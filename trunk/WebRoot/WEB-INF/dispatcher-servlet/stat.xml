@@ -1,0 +1,95 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="/console/stat/statItemGroupList.do" class="com.guzzservices.action.console.stat.StatItemGroupListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/stat/bannedTopRecordList.do" class="com.guzzservices.action.console.stat.BannedTopRecordListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/stat/statItemList.do" class="com.guzzservices.action.console.stat.StatItemListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/stat/statLogList.do" class="com.guzzservices.action.console.stat.StatLogListAction">
+		<property name="sessionManager" ref="sessionManager" />
+        <property name="statItemManager" ref="statItemManager" />
+	</bean>
+	
+	<bean name="/console/stat/statTopRecordList.do" class="com.guzzservices.action.console.stat.StatTopRecordListAction">
+		<property name="sessionManager" ref="sessionManager" />
+        <property name="statItemManager" ref="statItemManager" />
+	</bean>
+	
+	<bean name="/console/stat/statItemGroupAction.do" class="com.guzzservices.action.console.stat.StatItemGroupAction">
+		<property name="statItemGroupManager" ref="statItemGroupManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+    <bean name="/console/stat/statItemAction.do" class="com.guzzservices.action.console.stat.StatItemAction">
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView">
+            <value>console/stat/statItemForm</value>
+        </property>
+        <property name="successView">
+            <value>redirect:/console/stat/statItemList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/statTopRecordAction.do" class="com.guzzservices.action.console.stat.TopRecordAction">
+        <property name="topRecordManager">
+            <ref bean="topRecordManager" />
+        </property>
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView">
+            <value>console/stat/statTopRecordForm</value>
+        </property>
+        <property name="successView">
+            <value>redirect:/console/stat/statTopRecordList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/statTopRecordVisibility.do" class="com.guzzservices.action.console.stat.TopRecordVisibilityAction">
+        <property name="topRecordManager">
+            <ref bean="topRecordManager" />
+        </property>
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView">
+            <value>redirect:/console/stat/statTopRecordList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/statItemCommand.do" class="com.guzzservices.action.console.stat.StatItemCommandAction">
+        <property name="topRecordManager">
+            <ref bean="topRecordManager" />
+        </property>
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView">
+            <value>redirect:/console/stat/statTopRecordList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/bannedTopRecordDelete.do" class="com.guzzservices.action.console.stat.BannedTopRecordDeleteAction">
+        <property name="bannedTopRecordManager">
+            <ref bean="bannedTopRecordManager" />
+        </property>
+       <property name="sessionManager" ref="sessionManager" />
+    </bean>
+
+</beans>

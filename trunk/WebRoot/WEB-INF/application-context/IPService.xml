@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    
+    <bean id="chinaIPLocate" class="com.guzzservices.manager.impl.ip.ChinaIPLocateImpl">
+    	<property name="commandServerService" ref="commandServerService" />
+    	<property name="czFile" value="classpath:qqwry.dat" />
+    </bean>
+
+</beans>
