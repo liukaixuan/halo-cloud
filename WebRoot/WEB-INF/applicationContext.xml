@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    
+    <!-- guzzframework -->
+    <bean id="guzzContext" class="org.guzz.web.context.spring.GuzzContextBeanFactory" factory-method="createGuzzContext">
+    	<constructor-arg><value>/WEB-INF/guzz.xml</value></constructor-arg>
+    </bean>
+    
+    <bean id="abstractGuzzDao" class="org.guzz.dao.GuzzBaseDao" abstract="true">
+    	<property name="guzzContext" ref="guzzContext" />
+    </bean>
+    
+    <!-- export org.guzz.service.log.LogService -->
+    <bean id="logService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="logService" />
+    </bean>
+    
+    <bean id="slowUpdateService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="guzzSlowUpdate" />
+    </bean>
+    
+    <bean id="ssoService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="ssoService" />
+    </bean>
+    
+    <bean id="commandServerService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="commandServerService" />
+    </bean> 
+    
+    <bean id="html2PlainExtractService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="html2PlainExtractService" />
+    </bean>
+    
+    <bean id="configurationService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="configurationService" />
+    </bean>
+    
+    <bean id="statVelocityService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="statVelocityService" />
+    </bean>
+    
+    <bean id="versionControlService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="versionControlService" />
+    </bean>
+    
+    <bean id="kvStorageService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="kvStorageService" />
+    </bean>
+        
+    
+     <!--  异常处理  -->
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="include/defaultException"/>
+	</bean>
+	
+	<bean id="userManager" class="com.guzzservices.manager.impl.UserManagerImpl" parent="abstractGuzzDao">
+    </bean>
+    
+    <bean id="sessionManager" class="com.guzzservices.manager.impl.DefaultSessionManagerImpl" parent="abstractGuzzDao">
+    	<property name="ssoService" ref="ssoService" />
+    	<property name="kvStorageService" ref="kvStorageService" />
+    </bean>
+    
+    <import resource="application-context/IPService.xml" />
+    <import resource="application-context/filterWord.xml" />
+    <import resource="application-context/config.xml" />
+    <import resource="application-context/extractor.xml" />
+    <import resource="application-context/stat.xml" />
+
+</beans>

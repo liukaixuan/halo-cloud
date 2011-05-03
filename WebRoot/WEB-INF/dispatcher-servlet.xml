@@ -1,0 +1,67 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- ========================= VIEW DEFINITIONS ========================= -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.JstlView</value>
+		</property>
+		<property name="prefix">
+			<value>/WEB-INF/jsp/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+		<property name="contentType">
+			<value>text/html;charset=UTF8</value>
+		</property>
+	</bean>	
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>104857600</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+		
+	<!-- extends Multi Action -->
+	<bean id="methodNameResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>action</value>
+		</property>
+	</bean>
+	
+	<bean name="/userReg.do" class="com.guzzservices.action.open.UserAction">
+		<property name="userManager" ref="userManager"/>
+		<property name="formView" value="user/userForm"/>
+		<property name="successView" value="redirect:login.jsp"/>
+	</bean>
+	
+	<bean name="/login.do" class="com.guzzservices.action.open.UserLoginAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/logout.do" class="com.guzzservices.action.open.UserLogoutAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>	
+	
+	<bean name="/console/indexLeft.do" class="com.guzzservices.action.console.IndexLeftAction">
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="successView" value="console/indexLeft"/>
+	</bean>
+	
+	<bean name="/console/authMembersAction.do" class="com.guzzservices.action.console.AuthMembersAction">
+        <property name="userManager" ref="userManager" />
+        <property name="authManager" ref="sessionManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/authMembersForm" />
+        <property name="successView" value="redirect:/console/authMembersAction.do" />
+    </bean>
+	
+    <import resource="dispatcher-servlet/filterWord.xml" />
+    <import resource="dispatcher-servlet/config.xml" />
+    <import resource="dispatcher-servlet/stat.xml" />
+	
+</beans>

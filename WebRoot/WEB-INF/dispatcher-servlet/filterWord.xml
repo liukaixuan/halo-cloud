@@ -1,0 +1,52 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="/console/filterWordGroupList.do" class="com.guzzservices.action.console.fw.FilterWordGroupListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/filterWordList.do" class="com.guzzservices.action.console.fw.FilterWordListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/addFilterWord.do" class="com.guzzservices.action.console.fw.AddFilterWordAction">
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="filterWordManager" ref="filterWordManager" />
+	</bean>
+		
+	<bean name="/console/filterWordDelete.do" class="com.guzzservices.action.console.fw.FilterWordDeleteAction">
+		<property name="filterWordManager" ref="filterWordManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="successView" value="redirect:filterWordList.do"/>
+	</bean>
+	
+	<bean name="/console/filterWordExport.do" class="com.guzzservices.action.console.fw.FilterWordExportAction">
+		<property name="filterWordManager" ref="filterWordManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/filterWordImport.do" class="com.guzzservices.action.console.fw.FilterWordImportAction">
+		<property name="filterWordManager" ref="filterWordManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="formView" value="console/filterWord/filterWordImportForm"/>
+		<property name="successView" value="console/filterWord/filterWordImportResult"/>
+	</bean>
+	
+	<bean name="/console/filterWordPost.do" class="com.guzzservices.action.console.fw.FilterWordPostAction">
+		<property name="filterWordManager" ref="filterWordManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="successView" value="redirect:filterWordList.do"/>
+	</bean>
+	
+	<!-- group -->
+	<bean name="/console/filterWordGroupPost.do" class="com.guzzservices.action.console.fw.FilterWordGroupPostAction">
+		<property name="filterWordGroupManager" ref="filterWordGroupManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="formView" value="console/filterWord/filterWordGroupForm"/>
+		<property name="successView" value="redirect:filterWordGroupList.do"/>
+	</bean>
+	
+	
+</beans>
