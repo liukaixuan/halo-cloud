@@ -69,6 +69,10 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements Comma
 				
 				for(int i = 0 ; i < this.cookieDomains.length ; i++){
 					this.cookieDomains[i] = this.cookieDomains[i].trim() ;
+					
+					if(StringUtil.isEmpty(this.cookieDomains[i])){
+						this.cookieDomains[i] = null ;
+					}
 				}
 			}
 			
