@@ -13,6 +13,8 @@
     
     <body>
     <a href="./configPost.do?groupId=${groupId}">添加配置项</a>
+    &nbsp;&nbsp;<a href="./configImport.do?groupId=${groupId}">导入配置项</a>
+    &nbsp;&nbsp;<a href="./configExport.do?groupId=${groupId}">导出配置项</a>
     &nbsp;&nbsp;API KEY:${groupId}
     <hr>
     

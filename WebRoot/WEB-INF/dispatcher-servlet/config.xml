@@ -26,9 +26,22 @@
     </bean>
     
     <bean name="/console/configBatchUpdate.do" class="com.guzzservices.action.console.config.ConfigurationBatchUpdateAction">
-         <property name="configurationManager" ref="configurationManager" />
+        <property name="configurationManager" ref="configurationManager" />
         <property name="sessionManager" ref="sessionManager" />
         <property name="successView" value="redirect:/console/configList.do" />
+    </bean>
+    
+    <bean name="/console/configImport.do" class="com.guzzservices.action.console.config.ConfigurationImportAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/config/configImportForm" />
+        <property name="successView" value="redirect:/console/configList.do" />
+    </bean>
+    
+    <bean name="/console/configExport.do" class="com.guzzservices.action.console.config.ConfigurationExportAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView" value="console/config/configExport" />
     </bean>
     
 </beans>
