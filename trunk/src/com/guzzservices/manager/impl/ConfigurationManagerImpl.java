@@ -75,6 +75,13 @@ public class ConfigurationManagerImpl extends GuzzBaseDao implements IConfigurat
 		return (ConfigurationGroup) super.getForUpdate(ConfigurationGroup.class, groupId) ;
 	}
 
+	public List<Configuration> listConfigurations(String groupId) {
+		SearchExpression se = SearchExpression.forClass(Configuration.class, 1, 200) ;
+		se.and(Terms.eq("groupId", groupId)) ;
+		
+		return super.list(se) ;
+	}
+
 	public void save(Configuration config) {
 		super.insert(config) ;
 		

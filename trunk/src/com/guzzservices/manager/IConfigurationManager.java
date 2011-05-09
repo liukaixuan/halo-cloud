@@ -19,6 +19,8 @@ public interface IConfigurationManager {
 	
 	public ConfigurationGroup getGroup(String groupId) ;
 	
+	public List<Configuration> listConfigurations(String groupId) ;
+	
 	public void addGroup(LoginUser loginUser, ConfigurationGroup group) ;
 	
 	public void updateGroup(ConfigurationGroup group) ;
