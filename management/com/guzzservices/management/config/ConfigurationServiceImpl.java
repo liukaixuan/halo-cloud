@@ -3,10 +3,13 @@
  */
 package com.guzzservices.management.config;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.guzz.exception.DataTypeException;
+import org.guzz.exception.ServiceExecutionException;
 import org.guzz.service.AbstractService;
 import org.guzz.service.ServiceConfig;
 import org.guzz.util.Assert;
@@ -191,6 +194,54 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 			
 			return false ;
 		}
+	}
+
+	public void clear() {
+		throw new ServiceExecutionException("no write operation allowed.") ;
+	}
+
+	public boolean containsKey(Object key) {
+		throw new ServiceExecutionException("not supported") ;
+	}
+
+	public boolean containsValue(Object value) {
+		throw new ServiceExecutionException("not supported") ;
+	}
+
+	public Set entrySet() {
+		throw new ServiceExecutionException("not supported") ;
+	}
+
+	public Object get(Object key) {
+		return this.getString((String) key);
+	}
+
+	public boolean isEmpty() {
+		throw new ServiceExecutionException("not supported") ;
+	}
+
+	public Set keySet() {
+		throw new ServiceExecutionException("not supported") ;
+	}
+
+	public Object put(Object key, Object value) {
+		throw new ServiceExecutionException("no write operation allowed.") ;
+	}
+
+	public void putAll(Map t) {
+		throw new ServiceExecutionException("no write operation allowed.") ;
+	}
+
+	public Object remove(Object key) {
+		throw new ServiceExecutionException("no write operation allowed.") ;
+	}
+
+	public int size() {
+		throw new ServiceExecutionException("not supported") ;
+	}
+
+	public Collection values() {
+		throw new ServiceExecutionException("not supported") ;
 	}
 
 }
