@@ -37,7 +37,17 @@ public class ServerIoHandler extends IoHandlerAdapter {
 	}
 	
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-	    log.warn(cause.getMessage(), cause);
+		StringBuilder sb = new StringBuilder(64) ;
+		sb.append(cause.getMessage())
+		  .append('(')
+		  .append(session.getRemoteAddress())
+		  .append(')') ;
+		
+		if(log.isDebugEnabled()){
+			log.debug(sb.toString(), cause) ;
+		}else{
+			log.error(sb.toString());
+		}
 	    
 	    session.close(true) ;
 	}
