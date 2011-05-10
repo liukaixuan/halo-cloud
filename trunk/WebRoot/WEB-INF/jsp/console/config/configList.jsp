@@ -56,7 +56,7 @@
 				</c:if>
 			</td>
 			<td><c:out value="${m_config.description}" default="N/A" /></td>
-			<td><a href="configPost.do?id=${m_config.id}">修改</a></td>
+			<td><a href="configPost.do?id=${m_config.id}&groupId=${m_config.groupId}">修改</a></td>
 		</tr>
     	</c:forEach>
     </table>
