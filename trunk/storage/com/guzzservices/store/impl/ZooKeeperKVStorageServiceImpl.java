@@ -5,6 +5,7 @@ package com.guzzservices.store.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -37,6 +38,10 @@ public class ZooKeeperKVStorageServiceImpl extends AbstractService implements KV
 	private ZooKeeper zk ;
 	
 	private boolean zkAvailable ;
+	
+	private Properties props ;
+	
+	private boolean isShuttingdown ;
 	
 	protected String normalizePath(String path){
 		if(!zkAvailable){
@@ -225,17 +230,40 @@ public class ZooKeeperKVStorageServiceImpl extends AbstractService implements KV
 			String connectString = scs[0].getProps().getProperty("connectString") ;
 			Assert.assertNotEmpty(connectString, "missing parameter: connectString") ;
 			
-			int sessionTimeout = StringUtil.toInt(scs[0].getProps().getProperty("sessionTimeout"), 3000) ;
+			this.props = scs[0].getProps() ;
 			
-			try {
-				zk = new ZooKeeper(connectString, sessionTimeout, this) ;
-				zkAvailable = true ;
-			} catch (IOException e) {
-				throw new InvalidConfigurationException("unable to start zookeeper", e) ;
-			}
+			reconnectToZK0() ;
 		}
 		
 		return true;
+	}
+	
+	protected void shutdownZK0(){		
+		if(zk != null){
+			try {
+				zk.close() ;
+			} catch (Exception e) {
+				log.error("exception on closing zookeeper.", e) ;
+			}
+		}
+	}
+	
+	protected void reconnectToZK0(){
+		if(isShuttingdown) return ;
+		
+		shutdownZK0() ;
+		
+		String connectString = props.getProperty("connectString") ;
+		int sessionTimeout = StringUtil.toInt(props.getProperty("sessionTimeout"), 3000) ;
+		
+		log.info("connecting to zookeeper:" + connectString) ;
+		
+		try {
+			zk = new ZooKeeper(connectString, sessionTimeout, this) ;
+			zkAvailable = true ;
+		} catch (IOException e) {
+			throw new InvalidConfigurationException("unable to start zookeeper", e) ;
+		}
 	}
 
 	public boolean isAvailable() {
@@ -243,13 +271,8 @@ public class ZooKeeperKVStorageServiceImpl extends AbstractService implements KV
 	}
 
 	public void shutdown() {
-		if(zk != null){
-			try {
-				zk.close() ;
-			} catch (InterruptedException e) {
-				log.error("exception on closing zookeeper.", e) ;
-			}
-		}
+		this.isShuttingdown = true ;
+		shutdownZK0() ;
 	}
 
 	public void startup() {
@@ -269,6 +292,9 @@ public class ZooKeeperKVStorageServiceImpl extends AbstractService implements KV
             case Expired:
                 // It's all over
             	zkAvailable = false;
+            	
+            	//try to reconnect
+            	reconnectToZK0() ;
                 break;
             case AuthFailed:
                 // It's all over
