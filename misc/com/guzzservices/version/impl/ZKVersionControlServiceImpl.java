@@ -6,6 +6,7 @@ package com.guzzservices.version.impl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
@@ -42,6 +43,10 @@ public class ZKVersionControlServiceImpl extends AbstractService implements Vers
 	private ZooKeeper zk ;
 	
 	private boolean zkAvailable ;
+	
+	private Properties props ;
+	
+	private boolean isShuttingdown ;
 	
 	private Map<String, NewVersionDataCallback> listeners = new ConcurrentHashMap<String, NewVersionDataCallback>() ;
 	
@@ -252,18 +257,58 @@ public class ZKVersionControlServiceImpl extends AbstractService implements Vers
 			//10.100.4.31:2181,10.100.4.32:2181
 			String connectString = scs[0].getProps().getProperty("connectString") ;
 			Assert.assertNotEmpty(connectString, "missing parameter: connectString") ;
+
 			
-			int sessionTimeout = StringUtil.toInt(scs[0].getProps().getProperty("sessionTimeout"), 3000) ;
+			this.props = scs[0].getProps() ;
 			
-			try {
-				zk = new ZooKeeper(connectString, sessionTimeout, this) ;
-				zkAvailable = true ;
-			} catch (IOException e) {
-				throw new InvalidConfigurationException("unable to start zookeeper", e) ;
-			}
+			reconnectToZK0() ;
 		}
 		
 		return true;
+	}
+	
+	protected void shutdownZK0(){		
+		if(zk != null){
+			try {
+				zk.close() ;
+			} catch (Exception e) {
+				log.error("exception on closing zookeeper.", e) ;
+			}
+		}
+	}
+	
+	protected void reconnectToZK0(){
+		if(isShuttingdown) return ;
+		
+		shutdownZK0() ;
+		
+		String connectString = props.getProperty("connectString") ;
+		int sessionTimeout = StringUtil.toInt(props.getProperty("sessionTimeout"), 3000) ;
+		
+		log.info("connecting to zookeeper:" + connectString) ;
+		
+		try {
+			zk = new ZooKeeper(connectString, sessionTimeout, this) ;
+
+			zkAvailable = true ;
+			
+			//重新绑定监听
+			for(NewVersionDataCallback callback : this.listeners.values()){
+				String normalizedPath = this.normalizePath(callback.path) ;
+				
+				try {
+					this.zk.getData(normalizedPath, true, null) ;
+				} catch (KeeperException e) {
+					log.error("zookeeper InterruptedException while getting:[" + normalizedPath + "]", e) ;
+				} catch (InterruptedException e) {
+					log.error("zookeeper InterruptedException while getting:[" + normalizedPath + "]", e) ;
+				}
+			}
+		} catch (Exception e) {
+			zkAvailable = false ;
+			
+			throw new InvalidConfigurationException("unable to start zookeeper", e) ;
+		}
 	}
 
 	public boolean isAvailable() {
@@ -271,13 +316,8 @@ public class ZKVersionControlServiceImpl extends AbstractService implements Vers
 	}
 
 	public void shutdown() {
-		if(zk != null){
-			try {
-				zk.close() ;
-			} catch (InterruptedException e) {
-				log.error("exception on closing zookeeper.", e) ;
-			}
-		}
+		this.isShuttingdown = true ;
+		shutdownZK0() ;
 	}
 
 	public void startup() {
@@ -297,6 +337,9 @@ public class ZKVersionControlServiceImpl extends AbstractService implements Vers
             case Expired:
                 // It's all over
             	zkAvailable = false;
+            	
+            	//try to reconnect
+            	reconnectToZK0() ;
                 break;
             case AuthFailed:
                 // It's all over
