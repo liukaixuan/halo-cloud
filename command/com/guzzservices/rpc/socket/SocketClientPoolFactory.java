@@ -3,6 +3,8 @@
  */
 package com.guzzservices.rpc.socket;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.DelayQueue;
@@ -43,6 +45,9 @@ public class SocketClientPoolFactory implements PoolableObjectFactory {
 	private SocketMonitor socketMonitor ;
 	
 	private boolean isShuttingDown;
+	
+	/**连接到的服务器个数*/
+	private int totalServers ;
 
 	public SocketClientPoolFactory() {
 	}
@@ -103,10 +108,33 @@ public class SocketClientPoolFactory implements PoolableObjectFactory {
 		if (isShuttingDown)
 			return;
 
+		if (this.maxSizeInWaitingQueue <= this.waitingQueue.size()) {
+			return;
+		}
+		
+		/*
+		 * 如果所有服务端全部失败，就没有必要创建到最大连接数了。 waitingQueue控制在minSize + 5的量上。
+		 * 增加5的增量目的：防止只有1台服务器端，默认的minIdle为0，并且启动后服务器端提前失败，造成连接失败同时waitingQueue为空，再也无法连上。
+		 * 
+		 * 还有一个目的是提高重试连接频率，当服务器可用时，可以更快速的连上。
+		 */
+		Iterator<ReconnectRequest> i = this.waitingQueue.iterator() ;
+		
+		//如果并发异常就忽略。丢失一个重试性连接应该影响不大。
+		HashSet<java.util.Properties> s = new HashSet<java.util.Properties>() ;
+		while(i.hasNext()){
+			s.add(i.next().getProps()) ;
+		}
+		
+		if(s.size() >= this.totalServers && this.waitingQueue.size() >= this.pool.getMinIdle() + 5){
+			return ;
+		}
+		
 		if (this.maxSizeInWaitingQueue > this.waitingQueue.size()) {
 			this.waitingQueue.add(request);
 			this.pool.setMaxActive(totalMaxLoad - this.waitingQueue.size());
 		}
+		
 	}
 
 	public void setProperties(GenericObjectPool pool, Properties[] ps) {
@@ -151,6 +179,7 @@ public class SocketClientPoolFactory implements PoolableObjectFactory {
 		pool.setMaxActive(totalMaxLoad);
 
 		this.totalMaxLoad = totalMaxLoad;
+		this.totalServers = ps.length ;
 
 		// max 80% in the waiting queue, others in the pool to retry again and again...
 		this.maxSizeInWaitingQueue = (int) (totalMaxLoad * 0.8);
