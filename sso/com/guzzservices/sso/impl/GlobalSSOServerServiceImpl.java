@@ -169,6 +169,11 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements Comma
 			this.cacheService.removeFromCache(oldSessionId) ;
 		}
 		
+		//memcached不让按照相对时间存储超过1个月有效期的数据。
+		if(maxAge > CookieUtil.COOKIE_AGE_1Month){
+			maxAge = CookieUtil.COOKIE_AGE_1Month ;
+		}
+		
 		LoginUser loginUser = this.userStoreService.getLoginUser(userName) ;
 		
 		if(loginUser == null ){
@@ -231,6 +236,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements Comma
 	protected SSOInfo buildSSOInfo(String sessionId, LoginUser loginUser, int maxAge){
 		CookieUser cu = new CookieUser() ;
 		cu.setLogin(loginUser.isLogin()) ;
+		cu.setUserId(loginUser.getUserId()) ;
 		cu.setDisplayName(loginUser.getDisplayName()) ;
 		cu.setLoginTime(new Date().getTime()) ;
 		cu.setUserNick(loginUser.getUserNick()) ;

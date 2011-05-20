@@ -80,7 +80,7 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 		return sid ;
 	}
 	
-	protected CookieUser readCookieUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public CookieUser readCookieUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String hexValue = cookieUtil.readCookie(request, sessionUserCookieName) ;
 		
 		if(StringUtil.isEmpty(hexValue)){

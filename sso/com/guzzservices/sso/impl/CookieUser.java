@@ -14,6 +14,8 @@ public class CookieUser {
 
 	private boolean login ;
 	
+	private int userId ;
+	
 	private String userNick ;
 	
 	private String displayName ;
@@ -70,6 +72,14 @@ public class CookieUser {
 
 	public void setVersion(long version) {
 		this.version = version;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

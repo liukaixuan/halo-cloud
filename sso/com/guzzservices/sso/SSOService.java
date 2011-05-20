@@ -3,10 +3,13 @@
  */
 package com.guzzservices.sso;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.guzzservices.sso.impl.CookieUser;
 
 /**
  * 
@@ -19,6 +22,8 @@ public interface SSOService {
 	public static final String CACHED_LOGIN_USER_KEY = "guzzLoginUser" ;
 
 	public Object getLoginUser(HttpServletRequest request, HttpServletResponse response) ;
+	
+	public CookieUser readCookieUser(HttpServletRequest request, HttpServletResponse response) throws IOException ;
 	
 	public void checkPassword(String IP, String userName, String password) throws LoginException ;
 	
