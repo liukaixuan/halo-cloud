@@ -74,6 +74,10 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 		}
 		
 		if(StringUtil.isEmpty(sid)){
+			sid = (String) request.getAttribute(sessionIdCookieName) ;
+		}
+		
+		if(StringUtil.isEmpty(sid)){
 			sid = null ;
 		}
 		
@@ -85,6 +89,10 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 		
 		if(StringUtil.isEmpty(hexValue)){
 			hexValue = request.getParameter(sessionUserCookieName) ;
+		}
+		
+		if(StringUtil.isEmpty(hexValue)){
+			hexValue = (String) request.getAttribute(sessionUserCookieName) ;
 		}
 		
 		//no cookie
@@ -184,6 +192,8 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 		}
 		
 		request.removeAttribute(CACHED_LOGIN_USER_KEY) ;
+		request.removeAttribute(sessionIdCookieName) ;
+		request.removeAttribute(this.sessionUserCookieName) ;
 	}
 	
 	protected void login(HttpServletRequest request, HttpServletResponse response, String userName, String password, int maxAge, boolean checkPassword) throws LoginException {
@@ -205,7 +215,10 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 				for(CookieInfo c : info.getCookieInfos()){
 					cookieUtil.writeCookie(response, c.getName(), c.getValue(), c.getDomain(), "/", c.getMaxAge()) ;
 					
-					//把sessionId保存到request中，使得此方法成功后，可以直接读取到登录的用？？？是否有价值继续看反馈吧。
+					//把sessionId保存到request中，使得此方法成功后，可以直接读取到登录的用。
+					//某些系统在用户登录后，可能根据用户状态进行跳转重定向，因此需要获取到status和roleId等信息。
+					//这些信息，如果用户是新同步的，并且读取用户表的程序选择从数据库读取，则可能无法读取到，造成没有好的解决方案可以跳转。这时，立即获得LoginUser就很关键了。
+					request.setAttribute(c.getName(), c.getValue()) ;
 				}
 			}else{
 				throw new LoginException(info.getErrorCode()) ;
