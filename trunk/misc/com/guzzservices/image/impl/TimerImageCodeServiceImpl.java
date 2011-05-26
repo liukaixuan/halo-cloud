@@ -24,9 +24,13 @@ public class TimerImageCodeServiceImpl extends ImageCodeServiceImpl {
 	
 	private Image cachedImage;
 	
+	private String cachedCode ;
+	
 	//用通过传入的plainCode创建新图片，并覆盖被缓存的图片
 	public Image createCodeImageNoCache(String plainCode) {
 		this.cachedImage = super.createCodeImage(plainCode);
+		this.cachedCode = plainCode ;
+		
 		return this.cachedImage;
 	}
 
@@ -45,12 +49,16 @@ public class TimerImageCodeServiceImpl extends ImageCodeServiceImpl {
 		
 		long time = currentMilliSeconds / intervalMilliSeconds ;
 		
-		if(time >= this.lastUpdateTime){
-			return createRandomCode(lastUpdateTime);
+		if(time == this.lastUpdateTime){//hit in cache
+			if(this.cachedCode == null){
+				this.cachedCode = createRandomCode(lastUpdateTime) ;
+			}
+			return this.cachedCode ;
 		}else{
 			lastUpdateTime = time;
 			String code = createRandomCode(time);
 			cachedImage = null;   //超时的话，缓存的图片就过期了，所以置空
+			this.cachedCode = null ;
 			return code;
 		}
 	}
@@ -60,8 +68,12 @@ public class TimerImageCodeServiceImpl extends ImageCodeServiceImpl {
 		if(StringUtil.isEmpty(answerClient)){
 			return false;
 		}
-		String code = this.createRandomCode(lastUpdateTime);
-		return answerClient.equalsIgnoreCase(code);
+		
+		if(this.cachedCode == null){
+			this.cachedCode = createRandomCode(lastUpdateTime) ;
+		}
+		
+		return answerClient.equalsIgnoreCase(this.cachedCode);
 	}
 
 	//用milliSeconds做种子创造字符串
