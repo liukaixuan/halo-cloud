@@ -28,6 +28,10 @@ public class HashMapCacheServiceImpl extends AbstractService implements CacheSer
 	public void removeFromCache(String key) {
 		cache.remove(key) ;
 	}
+	
+	public void asyncRemoveFromCache(String key) {
+		cache.remove(key) ;
+	}
 
 	public void storeToCache(String key, Object value) {
 		cache.put(key, value) ;
@@ -35,6 +39,14 @@ public class HashMapCacheServiceImpl extends AbstractService implements CacheSer
 
 	public void storeToCache(String key, Object value, int maxAge) {
 		cache.put(key, value) ;
+	}
+
+	public void asyncStoreToCache(String key, Object value) {
+		storeToCache(key, value) ;
+	}
+
+	public void asyncStoreToCache(String key, Object value, int maxAge) {
+		storeToCache(key, value, maxAge) ;
 	}
 
 	public boolean configure(ServiceConfig[] scs) {

@@ -13,6 +13,8 @@ public interface CacheService {
 	
 	public void storeToCache(String key, Object value) ;
 	
+	public void asyncStoreToCache(String key, Object value) ;
+	
 	/**
 	 * store to cache. add or update.
 	 * 
@@ -22,7 +24,11 @@ public interface CacheService {
 	 */
 	public void storeToCache(String key, Object value, int maxAge) ;
 	
+	public void asyncStoreToCache(String key, Object value, int maxAge) ;
+	
 	public void removeFromCache(String key) ;
+	
+	public void asyncRemoveFromCache(String key) ;
 	
 	public Object getFromCache(String key) ;
 	

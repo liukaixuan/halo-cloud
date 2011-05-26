@@ -75,6 +75,18 @@ public class MemcachedServiceImpl extends AbstractService implements MemcachedSe
 		this.set(key, maxAge, value) ;
 	}
 
+	public void asyncStoreToCache(String key, Object value) {
+		this.asyncStoreToCache(key, value, defaultMaxAgeInSeconds) ;
+	}
+
+	public void asyncStoreToCache(String key, Object value, int maxAge) {
+		this.set(key, maxAge, value) ;
+	}
+	
+	public void asyncRemoveFromCache(String key) {
+		this.delete(key) ;
+	}
+
 	public void startup() {}
 
 	public boolean isAvailable() {
