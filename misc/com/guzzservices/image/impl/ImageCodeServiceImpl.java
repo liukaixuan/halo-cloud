@@ -33,7 +33,7 @@ public abstract class ImageCodeServiceImpl extends AbstractService implements Im
 	 * @see org.guzz.Service#configure(org.guzz.service.ServiceConfig[])
 	 */
 	public boolean configure(ServiceConfig[] scs){
-		if(scs != null){
+		if(scs.length > 0){
 			ServiceConfig sc = scs[0] ;
 			
 			//the parameter defined in properties file
