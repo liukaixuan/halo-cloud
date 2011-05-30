@@ -11,7 +11,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.guzz.service.ServiceConfig;
 import org.guzz.util.CookieUtil;
 import org.guzz.util.StringUtil;
 
@@ -78,13 +77,6 @@ public class CacheBasedImageCodeServiceImpl extends ImageCodeServiceImpl {
 		String code = (String) this.cacheService.getFromCache(key) ;
 		
 		return answer.equalsIgnoreCase(code) ;
-	}
-
-	/**
-	 * @see org.guzz.service.imageCode.impl.ImageCodeServiceImpl#configure(org.guzz.service.ServiceConfig[])
-	 */
-	public boolean configure(ServiceConfig[] scs) {
-		return super.configure(scs);
 	}
 
 	public CacheService getCacheService() {
