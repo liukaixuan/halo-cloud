@@ -27,7 +27,7 @@ servletUrl=http://cloud.guzzservices.com/services/command/http.jsp
 
 对于其他语言，需要实现自己的客户端。协议接口如下：
 
-*发送到服务器：* 以POST方式提交请求到[http://cloud.guzzservices.com/services/command/http.jsp] ，POST请求中包含3个参数：
+*发送到服务器：* 以POST方式提交请求到[RawHttpJsp http://cloud.guzzservices.com/services/command/http.jsp] ，POST请求中包含3个参数：
 || 参数 || 取值 ||
 || command || 请求服务器执行的命令 ||
 || isStringParam || 参数是否是字符串。1表示param参数为字符串；0表示param参数为字节数组。 ||
@@ -39,4 +39,7 @@ servletUrl=http://cloud.guzzservices.com/services/command/http.jsp
 || Http Header头 || guzzCommandServiceException || 1表示出现异常；0表示正常执行。 ||
 || Http Header头 || guzzCommandServiceString || 结果长度。-1表示结果为null；0表示结果为空字符串或空字节数组；其他为正常结果长度。 ||
 || Http Body || 响应内容 || 响应结果的字符串。如果guzzCommandServiceString为0，则为Base64编码后的字节数组。 ||
+
+http.jsp的实现代码如下：[RawHttpJsp] ，私有服务器端可以在此基础上开发其他接口，或者增加客户端调用的身份认证等。
+
 
