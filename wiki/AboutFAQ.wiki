@@ -47,6 +47,6 @@
 
  当然也提供有HTTP短连接的。常规RPC协议的调用，在guzz和spring中都有封装，这个项目就没有继续封装。 
  
- [RawHttpJsp http服务器端实现] 开源了服务的server端http接入的实现代码；如果用其他协议，也可以自己编写server端，很容易。
+ [RawHttpJsp http服务器端实现] 开源了服务的server端http接入的实现代码；如果用其他协议，也可以仿照着自己编写server端，很容易。
  
  
