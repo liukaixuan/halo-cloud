@@ -44,58 +44,17 @@ pool.maxActive=10
 pool.maxActive的最大值允许为10000。如果不设置，则默认计算为其他已经设置的pool.maxActive的平均值；如果所有pool.maxActive都没有设置，所有pool.maxActive默认为500。
 
 无论设置多少个[commandSocketChannelForServices]组，第一个[commandSocketChannelForServices]使用以下特殊参数控制连接池属性：
-<table>
-<tr>
-  <th>参数</th>
-  <th>含义</th>
-  <th>备注</th>
-</tr>
 
-<tr>
-  <td>pool.maxIdle</td>
-  <td>最大空闲连接数</td>
-  <td>包含到所有机器的连接（下同）</td>
-</tr>
-<tr>
-  <td>pool.minIdle</td>
-  <td>最少空闲连接数</td>
-  <td>&nbsp;</td>
-</tr>
-<tr>
-  <td>pool.whenExhaustedAction</td>
-  <td>当连接用完时，连接池策略</td>
-  <td>1: 报错 <br>2: 自动增长（连接池上限将无效）<br>3: 等待（默认策略）</td>
-</tr>
-</table>
+|| 参数 || 含义 || 备注 ||
+|| pool.maxIdle || 最大空闲连接数 || 包含到所有机器的连接（下同） ||
+|| pool.minIdle || 最少空闲连接数 || - ||
+|| pool.whenExhaustedAction || 当连接用完时，连接池策略 || 1: 报错 2: 自动增长（连接池上限将无效）3: 等待（默认策略） ||
+
 
 对于每一组[commandSocketChannelForServices]，通过以下参数控制连接属性：
 
-<table>
-<tr>
-  <th>参数</th>
-  <th>含义</th>
-  <th>备注</th>
-</tr>
-
-<tr>
-  <td>host</td>
-  <td>连接到的机器</td>
-  <td>必须有</td>
-</tr>
-<tr>
-  <td>port</td>
-  <td>连接到的端口</td>
-  <td>默认为：6618</td>
-</tr>
-<tr>
-  <td>charset</td>
-  <td>当通过字符串调用时，转成字节时，使用的编码</td>
-  <td>默认为：UTF-8</td>
-</tr>
-<tr>
-  <td>soTimeoutSeconds</td>
-  <td>超时时间，单位秒。具体参看：<a target="_blank" href="http://download.oracle.com/javase/1.4.2/docs/api/java/net/Socket.html#setSoTimeout(int)">Socket.setSoTimeout</a></td>
-  <td>默认为：10</td>
-</tr>
-</table>
-
+|| 参数 || 含义 || 备注 ||
+|| host || 连接到的机器 || 必须有 ||
+|| port || 连接到的端口 || 默认为：6618 ||
+|| charset || 当通过字符串调用时，转成字节时，使用的编码 || 默认为：UTF-8 ||
+|| soTimeoutSeconds || 超时时间，单位秒。具体参看：<a target="_blank" href="http://download.oracle.com/javase/1.4.2/docs/api/java/net/Socket.html#setSoTimeout(int)">Socket.setSoTimeout</a> || 默认为：10 ||

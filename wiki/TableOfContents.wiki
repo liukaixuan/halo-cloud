@@ -8,7 +8,7 @@
    * [ManHtml2Text 从html代码中抽取文本和图片]
    * [ManTopRank 排行榜]
    * [ManServiceChannel 远程通信信道]
-   * [ManHttpChannel 配置客户端HTTP协议通信信道]
-   * [ManSocketChannel 配置客户端Socket Pool通信信道]
+   * [ManHttpChannel 客户端HTTP协议通信信道]
+   * [ManSocketChannel 客户端Socket Pool通信信道]
    
    

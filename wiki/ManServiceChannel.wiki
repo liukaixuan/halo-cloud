@@ -8,25 +8,9 @@
 
 == 客户端配置 ==
 
-<table>
-<tr>
-<td>通道协议</td>
-<td>优点</td>
-<td>缺点</td>
-</tr>
-
-<tr>
-<td>[ManSocketChannel]客户端Socket Pool通信信道]</td>
-<td>速度快，并发高，适合大规模系统使用</td>
-<td>客户端实现复杂(java客户端已经实现)；需要网络开通相关端口</td>
-</tr>
-<tr>
-<td>[ManHttpChannel 客户端HTTP协议通信信道]</td>
-<td>跨语言协议容易实现；短连接方式，不需要维护连接池。适合服务调用比较少的系统使用。</td>
-<td>速度比socket方式慢</td>
-</tr>
-
-</table>
+|| 通道协议 || 优点 || 缺点 ||
+|| [ManSocketChannel]客户端Socket Pool通信信道] || 速度快，并发高，适合大规模系统使用 || 客户端实现复杂(java客户端已经实现)；需要网络开通相关端口 ||
+|| [ManHttpChannel 客户端HTTP协议通信信道] || 跨语言协议容易实现；短连接方式，不需要维护连接池。适合服务调用比较少的系统使用。 || 速度比socket方式慢 ||
 
 == 服务器端配置 ==
 
