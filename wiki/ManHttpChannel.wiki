@@ -19,12 +19,15 @@ servletUrl=http://cloud.guzzservices.com/services/command/http.jsp
 
 *注意：使用前，请确认您的应用程序能够通过Http方式，访问cloud.guzzservices.com的80端口！*
 
+== PHP客户端 ==
+
+参看 下载 中的php代码
+
 == 其他语言版HTTP方式客户端配置 ==
 
-   对于其他语言，需要实现自己的客户端。协议接口如下：
+对于其他语言，需要实现自己的客户端。协议接口如下：
 
-*发送到服务器：* 以POST方式提交请求到http://cloud.guzzservices.com/services/command/http.jsp，POST请求中包含3个参数：
-
+*发送到服务器：* 以POST方式提交请求到[http://cloud.guzzservices.com/services/command/http.jsp] ，POST请求中包含3个参数：
 || 参数 || 取值 ||
 || command || 请求服务器执行的命令 ||
 || isStringParam || 参数是否是字符串。1表示param参数为字符串；0表示param参数为字节数组。 ||
@@ -32,7 +35,6 @@ servletUrl=http://cloud.guzzservices.com/services/command/http.jsp
 
 
 *服务器响应：* 服务器响应4个值，如下图：
-
 || 存储位置 || 参数 || 取值 ||
 || Http Header头 || guzzCommandServiceException || 1表示出现异常；0表示正常执行。 ||
 || Http Header头 || guzzCommandServiceString || 结果长度。-1表示结果为null；0表示结果为空字符串或空字节数组；其他为正常结果长度。 ||
