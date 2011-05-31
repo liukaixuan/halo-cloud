@@ -18,39 +18,12 @@
 
 在读取原始排行数据时，系统将发起HTTP GET请求，并附带5个参数。参数如下：
 
-<table border="1">
-<tr>
-  <th>参数</th>
-  <th>含义</th>
-  <th>备注</th>
-</tr>
-
-<tr>
-  <td>authKey</td>
-  <td>验证key，数据提供者可以通过此参数验证请求是否合法</td>
-  <td>在创建排行榜时自己设定</td>
-</tr>
-<tr>
-  <td>statId</td>
-  <td>排行榜编号</td>
-  <td>系统自动生成，以后不会变化</td>
-</tr>
-<tr>
-  <td>time</td>
-  <td>提取多长时间内的排行数据。</td>
-  <td>创建排行榜时自己设定填写的”统计最近多长时间的记录“。</td>
-</tr>
-<tr>
-  <td>programId</td>
-  <td>自定义字段</td>
-  <td>创建排行榜时自己设定填写的programId</td>
-</tr>
-<tr>
-  <td>pageSize</td>
-  <td>读取多少记录。</td>
-  <td>创建排行榜时自己设定填写的”最大读取记录数“。</td>
-</tr>
-</table>
+|| 参数 || 含义 || 备注 ||
+|| authKey || 验证key，数据提供者可以通过此参数验证请求是否合法 || 在创建排行榜时自己设定 ||
+|| statId || 排行榜编号 || 系统自动生成，以后不会变化 ||
+|| time || 提取多长时间内的排行数据 || 创建排行榜时自己设定填写的”统计最近多长时间的记录“。 ||
+|| programId || 自定义字段 || 创建排行榜时自己设定填写的programId ||
+|| pageSize || 读取多少记录 || 创建排行榜时自己设定填写的”最大读取记录数“。 ||
 
 HTTP GET请求的url应该返回json格式的原始排行数据。数据内容为一个记录列表，每个记录的属性如下：
 {{{
@@ -77,6 +50,7 @@ HTTP GET请求的url应该返回json格式的原始排行数据。数据内容�
 }}}
 
 举例来说：
+
 {{{
 List m_topics = (List) request.getAttribute("m_topics") ;
 LinkedList records = new LinkedList() ;
@@ -108,36 +82,10 @@ out.print(com.guzzservices.rpc.util.JsonUtil.toJson(records)) ;
 
 发起POST时，将附带5个参数。具体参数如下：
 
-<table border="1">
-<tr>
-  <th>参数</th>
-  <th>含义</th>
-  <th>备注</th>
-</tr>
+|| 参数 || 含义 || 备注 ||
+|| authKey || 验证key，数据提供者可以通过此参数验证请求是否合法 || 在创建排行榜时自己设定 ||
+|| statId || 排行榜编号 || 系统自动生成，以后不会变化 ||
+|| time || 多长时间内的排行数据 || 创建排行榜时自己填写的”统计最近多长时间的记录“。 ||
+|| programId || 自定义字段 || 创建排行榜时自己填写的programId ||
+|| content || 排行文本内容 || Velociy模板翻译后的排行数据 ||
 
-<tr>
-  <td>authKey</td>
-  <td>验证key，数据提供者可以通过此参数验证请求是否合法</td>
-  <td>在创建排行榜时自己设定</td>
-</tr>
-<tr>
-  <td>statId</td>
-  <td>排行榜编号</td>
-  <td>系统自动生成，以后不会变化</td>
-</tr>
-<tr>
-  <td>time</td>
-  <td>多长时间内的排行数据。</td>
-  <td>创建排行榜时自己填写的”统计最近多长时间的记录“。</td>
-</tr>
-<tr>
-  <td>programId</td>
-  <td>自定义字段</td>
-  <td>创建排行榜时自己填写的programId</td>
-</tr>
-<tr>
-  <td>content</td>
-  <td>排行文本内容</td>
-  <td>Velociy模板翻译后的排行数据</td>
-</tr>
-</table>
