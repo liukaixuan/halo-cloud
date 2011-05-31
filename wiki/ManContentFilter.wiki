@@ -113,4 +113,6 @@ public class MatchResult {
 	 * @maxLength 返回的串最长允许多长。如果需要将返回结果存入到数据库中，则此参数一般传入数据库字段允许的最大长度。
 	 */
 	public String getMatchedContentList(String wordSep, int maxLength) ;
+}
+
 }}}

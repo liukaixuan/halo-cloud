@@ -12,13 +12,13 @@
 
 使用排行榜不需要引入任何API，和语言也无关。排行榜创建以后，系统自动通过HTTP GET ”数据提供者URL“填写的url 获取排行的原始数据（JSON格式），完成排行榜干预后，自动或者用户手动点击发布时，通过HTTP协议将排行榜合成的内容，POST到 ”数据POST发布到URL“ 填写的url。
 
-排行榜支持定期自动刷新排行，调度采用 <a href="http://www.quartz-scheduler.org/">http://www.quartz-scheduler.org/</a> 调用，调度表达式基于Cron Trigger。填写cron trigger时，省略第1位秒，这个由系统自动赋值。也就说调度周期最频繁为分钟级别。例如填写”0 * * * ? *“，则quartz实际的调度策略为”0 0 * * * ? *“。
+排行榜支持定期自动刷新排行，调度采用 [http://www.quartz-scheduler.org/] 调用，调度表达式基于Cron Trigger。填写cron trigger时，省略第1位秒，这个由系统自动赋值。也就说调度周期最频繁为分钟级别。例如填写”0 * * * ? *“，则quartz实际的调度策略为”0 0 * * * ? *“。
 
 == 获取排行原始数据 ==
 
 在读取原始排行数据时，系统将发起HTTP GET请求，并附带5个参数。参数如下：
 
-<table>
+<table border="1">
 <tr>
   <th>参数</th>
   <th>含义</th>
@@ -28,27 +28,27 @@
 <tr>
   <td>authKey</td>
   <td>验证key，数据提供者可以通过此参数验证请求是否合法</td>
-  <td>&nbsp;在创建排行榜时自己设定</td>
+  <td>在创建排行榜时自己设定</td>
 </tr>
 <tr>
   <td>statId</td>
   <td>排行榜编号</td>
-  <td>&nbsp;系统自动生成，以后不会变化</td>
+  <td>系统自动生成，以后不会变化</td>
 </tr>
 <tr>
   <td>time</td>
   <td>提取多长时间内的排行数据。</td>
-  <td>&nbsp;创建排行榜时自己设定填写的”统计最近多长时间的记录“。</td>
+  <td>创建排行榜时自己设定填写的”统计最近多长时间的记录“。</td>
 </tr>
 <tr>
   <td>programId</td>
   <td>自定义字段</td>
-  <td>&nbsp;创建排行榜时自己设定填写的programId</td>
+  <td>创建排行榜时自己设定填写的programId</td>
 </tr>
 <tr>
   <td>pageSize</td>
   <td>读取多少记录。</td>
-  <td>&nbsp;创建排行榜时自己设定填写的”最大读取记录数“。</td>
+  <td>创建排行榜时自己设定填写的”最大读取记录数“。</td>
 </tr>
 </table>
 
@@ -108,7 +108,7 @@ out.print(com.guzzservices.rpc.util.JsonUtil.toJson(records)) ;
 
 发起POST时，将附带5个参数。具体参数如下：
 
-<table>
+<table border="1">
 <tr>
   <th>参数</th>
   <th>含义</th>
@@ -118,26 +118,26 @@ out.print(com.guzzservices.rpc.util.JsonUtil.toJson(records)) ;
 <tr>
   <td>authKey</td>
   <td>验证key，数据提供者可以通过此参数验证请求是否合法</td>
-  <td>&nbsp;在创建排行榜时自己设定</td>
+  <td>在创建排行榜时自己设定</td>
 </tr>
 <tr>
   <td>statId</td>
   <td>排行榜编号</td>
-  <td>&nbsp;系统自动生成，以后不会变化</td>
+  <td>系统自动生成，以后不会变化</td>
 </tr>
 <tr>
   <td>time</td>
   <td>多长时间内的排行数据。</td>
-  <td>&nbsp;创建排行榜时自己填写的”统计最近多长时间的记录“。</td>
+  <td>创建排行榜时自己填写的”统计最近多长时间的记录“。</td>
 </tr>
 <tr>
   <td>programId</td>
   <td>自定义字段</td>
-  <td>&nbsp;创建排行榜时自己填写的programId</td>
+  <td>创建排行榜时自己填写的programId</td>
 </tr>
 <tr>
   <td>content</td>
   <td>排行文本内容</td>
-  <td>&nbsp;Velociy模板翻译后的排行数据</td>
+  <td>Velociy模板翻译后的排行数据</td>
 </tr>
 </table>

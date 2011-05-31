@@ -41,7 +41,9 @@ groupId=your groupId(类似gxfay0u5yflb6s3mgb7xs4howqvoj9xxwfbr8dh4x4ay9zpmjue3u
 
 在需要检查配置项的地方，获取或注入configurationService，java接口为：
 
-{{{com.guzzservices.management.ConfigurationService}}}
+{{{
+com.guzzservices.management.ConfigurationService
+}}}
 
 API定义：
 

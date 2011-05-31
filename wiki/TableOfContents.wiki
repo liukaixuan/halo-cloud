@@ -3,11 +3,11 @@
  * [AboutSandBox 演示环境]
  * 服务使用指南
    * [ManIPService 通过IP查询地理位置]
-   * [ManSystemConfig 系统配置服务]
-   * [ManContentFilter 关键词标记服务]
-   * [ManHtml2Text 从html代码中抽取文本和图片服务]
-   * [ManTopRank 排行榜服务]
-   * [ManServiceChannel 远程通信信道服务]
+   * [ManSystemConfig 系统配置管理]
+   * [ManContentFilter 文本关键词标记]
+   * [ManHtml2Text 从html代码中抽取文本和图片]
+   * [ManTopRank 排行榜]
+   * [ManServiceChannel 远程通信信道]
    * [ManHttpChannel 配置客户端HTTP协议通信信道]
    * [ManSocketChannel 配置客户端Socket Pool通信信道]
    
