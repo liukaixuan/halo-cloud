@@ -1,5 +1,4 @@
 <wiki:toc max_depth="2" />
- * [AboutGuzz 关于halo-cloud]
  * [AboutFAQ 常见问题FAQ]
  * [AboutSandBox 演示环境]
  * 服务使用指南
