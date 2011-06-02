@@ -70,6 +70,9 @@ public class FilterWordManagerImpl extends GuzzBaseDao implements IFilterWordMan
 		SearchExpression se = SearchExpression.forClass(FilterWord.class, 1, 2000) ;
 		se.and(Terms.eq("groupId", groupId)) ;
 		
+		//高等级的排到前面，一方面方便管理，另外一方面在WordFilter里面靠前，不会因为检测到低优先级的过滤词而忽略了此词。如"a"，"ab"都是过滤词。
+		se.setOrderBy("level desc") ;
+		
 		return super.list(se) ;
 	}
 	

@@ -6,15 +6,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>过滤词导入</title>
+	<title>过滤词</title>
 </head>
 
 <body>
 
-    导入失败的过滤词：<c:out value="${failed}" />
+    过滤词组重新加载完毕！
     
- <hr>
-    导入成功的过滤词：<c:out value="${successed}" />
  <hr>
   <a href="filterWordList.do?groupId=${groupId}">返回</a>
   

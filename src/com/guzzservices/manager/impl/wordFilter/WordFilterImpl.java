@@ -11,6 +11,7 @@ import org.guzz.util.StringUtil;
 
 import com.guzzservices.business.FilterWord;
 import com.guzzservices.business.FilterWordGroup;
+import com.guzzservices.manager.Constants;
 import com.guzzservices.manager.IFilterWordGroupManager;
 import com.guzzservices.manager.IFilterWordManager;
 import com.guzzservices.manager.IWordFilter;
@@ -68,7 +69,6 @@ public class WordFilterImpl implements IWordFilter, CommandHandler, NewVersionLi
 	
 	public void reloadDicMap(String groupName){
 		this.dicMap.remove(groupName) ;
-		this.versionControlService.unregister("/fws/" + groupName) ;
 	}
 	
 	protected synchronized Dictionary loadDictionary(String groupName){
@@ -89,14 +89,14 @@ public class WordFilterImpl implements IWordFilter, CommandHandler, NewVersionLi
 			}
 			
 			this.dicMap.put(groupName, d) ;
-			this.versionControlService.register("/fws/" + groupName, d.getMaxWordId(), this) ;
+			this.versionControlService.register(Constants.buildVersionControlPath(Constants.serviceName.FILTER_WORD, groupName), d.getMaxWordId(), this) ;
 		}
 		
 		return d ;
 	}
 
 	public void onNewVersion(String path, long localVersion, long newVersion) {
-		String groupName = path.substring("/fws/".length()) ;
+		String groupName = Constants.extractServiceKeyFromVersionControlPath(Constants.serviceName.FILTER_WORD, path) ;
 		Dictionary d = this.dicMap.get(groupName) ;
 		
 		if(d != null){
@@ -109,7 +109,7 @@ public class WordFilterImpl implements IWordFilter, CommandHandler, NewVersionLi
 	}
 
 	public void onVersionDeleted(String path, long localVersion) {
-		String groupName = path.substring("/fws/".length()) ;
+		String groupName = Constants.extractServiceKeyFromVersionControlPath(Constants.serviceName.FILTER_WORD, path) ;
 		
 		this.reloadDicMap(groupName) ;
 	}
