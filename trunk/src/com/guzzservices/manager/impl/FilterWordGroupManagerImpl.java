@@ -56,6 +56,11 @@ public class FilterWordGroupManagerImpl extends GuzzBaseDao implements IFilterWo
 		this.versionControlService.deleteVersion(Constants.buildVersionControlPath(Constants.serviceName.FILTER_WORD, group.getId())) ;
 	}
 
+	public void reload(String groupId) {
+		this.versionControlService.deleteVersion(Constants.buildVersionControlPath(Constants.serviceName.FILTER_WORD, groupId)) ;
+	}
+
+
 	public VersionControlService getVersionControlService() {
 		return versionControlService;
 	}

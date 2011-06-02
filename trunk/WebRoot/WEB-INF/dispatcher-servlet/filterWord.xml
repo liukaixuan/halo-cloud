@@ -48,5 +48,11 @@
 		<property name="successView" value="redirect:filterWordGroupList.do"/>
 	</bean>
 	
+	<bean name="/console/filterWordReload.do" class="com.guzzservices.action.console.fw.FilterWordReloadAction">
+		<property name="filterWordGroupManager" ref="filterWordGroupManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="successView" value="console/filterWord/filterWordReloadResult"/>
+	</bean>
+	
 	
 </beans>

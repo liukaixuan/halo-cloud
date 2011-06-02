@@ -17,6 +17,8 @@ public interface IFilterWordGroupManager {
 	
 	public void add(LoginUser loginUser, FilterWordGroup group) ;
 	
+	public void reload(String groupId) ;
+	
 	public void update(FilterWordGroup group) ;
 	
 	public void remove(FilterWordGroup group) ;

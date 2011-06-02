@@ -34,5 +34,11 @@ public class Constants {
 		
 		return sb.toString() ;
 	}
+	
+	public static String extractServiceKeyFromVersionControlPath(String serviceName, String vcPath){
+		String prefix = '/' + serviceName + '/' ;
+		
+		return vcPath.substring(prefix.length()) ;
+	}
 
 }

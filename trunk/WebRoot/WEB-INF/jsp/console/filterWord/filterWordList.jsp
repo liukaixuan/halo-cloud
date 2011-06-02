@@ -22,6 +22,8 @@
     &nbsp;&nbsp;
     <a target="_blank" href="../test/testWordFilter.jsp?groupId=${groupId}">测试效果</a>
     &nbsp;&nbsp;
+    <a href="./filterWordReload.do?groupId=${groupId}">手动刷新加载</a>
+    &nbsp;&nbsp;
     <a href="./filterWordImport.do?groupId=${groupId}">导入过滤词</a>
     &nbsp;&nbsp;
     <a href="./filterWordExport.do?groupId=${groupId}">导出过滤词</a>
