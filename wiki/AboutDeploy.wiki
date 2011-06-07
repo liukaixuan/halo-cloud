@@ -30,3 +30,18 @@ halo-cloud为guzz标准服务，使用方法请参看：[http://code.google.com/
 
 7. 集群：云端最少只需要1台机器即可，多台机器之间没有任何关联，可以任意部署。也就是Share-Nothing架构。
 
+
+===一般升级方法===
+
+/WEB-INF/guzz_services.properties 不能覆盖，需根据最新变化修改。classpath下的log4j.properties等配置文件根据需要修改。其他的应该都是直接覆盖即可。
+
+
+===代码结构===
+
+/src 下是服务器端专用代码。
+
+/conf 存放配置文件
+
+/test 存放测试代码
+
+其他源代码目录直接打成jar包，当作客户端代码来用。我们发布的名字是：guzzServices_common.jar
