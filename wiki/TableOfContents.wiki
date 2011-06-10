@@ -3,6 +3,7 @@
  * [AboutDeploy 升级部署与使用]
  * [AboutSandBox 演示环境]
  * 服务使用指南
+   * [ManSendMail 发送邮件]
    * [ManIPService 通过IP查询地理位置]
    * [ManSystemConfig 系统配置管理]
    * [ManContentFilter 文本关键词标记]
