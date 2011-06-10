@@ -3,7 +3,6 @@
  */
 package com.guzzservices.version.impl;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;

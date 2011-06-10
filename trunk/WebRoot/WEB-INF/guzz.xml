@@ -41,6 +41,7 @@
 	<service name="configurationService" configName="configurationService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.management.config.ConfigurationServiceImpl"/>
 	<service name="versionControlService" configName="zkVersionControlService" class="com.guzzservices.version.impl.ZKVersionControlServiceImpl"/>
 	<service name="kvStorageService" configName="zkKVStorageService" class="com.guzzservices.store.impl.ZooKeeperKVStorageServiceImpl"/>
+	<service name="sendMailService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.mail.impl.RemoteSendMailServiceImpl"/>
 	
 	<!-- business main starts -->
 	<a-business name="user" class="com.guzzservices.business.User" />

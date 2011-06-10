@@ -8,6 +8,10 @@
     	<constructor-arg><value>/WEB-INF/guzz.xml</value></constructor-arg>
     </bean>
     
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="/WEB-INF/guzz_services.properties"/>
+    </bean>
+    
     <bean id="abstractGuzzDao" class="org.guzz.dao.GuzzBaseDao" abstract="true">
     	<property name="guzzContext" ref="guzzContext" />
     </bean>
@@ -48,6 +52,10 @@
     <bean id="kvStorageService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
     	<property name="serviceName" value="kvStorageService" />
     </bean>
+    
+    <bean id="sendMailService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="sendMailService" />
+    </bean>
         
     
      <!--  异常处理  -->
@@ -68,5 +76,6 @@
     <import resource="application-context/config.xml" />
     <import resource="application-context/extractor.xml" />
     <import resource="application-context/stat.xml" />
+    <import resource="application-context/misc.xml" />
 
 </beans>
