@@ -91,5 +91,27 @@
         </property>
        <property name="sessionManager" ref="sessionManager" />
     </bean>
+    
+    <!-- task -->
+	<bean name="/console/task/taskGroupList.do" class="com.guzzservices.action.console.task.TaskGroupListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/task/taskList.do" class="com.guzzservices.action.console.task.TaskListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/task/taskGroupAction.do" class="com.guzzservices.action.console.task.TaskGroupAction">
+		<property name="taskGroupManager" ref="taskGroupManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+    <bean name="/console/task/taskAction.do" class="com.guzzservices.action.console.task.TaskAction">
+        <property name="taskManager" ref="taskManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/task/taskForm" />
+        <property name="successView" value="redirect:/console/task/taskList.do" />
+    </bean>
 
 </beans>

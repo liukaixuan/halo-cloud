@@ -21,6 +21,8 @@ public class Constants {
 		
 		public final String STAT_ITEM = "gs_si" ;
 		
+		public final String TASK = "gs_task" ;
+		
 		public final String IP_TABLE = "gs_ipt" ;
 		
 	}

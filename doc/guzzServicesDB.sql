@@ -163,6 +163,27 @@ CREATE TABLE gs_authed_service (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE gs_task_group (
+  id int(11) NOT NULL auto_increment,
+  name varchar(64) NOT NULL,
+  userId int(11) NOT NULL,
+  createdTime datetime NOT NULL,
+  PRIMARY KEY  (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE gs_task (
+  id int(11) NOT NULL auto_increment,
+  name varchar(64) NOT NULL,
+  userId int(11) NOT NULL,
+  groupId int(11) NOT NULL,
+  errorCode int(11) default 0,
+  authKey varchar(128),
+  remoteUrl varchar(255) NOT NULL,
+  cronExpression varchar(64) NOT NULL,
+  lastExecuteTime datetime,
+  lastSucessTime datetime,
+  PRIMARY KEY  (id),
+  KEY idx_uid (groupId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

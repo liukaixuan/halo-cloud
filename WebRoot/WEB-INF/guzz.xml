@@ -58,6 +58,9 @@
 	<a-business name="statItemGroup" class="com.guzzservices.business.StatItemGroup" />
 	<a-business name="statLog" class="com.guzzservices.business.StatLog" />
 	<a-business name="topRecord" class="com.guzzservices.business.TopRecord" />
+	
+	<a-business name="taskGroup" class="com.guzzservices.business.TaskGroup" />
+	<a-business name="task" class="com.guzzservices.business.Task" />
 	<!-- business main ends -->	
 
 </guzz-configs>
