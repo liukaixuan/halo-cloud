@@ -66,7 +66,7 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 			
 			if(!si.shouldExecute()){
 				if(log.isDebugEnabled()){
-					log.debug("stat:" + statId + " cancelled. Not in execute time span.") ;
+					log.debug("stat:" + statId + " cancelled. Not in a execute time span.") ;
 				}
 				
 				return ;

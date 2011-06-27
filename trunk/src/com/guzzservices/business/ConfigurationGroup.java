@@ -11,7 +11,7 @@ import org.guzz.annotations.Parameter;
 import org.guzz.annotations.Table;
 
 /**
- * 过滤词组
+ * 配置信息组
  * 
  * @author liu kaixuan
  */

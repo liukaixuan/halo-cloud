@@ -43,8 +43,7 @@ public class IndexLeftAction implements Controller {
         node.addSon(new DHtmlTree("应用配置","configGroupList.do	"));
         node.addSon(new DHtmlTree("排行榜","stat/statItemGroupList.do"));
         node.addSon(new DHtmlTree("统计","comingsoon.jsp"));
-        node.addSon(new DHtmlTree("任务调度","comingsoon.jsp"));
-        
+        node.addSon(new DHtmlTree("任务调度","task/taskGroupList.do"));
         
         root.addSon(new DHtmlTree("退出","../logout.do", "_top"));
         
