@@ -13,9 +13,57 @@
         <link type="text/css" href="../../css/smoothness/jquery-ui-1.8.9.custom.css" rel="stylesheet" />	
 		<script type="text/javascript" src="../../js/jquery-1.4.4.min.js"></script>
 		<script type="text/javascript" src="../../js/jquery-ui-1.8.9.custom.min.js"></script>
-		
+		<script type="text/javascript">
+			$(function(){
+				// Dialog
+				$('#editDialog').dialog({
+					autoOpen: false,
+					width: 350,
+					height:130,
+					buttons: {
+						"Ok": function() {
+							var id = $("#ed_id").attr("value") ;
+							var cron = $("#ed_cron").attr("value") ;
+
+							if(!cron){
+								$("#errorMsg").html("请输入cron！") ;
+							}else{
+
+								$(this).dialog("close");
+								
+								$.ajax({
+							   		url : "./taskReschedule.do" ,
+							   		type: "POST",
+							   		data : {"id" : id, "cron" : cron},
+							   		success: function(map){
+								   		document.location.reload() ;
+							 		  }
+							   	});
+							}
+						},
+
+						"Cancel": function() {
+							$(this).dialog("close"); 
+						}
+					}
+
+				});
+
+				$('.editGroupLink').click(function(){
+					$('#editDialog').dialog("option", 'title', "修改cron表达式");
+					
+					$("#ed_id").attr("value", $(this).attr("id")) ;
+					$("#ed_cron").attr("value", $(this).attr("cron")) ;
+					
+					$('#editDialog').dialog('open');
+					
+					return false;
+				});
+			});
+
+		</script>
+
 		<style type="text/css">
-			/*demo page css*/
 			body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 5px;}
 			.demoHeaders { margin-top: 2em; }
 			#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
@@ -27,6 +75,13 @@
     </head>
     
     <body>
+    
+    <div id="editDialog" title="调整任务执行计划">
+    	新cron表达式：<input type="text" name="cron" id="ed_cron" />
+    	&nbsp;<span id="errorMsg" style="color:red"></span>
+    	
+    	<input type="hidden" name="id" id="ed_id" />
+    </div>
     
     <a href="./taskAction.do?groupId=${groupId}">创建任务</a>
     &nbsp;&nbsp;||&nbsp;&nbsp;
@@ -49,7 +104,9 @@
 			<td><c:out value="${m_item.errorCode}" /></td>
 			<td><c:out value="${m_item.cronExpression}" /></td>
 			<td>
-			<a href='./taskAction.do?id=${m_item.id}'>修改</a>
+			<a href='#' class="editGroupLink" id="${m_item.id}" cron="${m_item.cronExpression}">调整执行计划</a>
+			&nbsp;&nbsp;
+			<a href='./taskAction.do?id=${m_item.id}'>修改任务</a>
 			&nbsp;&nbsp;
 			<a href='./statTopRecordList.do?statId=${m_item.id}'>管理排行</a>
 			&nbsp;&nbsp;

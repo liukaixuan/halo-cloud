@@ -86,10 +86,13 @@
     </bean>
     
     <bean name="/console/stat/bannedTopRecordDelete.do" class="com.guzzservices.action.console.stat.BannedTopRecordDeleteAction">
-        <property name="bannedTopRecordManager">
-            <ref bean="bannedTopRecordManager" />
-        </property>
+       <property name="bannedTopRecordManager" ref="bannedTopRecordManager" />
        <property name="sessionManager" ref="sessionManager" />
+    </bean>    
+    
+    <bean name="/console/stat/statItemReschedule.do" class="com.guzzservices.action.console.stat.StatItemRescheduleAction">
+        <property name="statItemManager" ref="statItemManager" />
+        <property name="sessionManager" ref="sessionManager" />
     </bean>
     
     <!-- task -->
@@ -112,6 +115,11 @@
         <property name="sessionManager" ref="sessionManager" />
         <property name="formView" value="console/task/taskForm" />
         <property name="successView" value="redirect:/console/task/taskList.do" />
+    </bean>
+    
+    <bean name="/console/task/taskReschedule.do" class="com.guzzservices.action.console.task.TaskRescheduleAction">
+        <property name="taskManager" ref="taskManager" />
+        <property name="sessionManager" ref="sessionManager" />
     </bean>
 
 </beans>

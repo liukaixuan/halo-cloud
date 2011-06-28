@@ -75,8 +75,18 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 				m_task.setLastSucessTime(m_task.getLastExecuteTime()) ;
 			}
 			
+			if(log.isDebugEnabled()){
+				log.debug("task:" + taskId + " executed. result:" + resultCode) ;
+			}
+			
 			taskManager.update(m_task) ;
 		}
+	}
+	
+	protected String fillCronWithSeconds(String cron){
+		int seconds = (int) (Math.random() * 60) ;
+		
+		return seconds + " " + cron ;
 	}
 
 	public void delete(Object domainObject) {
@@ -92,6 +102,24 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 
 		super.delete(domainObject);
 	}
+	
+	public void reScheduleTask(Task task, String newCron){
+		if(task == null) return ;
+		
+		try {
+			 // 得到trigger
+			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(task.getTaskName(), task.getTaskGroupName());
+			trigger.setCronExpression(fillCronWithSeconds(newCron));
+			
+			// 重置job 
+			scheduler.rescheduleJob(task.getTaskName(), task.getTaskGroupName(), trigger);
+		} catch (Exception e) {			
+			throw new GuzzException("taskId:" + task.getId(), e) ;
+		}
+		
+		task.setCronExpression(newCron) ;
+		this.update(task) ;
+	}
 
 	public Serializable insert(Object domainObject) {
 		Task m_task = (Task) domainObject ;
@@ -101,7 +129,7 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 		
 		//add to task
 		try {
-			CronTrigger trigger = new CronTrigger(m_task.getTaskName(), m_task.getTaskGroupName(), "0 " + m_task.getCronExpression());
+			CronTrigger trigger = new CronTrigger(m_task.getTaskName(), m_task.getTaskGroupName(), fillCronWithSeconds(m_task.getCronExpression()));
 			
 			JobDetail job = new JobDetail(m_task.getTaskName(), m_task.getTaskGroupName(), ExecuteTaskJob.class) ;
 			job.getJobDataMap().put("taskId", m_task.getId()) ;

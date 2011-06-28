@@ -9,4 +9,6 @@ import com.guzzservices.business.Task;
  */
 public interface ITaskManager extends IBaseManager<Task> {
 	
+	public void reScheduleTask(Task task, String newCron) ;
+	
 }
