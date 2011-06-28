@@ -15,5 +15,6 @@ public interface IStatItemManager extends IBaseManager<StatItem> {
 	
 	public void refreshRecords(StatItem item);
 	
-
+	public void reScheduleTask(StatItem si, String newCron) ;
+	
 }

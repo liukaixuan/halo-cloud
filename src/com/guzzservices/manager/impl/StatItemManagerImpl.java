@@ -97,7 +97,30 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		}
 
 		super.delete(domainObject);
+	}
+	
+	public void reScheduleTask(StatItem si, String newCron){
+		if(si == null) return ;
 		
+		try {
+			 // 得到trigger
+			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(si.getTaskName(), si.getTaskGroupName());
+			trigger.setCronExpression(fillCronWithSeconds(newCron));
+			
+			// 重置job 
+			scheduler.rescheduleJob(si.getTaskName(), si.getTaskGroupName(), trigger);
+		} catch (Exception e) {			
+			throw new GuzzException("StatItem id:" + si.getId(), e) ;
+		}
+		
+		si.setCronExpression(newCron) ;
+		this.update(si) ;
+	}
+	
+	protected String fillCronWithSeconds(String cron){
+		int seconds = (int) (Math.random() * 60) ;
+		
+		return seconds + " " + cron ;
 	}
 
 	public Serializable insert(Object domainObject) {
@@ -108,7 +131,7 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		//add to task
 		if(StringUtil.notEmpty(si.getCronExpression())){
 			try {
-				CronTrigger trigger = new CronTrigger(si.getTaskName(), si.getTaskGroupName(), "0 " + si.getCronExpression());
+				CronTrigger trigger = new CronTrigger(si.getTaskName(), si.getTaskGroupName(), fillCronWithSeconds(si.getCronExpression()));
 				
 				JobDetail job = new JobDetail(si.getTaskName(), si.getTaskGroupName(), TopRankJob.class) ;
 				job.getJobDataMap().put("statId", si.getId()) ;
