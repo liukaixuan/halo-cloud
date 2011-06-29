@@ -1,19 +1,16 @@
 package com.guzzservices.rpc.socket;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.Properties;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.guzz.util.CloseUtil;
 import org.guzz.util.StringUtil;
 
 import com.guzzservices.rpc.CommandException;
@@ -28,9 +25,9 @@ public class SocketCommandService {
 	private static final Log log = LogFactory.getLog(SocketCommandService.class) ;
 	private final Properties props ;
 	
-	private final Socket socket ;
-	private InputStream is ;
-	private OutputStream os ;
+	private final SocketChannel channel ;
+	//private InputStream is ;
+	//private OutputStream os ;
 	private final String charset ;
 	private final short version = 1 ;
 	
@@ -44,9 +41,15 @@ public class SocketCommandService {
 	
 	public void dispose(){
 		if(!isClosed){
-			CloseUtil.close(socket) ;
 			isClosed = true ;
 			this.disposedForIOException = false ;
+			if(this.channel != null){
+				try {
+					this.channel.close() ;
+				} catch (IOException e) {
+					log.error("fail to close the channel.", e) ;
+				}
+			}
 		}
 	}
 	
@@ -59,14 +62,16 @@ public class SocketCommandService {
 		int port = StringUtil.toInt(props.getProperty("port"), 6618) ;
 		this.charset = props.getProperty("charset", "UTF-8") ;
 		
-		socket = new Socket() ;
+		this.channel = SocketChannel.open(new InetSocketAddress(host, port)) ;
+		Socket socket = channel.socket() ;
+		
 		socket.setTcpNoDelay(true) ;
-//		socket.setSoTimeout(idleTimeSeconds * 1000) ;
 		socket.setSoTimeout(soTimeoutSeconds * 1000) ;
 		socket.setPerformancePreferences(1, 3, 0) ;
 		socket.setTrafficClass(0x10) ;
-		socket.setSendBufferSize(4096) ;
-		socket.connect(new InetSocketAddress(host, port)) ;
+		socket.setReceiveBufferSize(4096) ;
+		
+		this.channel.finishConnect() ;
 	}
 	
 	public String executeCommand(String command, String param) throws Exception {
@@ -86,6 +91,42 @@ public class SocketCommandService {
 	protected byte[] executeCommand(String command, byte[] param, boolean isStringParam) throws Exception {
 		try {
 			writeRequest(command, param, isStringParam) ;
+			
+			ByteBuffer buff = this.readResponse() ;
+			
+			if(buff == null) return null ;
+			if(buff.remaining() == 0) return new byte[0] ;
+			
+			byte[] bs = new byte[buff.remaining()] ;
+			buff.get(bs) ;
+			buff.clear() ;
+			
+			return bs ;
+		} catch (CommandException e){
+			//CommandException is fine, we have cleaned the channel.
+			throw e ;
+		} catch (Exception e) {
+			//on error dispose.
+			this.dispose() ;
+			this.disposedForIOException = true ;
+			
+			throw e ;
+		}
+	}
+	
+	public ByteBuffer executeCommand(String command, ByteBuffer param) throws Exception {
+		try {
+			byte[] bs = null ;
+			if(param == null){
+			}else if(param.remaining() == 0){
+				bs = new byte[0] ;
+			}else{
+				bs = new byte[param.remaining()] ;
+				param.get(bs) ;
+				param.clear() ;
+			}
+			
+			writeRequest(command, bs, false) ;
 			
 			return readResponse() ;
 		} catch (CommandException e){
@@ -127,95 +168,125 @@ public class SocketCommandService {
 			}
 		}
 		
-		byte[] toSent = buffer.array() ;
-		
-		if(log.isDebugEnabled()){
-			log.debug("package sent:" + Base64.encodeBase64String(toSent)) ;
-		}
-		
-		os = socket.getOutputStream() ;
-		
-		os.write(toSent) ;
-		os.flush() ;
-		
-		is = socket.getInputStream() ;
+		buffer.flip() ;
+		channel.write(buffer) ;
 	}
 	
-	protected byte[] readResponse() throws IOException, CommandException{
+//	protected byte[] readResponse() throws IOException, CommandException{
+//		//read version
+//		ByteBuffer buffer = ByteBuffer.allocate(10) ;
+//		int retBytes = this.channel.read(buffer) ;
+//		if(retBytes != 10){
+//			buffer.clear() ;
+//			throw new SocketException("header length error:" + retBytes) ;
+//		}
+//		
+//		buffer.flip() ;
+//		short version = buffer.getShort() ;
+//		
+//		if(version != this.version){
+//			buffer.clear() ;
+//			throw new SocketException("only support version 1. The received version is:" + version) ;
+//		}
+//		
+//		boolean isException = buffer.getShort() == 1 ;
+//		//boolean isStringResult  == 1
+//		buffer.getShort() ;
+//		int resultLen = buffer.getInt() ;
+//		buffer.clear() ;
+//		
+//		byte[] result = null ;
+//		
+//		if(resultLen > 0){
+//			buffer = ByteBuffer.allocate(resultLen) ;
+//						
+//			while(this.channel.read(buffer) != -1){
+//				if(buffer.remaining() == 0) break ;
+//			}
+//			
+//			buffer.flip() ;
+//			if(buffer.remaining() != resultLen){
+//				buffer.clear() ;
+//				throw new IOException("result body length error.") ;
+//			}
+//			
+//			result = new byte[resultLen] ;
+//			buffer.get(result) ;
+//			buffer.clear() ;
+//		}else if(resultLen == 0){
+//			result = new byte[0] ;
+//		}
+//		
+//		//server exception. Throw after reading all responded data.
+//		if(isException){
+//			if(result == null){
+//				throw new CommandException() ;
+//			}else{
+//				throw new CommandException(new String(result, charset)) ;
+//			}
+//		}
+//		
+//		return result ;
+//	}
+	
+	protected ByteBuffer readResponse() throws IOException, CommandException{
 		//read version
-		byte[] header = new byte[2] ;
-		
-		if(is.read(header) != header.length){
-			if(log.isDebugEnabled()){
-				log.debug("package header received:" + Base64.encodeBase64String(header)) ;
-			}
-			
-			throw new SocketException("header length error.") ;
+		ByteBuffer buffer = ByteBuffer.allocate(10) ;
+		int retBytes = this.channel.read(buffer) ;
+		if(retBytes != 10){
+			buffer.clear() ;
+			throw new SocketException("header length error:" + retBytes) ;
 		}
-				
-		ByteBuffer buffer = ByteBuffer.wrap(header) ;
 		
+		buffer.flip() ;
 		short version = buffer.getShort() ;
+		
 		if(version != this.version){
+			buffer.clear() ;
 			throw new SocketException("only support version 1. The received version is:" + version) ;
 		}
 		
-		//read the header
-		header = new byte[8] ;
-		if(is.read(header) != header.length){
-			throw new SocketException("header length error.") ;
-		}
-		
-		buffer = ByteBuffer.wrap(header) ;
 		boolean isException = buffer.getShort() == 1 ;
-		boolean isStringResult = buffer.getShort() == 1 ;
-			
+		//boolean isStringResult  == 1
+		buffer.getShort() ;
 		int resultLen = buffer.getInt() ;
-		byte[] result = null ;
+		buffer.clear() ;
+		
+		ByteBuffer body = null ;
 		
 		if(resultLen > 0){
-			buffer = ByteBuffer.allocate(resultLen) ;
-			
-			int readCount = 0 ;
-			
-			while(readCount != resultLen){
-				byte[] body = new byte[Math.min(is.available(), resultLen - readCount)] ;
-				
-				int count = is.read(body) ;
-				
-				//nothing available. jump out to avoid dead loop.
-				if(count == -1){
-					break ;
-				}
-				
-				buffer.put(body, 0, count) ;
-				
-				readCount += count ;
-				
-				if(readCount == resultLen){
-					break ;
-				}
+			body = ByteBuffer.allocate(resultLen) ;
+						
+			while(this.channel.read(body) != -1){
+				if(body.remaining() == 0) break ;
 			}
 			
-			if(readCount != resultLen){
+			body.flip() ;
+			if(body.remaining() != resultLen){
+				body.clear() ;
 				throw new IOException("result body length error.") ;
 			}
 			
-			result = buffer.array() ;
 		}else if(resultLen == 0){
-			result = new byte[0] ;
+			body = ByteBuffer.allocate(0) ;
 		}
 		
 		//server exception. Throw after reading all responded data.
 		if(isException){
-			if(result == null){
+			if(body == null){
+				throw new CommandException() ;
+			}else if(body.remaining() == 0){
 				throw new CommandException() ;
 			}else{
+				byte[] result = new byte[resultLen] ;
+				body.get(result) ;
+				body.clear() ;
+				
 				throw new CommandException(new String(result, charset)) ;
 			}
 		}
 		
-		return result ;
+		return body ;
 	}
 
 	public boolean isDisposedForIOException() {

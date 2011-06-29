@@ -9,14 +9,14 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.guzzservices.dir.ip.ChinaIPLocateServiceImpl;
 import com.guzzservices.dir.ip.LocateResult;
-import com.guzzservices.rpc.server.CommandHandler;
+import com.guzzservices.rpc.server.CommandHandlerAdapter;
 import com.guzzservices.rpc.server.CommandServerService;
 import com.guzzservices.rpc.util.JsonUtil;
 
 /**
  * IPLocator based on the cz's IP database. 
  */
-public class ChinaIPLocateImpl implements CommandHandler, InitializingBean {
+public class ChinaIPLocateImpl extends CommandHandlerAdapter implements InitializingBean {
 	protected static final Logger log = Logger.getLogger(ChinaIPLocateImpl.class);
 	
 	private CommandServerService commandServerService ;
@@ -72,10 +72,6 @@ public class ChinaIPLocateImpl implements CommandHandler, InitializingBean {
 		loc.setCityMarker(mark.getCityMarker()) ;
 		
 		return JsonUtil.toJson(loc) ;
-	}
-
-	public byte[] executeCommand(String command, byte[] param) throws Exception {
-		throw new NoSuchMethodException("not supported!") ;
 	}
 	
 	public void setCommandServerService(CommandServerService commandServerService) {

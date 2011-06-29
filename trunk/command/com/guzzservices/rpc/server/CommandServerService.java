@@ -17,6 +17,6 @@ public interface CommandServerService {
 	
 	public CommandHandler queryCommandHandler(String command) ;
 	
-	public CommandResponse executeCommand(CommandRequest request) ;
+	public CommandResponse executeCommand(ClientInfo client, CommandRequest request) ;
 	
 }

@@ -21,6 +21,7 @@ import org.guzz.util.StringUtil;
 import org.guzz.util.thread.DemonQueuedThread;
 
 import com.guzzservices.rpc.server.CommandHandler;
+import com.guzzservices.rpc.server.CommandHandlerAdapter;
 import com.guzzservices.rpc.server.CommandServerService;
 import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.sso.GuestUser;
@@ -40,7 +41,7 @@ import com.guzzservices.store.CacheService;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public class GlobalSSOServerServiceImpl extends AbstractService implements CommandHandler {
+public class GlobalSSOServerServiceImpl extends AbstractService {
 	
 	private String sessionIdCookieName = "guzz_session_id" ;
 	
@@ -308,61 +309,63 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements Comma
 	}
 	
 	public void setCommandServerService(CommandServerService css){
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_LOGIN, this) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_LOGOUT, this) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_GET_LOGIN_USER, this) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD, this) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO, this) ;
+		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_LOGIN, commandHandler) ;
+		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_LOGOUT, commandHandler) ;
+		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_GET_LOGIN_USER, commandHandler) ;
+		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD, commandHandler) ;
+		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO, commandHandler) ;
 	}
-
-	public String executeCommand(String command, String param) throws Exception {
-		String result = null ; 
-		
-		if(CommandSSOServiceImpl.COMMAND_LOGIN.equals(command)){
-			LoginCommandRequest r = JsonUtil.fromJson(param, LoginCommandRequest.class) ;
+	
+	private CommandHandler commandHandler = new CommandHandlerAdapter(){
+		public String executeCommand(String command, String param) throws Exception {
+			String result = null ; 
 			
-			if(r.checkPassword){
-				result = this.login(r.oldSessionId, r.userName, r.password, r.IP, r.maxAge) ;
+			if(CommandSSOServiceImpl.COMMAND_LOGIN.equals(command)){
+				LoginCommandRequest r = JsonUtil.fromJson(param, LoginCommandRequest.class) ;
+				
+				if(r.checkPassword){
+					result = login(r.oldSessionId, r.userName, r.password, r.IP, r.maxAge) ;
+				}else{
+					//只有local允许按照用户名随意登录。
+					throw new LoginException(LoginException.PERMISSION_DENIED, "Password is required!") ;
+//					result = this.login(r.oldSessionId, r.userName, r.IP, r.maxAge) ;
+				}
+				
+				return result ;
+				
+			}else if(CommandSSOServiceImpl.COMMAND_LOGOUT.equals(command)){
+				String sessionId = param ;
+				
+				result = logout(sessionId) ;
+				
+			}else if(CommandSSOServiceImpl.COMMAND_GET_LOGIN_USER.equals(command)){
+				String guzzSessionId = param ;
+				
+				result = getLoginUser(guzzSessionId) ;
+			}else if(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD.equals(command)){
+				CheckPasswordCommandRequest r = JsonUtil.fromJson(param, CheckPasswordCommandRequest.class) ;
+				int errorCode = checkPassword(r.IP, r.userName, r.password) ;
+				
+				return String.valueOf(errorCode) ;
+			}else if(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO.equals(command)){
+				Map<String, Object> infos = localQueryUserInfo(param) ;
+				
+				if(infos == null){
+					return null ;
+				}else{
+					return JsonUtil.toJson(infos) ;
+				}
 			}else{
-				//只有local允许按照用户名随意登录。
-				throw new LoginException(LoginException.PERMISSION_DENIED, "Password is required!") ;
-//				result = this.login(r.oldSessionId, r.userName, r.IP, r.maxAge) ;
+				throw new ServiceExecutionException("unknown command for sso:" + command) ;
 			}
 			
-			return result ;
-			
-		}else if(CommandSSOServiceImpl.COMMAND_LOGOUT.equals(command)){
-			String sessionId = param ;
-			
-			result = this.logout(sessionId) ;
-			
-		}else if(CommandSSOServiceImpl.COMMAND_GET_LOGIN_USER.equals(command)){
-			String guzzSessionId = param ;
-			
-			result = this.getLoginUser(guzzSessionId) ;
-		}else if(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD.equals(command)){
-			CheckPasswordCommandRequest r = JsonUtil.fromJson(param, CheckPasswordCommandRequest.class) ;
-			int errorCode = this.checkPassword(r.IP, r.userName, r.password) ;
-			
-			return String.valueOf(errorCode) ;
-		}else if(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO.equals(command)){
-			Map<String, Object> infos = this.localQueryUserInfo(param) ;
-			
-			if(infos == null){
-				return null ;
-			}else{
-				return JsonUtil.toJson(infos) ;
-			}
-		}else{
-			throw new ServiceExecutionException("unknown command for sso:" + command) ;
+			return result;
 		}
-		
-		return result;
-	}
 
-	public byte[] executeCommand(String command, byte[] param) throws Exception {
-		throw new ServiceExecutionException("byte[] protocol not implemented.") ;
-	}
+		public byte[] executeCommand(String command, byte[] param) throws Exception {
+			throw new ServiceExecutionException("byte[] protocol not implemented.") ;
+		}
+	} ;
 	
 	class OnlineStatusSync extends DemonQueuedThread{
 		private HashMap<String, String> activeUsers = new HashMap<String, String>() ;
