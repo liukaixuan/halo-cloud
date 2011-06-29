@@ -3,6 +3,8 @@
  */
 package com.guzzservices.rpc.server;
 
+import java.nio.ByteBuffer;
+
 /**
  * 
  * 
@@ -11,7 +13,8 @@ package com.guzzservices.rpc.server;
  */
 public class CommandResponse {
 	
-	public byte[] resultB ;
+	/**Fliped ByteBuffer*/
+	public ByteBuffer resultB ;
 	
 	public String resultS ;
 	

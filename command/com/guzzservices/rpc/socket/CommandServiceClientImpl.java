@@ -1,5 +1,6 @@
 package com.guzzservices.rpc.socket;
 
+import java.nio.ByteBuffer;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -57,6 +58,7 @@ public class CommandServiceClientImpl extends AbstractService implements Command
 		try{
 			return client.executeCommand(command, param) ;
 		}catch(Exception e){
+			e.printStackTrace() ;
 			//retry again
 			return client.executeCommand(command, param) ;
 		}finally{
@@ -65,6 +67,23 @@ public class CommandServiceClientImpl extends AbstractService implements Command
 	}
 
 	public byte[] executeCommand(String command, byte[] param) throws Exception {
+		final SocketCommandService client = getClient() ;
+		
+		if(client == null || client.isClosed()) {
+			throw new CommandException("no idle socket available!") ;
+		}
+		
+		try{
+			return client.executeCommand(command, param) ;
+		}catch(Exception e){
+			//retry again
+			return client.executeCommand(command, param) ;
+		}finally{
+			returnClient(client) ;
+		}
+	}
+	
+	public ByteBuffer executeCommand(String command, ByteBuffer param) throws Exception{
 		final SocketCommandService client = getClient() ;
 		
 		if(client == null || client.isClosed()) {

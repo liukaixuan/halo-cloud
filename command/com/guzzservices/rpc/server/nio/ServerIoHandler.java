@@ -3,12 +3,15 @@
  */
 package com.guzzservices.rpc.server.nio;
 
+import java.net.InetSocketAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 
+import com.guzzservices.rpc.server.ClientInfo;
 import com.guzzservices.rpc.server.CommandRequest;
 import com.guzzservices.rpc.server.CommandResponse;
 import com.guzzservices.rpc.server.CommandServerService;
@@ -30,8 +33,10 @@ public class ServerIoHandler extends IoHandlerAdapter {
 	
 	public void messageReceived(IoSession session, Object message) throws Exception {
 		CommandRequest request = (CommandRequest) message ;
+		InetSocketAddress addr = (InetSocketAddress) session.getRemoteAddress() ;		
+		ClientInfo client = new ClientInfo(addr) ;
 		
-		CommandResponse rp = this.commandServerService.executeCommand(request) ;
+		CommandResponse rp = this.commandServerService.executeCommand(client, request) ;
 		
 		session.write(rp);
 	}

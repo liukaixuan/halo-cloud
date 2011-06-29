@@ -20,6 +20,7 @@ import com.guzzservices.manager.Constants;
 import com.guzzservices.manager.IAuthManager;
 import com.guzzservices.manager.IConfigurationManager;
 import com.guzzservices.rpc.server.CommandHandler;
+import com.guzzservices.rpc.server.CommandHandlerAdapter;
 import com.guzzservices.rpc.server.CommandServerService;
 import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.sso.LoginUser;
@@ -31,7 +32,7 @@ import com.guzzservices.version.VersionControlService;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public class ConfigurationManagerImpl extends GuzzBaseDao implements IConfigurationManager, CommandHandler {
+public class ConfigurationManagerImpl extends GuzzBaseDao implements IConfigurationManager {
 	
 	private SlowUpdateService slowUpdateService ;
 	
@@ -132,38 +133,37 @@ public class ConfigurationManagerImpl extends GuzzBaseDao implements IConfigurat
 		this.versionControlService.incVersion(Constants.buildVersionControlPath(Constants.serviceName.CONFIGURATION, groupId)) ;
 	}
 	
-	public String executeCommand(String command, String param) throws Exception {
-		if(ConfigurationServiceImpl.COMMAND_LOAD_CONFIG.equals(command)){
-			SearchExpression se = SearchExpression.forClass(Configuration.class, 1, 200) ;
-			se.and(Terms.eq("groupId", param)) ;
-			
-			List<Configuration> configs = super.list(se) ;
-			HashMap<String, Object> result = new HashMap<String, Object>() ;
-			
-			for(Configuration c : configs){
-				Object value = c.toTypedValue() ;
-				
-				result.put(c.getParameter(), value) ;
-			}
-			
-			return JsonUtil.toJson(result) ;
-		}else if(ConfigurationServiceImpl.COMMAND_QUERY_VERSION.equals(command)){
-			long v = versionControlService.getVersion(Constants.buildVersionControlPath(Constants.serviceName.CONFIGURATION, param)) ;
-			
-			return String.valueOf(v) ;
-		}else{
-			throw new UnsupportedOperationException(command) ;
-		}
-	}
-
-	public byte[] executeCommand(String command, byte[] param) throws Exception {
-		throw new NoSuchMethodException("not supported!") ;
+	public void setCommandServerService(CommandServerService commandServerService) {
+		commandServerService.addCommandHandler(ConfigurationServiceImpl.COMMAND_LOAD_CONFIG, commandHandler) ;
+		commandServerService.addCommandHandler(ConfigurationServiceImpl.COMMAND_QUERY_VERSION, commandHandler) ;
 	}
 	
-	public void setCommandServerService(CommandServerService commandServerService) {
-		commandServerService.addCommandHandler(ConfigurationServiceImpl.COMMAND_LOAD_CONFIG, this) ;
-		commandServerService.addCommandHandler(ConfigurationServiceImpl.COMMAND_QUERY_VERSION, this) ;
-	}
+	private CommandHandler commandHandler = new CommandHandlerAdapter(){
+		
+		public String executeCommand(String command, String param) throws Exception {
+			if(ConfigurationServiceImpl.COMMAND_LOAD_CONFIG.equals(command)){
+				SearchExpression se = SearchExpression.forClass(Configuration.class, 1, 200) ;
+				se.and(Terms.eq("groupId", param)) ;
+				
+				List<Configuration> configs = list(se) ;
+				HashMap<String, Object> result = new HashMap<String, Object>() ;
+				
+				for(Configuration c : configs){
+					Object value = c.toTypedValue() ;
+					
+					result.put(c.getParameter(), value) ;
+				}
+				
+				return JsonUtil.toJson(result) ;
+			}else if(ConfigurationServiceImpl.COMMAND_QUERY_VERSION.equals(command)){
+				long v = versionControlService.getVersion(Constants.buildVersionControlPath(Constants.serviceName.CONFIGURATION, param)) ;
+				
+				return String.valueOf(v) ;
+			}else{
+				throw new UnsupportedOperationException(command) ;
+			}
+		}		
+	} ;
 
 	public SlowUpdateService getSlowUpdateService() {
 		return slowUpdateService;

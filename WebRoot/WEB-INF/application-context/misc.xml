@@ -5,6 +5,7 @@
 
 	<bean id="_springSendMailProvider" class="com.guzzservices.serviceimpl.SpringSendMailProvider">
 		<property name="commandServerService" ref="commandServerService" />
+		<property name="authedIPs" value="${sendmail.authedIPs}" />
 		<property name="mailSender">
 			<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		        <property name="host" value="${sendmail.host}" />

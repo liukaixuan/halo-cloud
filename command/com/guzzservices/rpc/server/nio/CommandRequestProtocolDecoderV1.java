@@ -23,11 +23,11 @@ import com.guzzservices.rpc.server.CommandRequest;
 public class CommandRequestProtocolDecoderV1 extends CumulativeProtocolDecoder {
 	private static final Log log = LogFactory.getLog(CommandRequestProtocolDecoderV1.class) ;
 	private static final String CONTEXT = "GS_CRPDV1_CONTEXT" ;
-	
-	private final Charset charset ;
+		
+	private final CharsetDecoder cd ;
 	
 	public CommandRequestProtocolDecoderV1(Charset charset){
-		this.charset = charset ;
+		cd = charset.newDecoder() ;
 	}
 
 	@Override
@@ -58,18 +58,15 @@ public class CommandRequestProtocolDecoderV1 extends CumulativeProtocolDecoder {
 			context.setHeadRead(true) ;
 		}
 		
-		CharsetDecoder cd = charset.newDecoder() ;
-		
 		if(!context.isCommandRead()){
 			short commandBLen = context.getCommandBLen() ;
 			
 			if(in.remaining() >= commandBLen){
 				context.setCommand(in.getString(commandBLen, cd)) ;
+				context.setCommandRead(true) ;
 			}else{
 				return false ;
 			}
-			
-			context.setCommandRead(true) ;
 		}
 		
 		int paramLen = context.getParamLen() ;
@@ -96,7 +93,7 @@ public class CommandRequestProtocolDecoderV1 extends CumulativeProtocolDecoder {
 				if(cr.isStringParam){
 					cr.paramS = buffer.getString(paramLen, cd) ;
 				}else{
-					cr.paramB = buffer.array() ;
+					cr.paramB = buffer.buf() ;
 				}
 			}
 			
@@ -122,6 +119,7 @@ public class CommandRequestProtocolDecoderV1 extends CumulativeProtocolDecoder {
 	}
 	
 	private static class Context {
+		//param body
 		private final IoBuffer innerBuffer;
 		
 		private boolean headRead ;

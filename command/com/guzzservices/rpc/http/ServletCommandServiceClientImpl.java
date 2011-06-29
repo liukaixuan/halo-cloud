@@ -3,6 +3,7 @@
  */
 package com.guzzservices.rpc.http;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,23 @@ public class ServletCommandServiceClientImpl extends AbstractService implements 
 		}else{
 			return Base64.decodeBase64(resultInString) ;
 		}
+	}
+	
+	public ByteBuffer executeCommand(String command, ByteBuffer param) throws Exception {
+		byte[] bs = null ;
+		if(param == null){
+			
+		}else if(param.remaining() == 0){
+			bs = new byte[0] ;
+		}else{
+			bs = new byte[param.remaining()] ;
+			param.get(bs) ;
+			param.clear() ;
+		}
+		
+		byte[] result = this.executeCommand(command, bs) ;
+		
+		return ByteBuffer.wrap(result) ;
 	}
 	
 	public String executeCommand(String command, boolean isStringParam, String param) throws Exception {

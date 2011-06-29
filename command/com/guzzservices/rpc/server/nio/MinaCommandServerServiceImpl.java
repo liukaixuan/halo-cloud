@@ -18,6 +18,7 @@ import org.guzz.service.AbstractService;
 import org.guzz.service.ServiceConfig;
 import org.guzz.util.StringUtil;
 
+import com.guzzservices.rpc.server.ClientInfo;
 import com.guzzservices.rpc.server.CommandHandler;
 import com.guzzservices.rpc.server.CommandRequest;
 import com.guzzservices.rpc.server.CommandResponse;
@@ -81,7 +82,7 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 
 	}
 	
-	public CommandResponse executeCommand(CommandRequest request){
+	public CommandResponse executeCommand(ClientInfo client, CommandRequest request){
 		String command = request.command ;
 	
 		if(log.isDebugEnabled()){
@@ -100,9 +101,9 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 		}else{
 			try{
 				if(request.isStringParam){
-					rp.resultS = handler.executeCommand(command, request.paramS) ;
+					rp.resultS = handler.executeCommand(client, command, request.paramS) ;
 				}else{
-					rp.resultB = handler.executeCommand(command, request.paramB) ;
+					rp.resultB = handler.executeCommand(client, command, request.paramB) ;
 				}
 			}catch(Throwable t){
 				StringBuilder sb = new StringBuilder() ;	

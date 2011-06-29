@@ -15,7 +15,8 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import com.guzzservices.mail.SendMailService;
 import com.guzzservices.mail.impl.RemoteSendMailServiceImpl;
-import com.guzzservices.rpc.server.CommandHandler;
+import com.guzzservices.rpc.server.ClientInfo;
+import com.guzzservices.rpc.server.CommandHandlerAdapter;
 import com.guzzservices.rpc.server.CommandServerService;
 import com.guzzservices.rpc.util.JsonUtil;
 
@@ -25,10 +26,15 @@ import com.guzzservices.rpc.util.JsonUtil;
  * 
  * @author liu kaixuan(liukaixuan@gmail.com)
  */
-public class SpringSendMailProvider implements SendMailService, CommandHandler {
+public class SpringSendMailProvider extends CommandHandlerAdapter implements SendMailService {
 	private static final Log log = LogFactory.getLog(SpringSendMailProvider.class) ;
 	
 	private JavaMailSender mailSender;
+	
+	/**
+	 * 允许发送邮件的客户端IP地址列表
+	 */
+	private String[] authedIPs ;
 	
 	public boolean sendPlainMail(String from, String to, String subject, String content) {
 		SimpleMailMessage msg=new SimpleMailMessage();  
@@ -66,7 +72,29 @@ public class SpringSendMailProvider implements SendMailService, CommandHandler {
 		return true;
 	}
 
-	public String executeCommand(String command, String param) throws Exception {
+	public String executeCommand(ClientInfo client, String command, String param) throws Exception {
+		if(authedIPs != null && authedIPs.length > 0){
+			boolean passed = true ;
+			
+			for(String IP : authedIPs){
+				if(IP.length() == 0) continue ;
+				
+				if(client.getIP().equals(IP)){
+					passed = true ;
+					break ;
+				}else if(client.getIP().startsWith(IP)){
+					passed = true ;
+					break ;
+				}
+				
+				passed = false ;
+			}
+			
+			if(!passed){
+				throw new ServiceExecutionException("Forbidden. IP:" + client.getIP()) ;
+			}
+		}
+		
 		boolean result = false ;
 		
 		if(RemoteSendMailServiceImpl.SEND_HTML_MAIL.equals(command)){
@@ -94,10 +122,6 @@ public class SpringSendMailProvider implements SendMailService, CommandHandler {
 		return String.valueOf(result) ;
 	}
 
-	public byte[] executeCommand(String command, byte[] param) throws Exception {
-		throw new ServiceExecutionException("not supported") ;
-	}
-
 	public void setCommandServerService(CommandServerService commandServerService) {
 		commandServerService.addCommandHandler(RemoteSendMailServiceImpl.SEND_HTML_MAIL, this) ;
 		commandServerService.addCommandHandler(RemoteSendMailServiceImpl.SEND_PLAIN_TEXT_MAIL, this) ;
@@ -109,6 +133,14 @@ public class SpringSendMailProvider implements SendMailService, CommandHandler {
 
 	public void setMailSender(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
+	}
+
+	public String[] getAuthedIPs() {
+		return authedIPs;
+	}
+
+	public void setAuthedIPs(String[] authedIPs) {
+		this.authedIPs = authedIPs;
 	}
 
 }

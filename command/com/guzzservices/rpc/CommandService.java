@@ -3,6 +3,8 @@
  */
 package com.guzzservices.rpc;
 
+import java.nio.ByteBuffer;
+
 /**
  * 
  * Execute a command and return.
@@ -28,5 +30,14 @@ public interface CommandService {
 	 * @throws Exception
 	 */
 	public byte[] executeCommand(String command, byte[] param) throws Exception ;
+	
+	/**
+	 * Execute a command, and return the result as a ByteBuffer.
+	 * 
+	 * @param command command name
+	 * @param param parameters
+	 * @throws Exception
+	 */
+	public ByteBuffer executeCommand(String command, ByteBuffer param) throws Exception ;
 
 }

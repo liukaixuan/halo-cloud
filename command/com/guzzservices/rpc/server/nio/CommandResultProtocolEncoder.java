@@ -3,6 +3,8 @@
  */
 package com.guzzservices.rpc.server.nio;
 
+import java.nio.ByteBuffer;
+
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
@@ -32,11 +34,16 @@ public class CommandResultProtocolEncoder extends ProtocolEncoderAdapter {
 		
 		if(cr.isStringResult){
 			if(cr.resultS != null){
-				cr.resultB = cr.resultS.getBytes(charset) ;
+				byte[] bs = cr.resultS.getBytes(charset) ;
+				ByteBuffer bb = ByteBuffer.allocate(bs.length) ;
+				bb.put(bs) ;
+				bb.flip() ;
+				
+				cr.resultB = bb ;
 			}
 		}
 		
-		int resultLen = cr.resultB == null ? -1 : cr.resultB.length ;
+		int resultLen = cr.resultB == null ? -1 : cr.resultB.remaining() ;
 		
 		IoBuffer buffer = IoBuffer.allocate(11 + resultLen) ;
 		

@@ -15,7 +15,7 @@ import com.guzzservices.manager.Constants;
 import com.guzzservices.manager.IFilterWordGroupManager;
 import com.guzzservices.manager.IFilterWordManager;
 import com.guzzservices.manager.IWordFilter;
-import com.guzzservices.rpc.server.CommandHandler;
+import com.guzzservices.rpc.server.CommandHandlerAdapter;
 import com.guzzservices.rpc.server.CommandServerService;
 import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.secure.wordFilter.MatchResult;
@@ -27,7 +27,7 @@ import com.guzzservices.version.VersionControlService;
 /**
  * 过滤词引擎.可以实现分组xml字典的过滤处理，支持大小写不敏感，支持过滤词分级 ，支持标记颜色分级.
  */
-public class WordFilterImpl implements IWordFilter, CommandHandler, NewVersionListener {
+public class WordFilterImpl extends CommandHandlerAdapter implements IWordFilter, NewVersionListener {
 	protected static final Logger LOG = Logger.getLogger(WordFilterImpl.class);
 	
 	/** 词典 */
@@ -412,10 +412,6 @@ public class WordFilterImpl implements IWordFilter, CommandHandler, NewVersionLi
 		if(result == null) return null ;
 		
 		return JsonUtil.toJson(result) ;
-	}
-
-	public byte[] executeCommand(String command, byte[] param) throws Exception {
-		throw new NoSuchMethodException("not supported!") ;
 	}
 	
 	public void setCommandServerService(CommandServerService commandServerService) {
