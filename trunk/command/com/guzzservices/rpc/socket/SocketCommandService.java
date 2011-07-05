@@ -57,7 +57,7 @@ public class SocketCommandService {
 		this.props = props ;
 		
 		//int idleTimeSeconds = StringUtil.toInt(props.getProperty("idleTimeSeconds"), 300) ;
-		int soTimeoutSeconds = StringUtil.toInt(props.getProperty("soTimeoutSeconds"), 10) ;
+		int soTimeoutSeconds = StringUtil.toInt(props.getProperty("soTimeoutSeconds"), 15) ;
 		String host = props.getProperty("host") ;
 		int port = StringUtil.toInt(props.getProperty("port"), 6618) ;
 		this.charset = props.getProperty("charset", "UTF-8") ;
