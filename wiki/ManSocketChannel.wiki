@@ -57,4 +57,4 @@ pool.maxActive的最大值允许为10000。如果不设置，则默认计算为�
 || host || 连接到的机器 || 必须有 ||
 || port || 连接到的端口 || 默认为：6618 ||
 || charset || 当通过字符串调用时，转成字节时，使用的编码 || 默认为：UTF-8 ||
-|| soTimeoutSeconds || 超时时间，单位秒。具体参看：<a target="_blank" href="http://download.oracle.com/javase/1.4.2/docs/api/java/net/Socket.html#setSoTimeout(int)">Socket.setSoTimeout</a> || 默认为：10 ||
+|| soTimeoutSeconds || 超时时间，单位秒。具体参看：<a target="_blank" href="http://download.oracle.com/javase/1.4.2/docs/api/java/net/Socket.html#setSoTimeout(int)">Socket.setSoTimeout</a> || 默认为：15 ||
