@@ -43,7 +43,7 @@ pool.maxActive=10
 
 pool.maxActive的最大值允许为10000。如果不设置，则默认计算为其他已经设置的pool.maxActive的平均值；如果所有pool.maxActive都没有设置，所有pool.maxActive默认为500。
 
-无论设置多少个[commandSocketChannelForServices]组，第一个[commandSocketChannelForServices]使用以下特殊参数控制连接池属性：
+无论设置多少个[commandSocketChannelForServices]组，第一组[commandSocketChannelForServices]使用以下特殊参数控制整个连接池的属性：
 
 || 参数 || 含义 || 备注 ||
 || pool.maxIdle || 最大空闲连接数 || 包含到所有机器的连接（下同） ||
