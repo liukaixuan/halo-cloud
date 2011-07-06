@@ -1,6 +1,7 @@
 package com.guzzservices.action.vo;
 
 import com.guzzservices.business.Task;
+import com.guzzservices.util.RandomUtils;
 
 /**
  * 
@@ -22,6 +23,7 @@ public class TaskForm {
 		this.task = new Task() ;
 		this.task.setGroupId(groupId) ;
 		this.task.setUserId(userId) ;
+		this.task.setAuthKey(RandomUtils.generateRandomString(32)) ;
 	}
 
 	public boolean isNewTask() {
