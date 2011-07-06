@@ -48,7 +48,7 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 		
 		Properties props = scs[0].getProps() ;
 		
-		int idleTimeSeconds = StringUtil.toInt(props.getProperty("idleTimeSeconds"), 600) ;
+		int idleTimeSeconds = StringUtil.toInt(props.getProperty("idleTimeSeconds"), 3600) ;
 		int port = StringUtil.toInt(props.getProperty("port"), 11546) ;
 		
 		acceptor.getSessionConfig().setUseReadOperation(true) ;
