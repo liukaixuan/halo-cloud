@@ -39,7 +39,7 @@ idleTimeSeconds=300
 <service name="yourService" dependsOn="commandSocketChannelForServices"  class="xxxxx"/>
 }}}
 
-2. 注入后，在用户调用API时，封装参数并转调CommandService的2个API调用远程服务，封装结果并返回。CommandService的类为：
+2. 注入后，在用户调用API时，封装参数并转调CommandService的3个API调用远程服务，封装结果并返回。CommandService的类为：
 {{{
 com.guzzservices.rpc.CommandService
 }}}
@@ -66,10 +66,20 @@ public String executeCommand(String command, String param) throws Exception ;
 */
 public byte[] executeCommand(String command, byte[] param) throws Exception ;
 
+	
+/**
+* Execute a command, and return the result as a ByteBuffer.
+* 
+* @param command command name
+* @param param parameters
+* @throws Exception
+*/
+public ByteBuffer executeCommand(String command, ByteBuffer param) throws Exception ;
+
 }
 }}}
 
-两个API都需要传入一个命令，以及一个参数；如果服务器执行错误，或出现网络错误，抛出异常。
+3个API都需要传入一个命令，以及一个参数；如果服务器执行错误，或出现网络错误，抛出异常。
 
 API函数执行为同步执行，只有完成远程调用才会返回。
 
@@ -79,11 +89,11 @@ API函数执行为同步执行，只有完成远程调用才会返回。
 
 对于一个服务，需要实现一个com.guzzservices.rpc.server.CommandHandler，并且在commandServerService中注册该handler能够处理的command命令。这样，当某个远程调用发生时，commandServerService根据command查找到对应的CommandHandler，执行调用。
 
-CommandHandler需要实现的方法，与前面CommandService的2个方法相对应。CommandHandler允许抛出异常，抛出异常时，客户端将对应的抛出异常。
+CommandHandler需要实现的方法，与前面CommandService的3个方法相对应。CommandHandler允许抛出异常，抛出异常时，客户端将对应的抛出异常。
 
 编写方式：
 <ol>
-	<li>编写类，实现com.guzzservices.rpc.server.CommandHandler接口。接口需要实现的两个方法，对应客户端CommandService的两个方法调用。</li>
+	<li>编写类，实现com.guzzservices.rpc.server.CommandHandler接口。一般选择通过继承 com.guzzservices.rpc.server.CommandHandlerAdapter 的方式实现。实现类覆盖支持的调用方法，实现具体服务。</li>
 	<li>获得类的实例，例如spring中为一个bean。</li>
 	<li>获得上面配置的commandServerService服务的示例。commandServerService的java类型为：com.guzzservices.rpc.server.CommandServerService</li>
 	<li>调用commandServerService的方法注册步骤1实现Handler可以处理的命令。例如：</li>
