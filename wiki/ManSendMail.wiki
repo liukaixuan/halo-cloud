@@ -37,11 +37,14 @@ s.sendHtmlMail("halo-cloud@guzzservices.com", "xxxx@gmail.com", "test html subje
 对于私服，需要修改服务器端的配置文件，填写正确的邮件服务器信息，如：
 {{{
 [springConfiguration]
+sendmail.authedIPs=192.168,26.36.46.56
 sendmail.host=smtp.163.com
 sendmail.port=25
 sendmail.username=xxx
 sendmail.password=xxxxxx
 }}}
+
+其中，sendmail.authedIPs为允许访问邮件服务的的IP地址或者以xx开头的IP地址列表，用英文逗号分隔。其他配置项类似于Outlook等邮件客户端软件的配置。
 
 为防止垃圾邮件，cloud.guzzservices.com 的测试环境不提供默认的邮件发送服务。
 

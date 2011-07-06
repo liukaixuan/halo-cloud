@@ -45,3 +45,12 @@ halo-cloud为guzz标准服务，使用方法请参看：[http://code.google.com/
 /test 存放测试代码
 
 其他源代码目录直接打成jar包，当作客户端代码来用。我们发布的名字是：guzzServices_common.jar
+
+=== 代码获取 ===
+
+云端代码请直接从svn checkout，工程不在提供下载。
+
+客户端代码可以从Downloads中下载，也可以在下载并导入的云端工程中自己打包。打包的方式是：打包除src和conf目录以外的所有源代码目录。
+
+从Downloads中下载的客户端代码不保证最新。
+
