@@ -82,7 +82,7 @@ public class HttpClientUtils {
 				url += "?";
 			}
 			
-			String paramString = URLEncodedUtils.format(nvps, "utf-8");
+			String paramString = URLEncodedUtils.format(nvps, encoding);
 		    url += paramString;
 		}
 		
