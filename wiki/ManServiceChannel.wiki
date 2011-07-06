@@ -108,3 +108,9 @@ commandServerService.addCommandHandler(“query.cn.ip”, cnIpLocateHandler) ;
 	<li>在CommandHandler中增加setCommandServerService(CommandServerService css)方法。并通过spring IOC等，注入commandServerService</li>
 	<li>在这个方法中调用：css.addCommandHandler(command, cnIpLocateHandler) ;</li>
 </ol>
+
+服务器端实现参考：
+
+[http://code.google.com/p/halo-cloud/source/browse/trunk/src/com/guzzservices/manager/impl/ip/ChinaIPLocateImpl.java]
+
+[http://code.google.com/p/halo-cloud/source/browse/trunk/src/com/guzzservices/manager/impl/ConfigurationManagerImpl.java]
