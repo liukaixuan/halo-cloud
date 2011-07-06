@@ -48,7 +48,7 @@ halo-cloud为guzz标准服务，使用方法请参看：[http://code.google.com/
 
 === 代码获取 ===
 
-云端代码请直接从svn checkout，工程不在提供下载。
+云端代码请直接从svn checkout，Downloads中不在提供下载。
 
 客户端代码可以从Downloads中下载，也可以在下载并导入的云端工程中自己打包。打包的方式是：打包除src和conf目录以外的所有源代码目录。
 
