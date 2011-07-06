@@ -106,5 +106,5 @@ commandServerService.addCommandHandler(“query.cn.ip”, cnIpLocateHandler) ;
 一般情况下，我们会通过依赖注入的方式注册服务器端服务。注册方式：
 <ol>
 	<li>在CommandHandler中增加setCommandServerService(CommandServerService css)方法。并通过spring IOC等，注入commandServerService</li>
-	<li>在这个方法中调用：css.addCommandHandler(command, this) ;</li>
+	<li>在这个方法中调用：css.addCommandHandler(command, cnIpLocateHandler) ;</li>
 </ol>
