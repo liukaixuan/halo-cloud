@@ -1,6 +1,6 @@
 == 功能介绍 ==
 
-建立起一个与服务器通信的协议信道，供其他应用服务与服务器交互是使用。如果将一般的服务，如内容过滤、IP反查等理解为网络应用软件（像QQ，迅雷等），则信道服务为底层的TCP/IP协议，负责应用软件的网络通讯工作。
+建立起一个与服务器通信的协议信道，供其他应用服务与服务器交互时使用。如果将一般的服务，如内容过滤、IP反查等理解为网络应用软件（像QQ，迅雷等），则信道服务为底层的TCP/IP协议，负责应用软件的网络通讯工作。
 
 通信信道服务分为客户端和服务器端。在一个应用系统中，可以配置多个客户端，连接多个服务器。一般应用程序只需要配置客户端即可。对于guzzservices提供的所有服务，如果没有特别声明都只需要配置客户端。
 
@@ -98,5 +98,3 @@ commandServerService.addCommandHandler(“query.cn.ip”, cnIpLocateHandler) ;
 	<li>在CommandHandler中增加setCommandServerService(CommandServerService css)方法。并通过spring IOC等，注入commandServerService</li>
 	<li>在这个方法中调用：css.addCommandHandler(command, this) ;</li>
 </ol>
-
-
