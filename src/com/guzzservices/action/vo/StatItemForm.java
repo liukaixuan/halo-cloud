@@ -1,6 +1,7 @@
 package com.guzzservices.action.vo;
 
 import com.guzzservices.business.StatItem;
+import com.guzzservices.util.RandomUtils;
 
 /**
  * 
@@ -25,6 +26,7 @@ public class StatItemForm {
 		this.statItem.setGroupId(groupId) ;
 		this.statItem.setUserId(userId) ;
 		this.statItem.setTemplateContent(defaultTemplate) ;
+		this.statItem.setAuthKey(RandomUtils.generateRandomString(32)) ;
 	}
 
 	public boolean isNewStatItem() {
