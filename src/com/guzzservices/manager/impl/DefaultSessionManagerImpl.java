@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,14 @@ public class DefaultSessionManagerImpl extends AbstractBaseManagerImpl<AuthedSer
 	private SSOService ssoService ;
 	
 	private KVStorageService kvStorageService ;
+	
+	/**
+	 * @throws LoginException 
+	 * @see SSOService#queryUserInfo(String)
+	 */
+	public Map<String, Object> queryUserInfo(String userName) throws LoginException{
+		return this.ssoService.queryUserInfo(userName) ;
+	}
 
 	public LoginUser getLoginUser(HttpServletRequest request, HttpServletResponse response) {
 		return (LoginUser) ssoService.getLoginUser(request, response);

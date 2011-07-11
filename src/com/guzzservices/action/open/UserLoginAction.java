@@ -34,7 +34,7 @@ public class UserLoginAction implements Controller {
 		try{
 			sessionManager.login(request, response, email, password) ;
 		}catch(LoginException e){
-			return new ModelAndView(loginView, "msg", "邮箱密码错误, code:" + e.getErrorCode()) ;
+			return new ModelAndView(loginView, "msg", "用户名密码错误, code:" + e.getErrorCode()) ;
 		}
 		
 		return new ModelAndView(successView) ;

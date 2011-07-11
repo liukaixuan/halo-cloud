@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,10 +54,21 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 	
 	public static IStatItemManager statItemManager ;
 	
+	private static CountDownLatch waitingForInit = new CountDownLatch(1) ;
+	
 	public static class TopRankJob implements Job{
 
 		public void execute(JobExecutionContext context) throws JobExecutionException {
 			int statId = context.getJobDetail().getJobDataMap().getInt("statId") ;
+			
+			if(waitingForInit != null){
+				try {
+					waitingForInit.await() ;
+				} catch (InterruptedException e) {
+					throw new JobExecutionException(e) ;
+				}
+			}
+			
 			StatItem si = statItemManager.getForRead(statId) ;
 			
 			if(si == null){
@@ -305,6 +317,9 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 	public void setScheduler(Scheduler scheduler) {
 		this.scheduler = scheduler;
 		statItemManager = this ;
+		
+		waitingForInit.countDown() ;
+		waitingForInit = null ;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,10 +34,21 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 	
 	public static ITaskManager taskManager ;
 	
+	private static CountDownLatch waitingForInit = new CountDownLatch(1) ;
+	
 	public static class ExecuteTaskJob implements Job{
 
 		public void execute(JobExecutionContext context) throws JobExecutionException {
 			int taskId = context.getJobDetail().getJobDataMap().getInt("taskId") ;
+			
+			if(waitingForInit != null){
+				try {
+					waitingForInit.await() ;
+				} catch (InterruptedException e) {
+					throw new JobExecutionException(e) ;
+				}
+			}
+			
 			Task m_task = taskManager.getForUpdate(taskId) ;
 			
 			if(m_task == null){
@@ -152,6 +164,8 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 	public void setScheduler(Scheduler scheduler) {
 		this.scheduler = scheduler;
 		taskManager = this ;
+		waitingForInit.countDown() ;
+		waitingForInit = null ;
 	}
 
 }

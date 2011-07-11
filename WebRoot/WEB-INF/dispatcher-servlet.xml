@@ -53,7 +53,6 @@
 	</bean>
 	
 	<bean name="/console/authMembersAction.do" class="com.guzzservices.action.console.AuthMembersAction">
-        <property name="userManager" ref="userManager" />
         <property name="authManager" ref="sessionManager" />
         <property name="sessionManager" ref="sessionManager" />
         <property name="formView" value="console/authMembersForm" />

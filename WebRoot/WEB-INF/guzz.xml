@@ -23,8 +23,8 @@
 		
 	<!-- sso service -->
 	<service name="userStoreService" class="com.guzzservices.manager.impl.SSOUserStoreServiceImpl"/>
-	<service name="ssoServerService" configName="ssoServerService" dependsOn="sessionCacheGroup, userStoreService" class="com.guzzservices.sso.impl.GlobalSSOServerServiceImpl" />
-	<service name="ssoService" dependsOn="ssoServerService" class="com.guzzservices.sso.impl.LocalSSOServiceImpl" />
+	<service name="ssoServerService" configName="ssoServerService" dependsOn="sessionCacheGroup, userStoreService, commandServerService" class="com.guzzservices.sso.impl.GlobalSSOServerServiceImpl" />
+	<service name="ssoService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.sso.impl.CommandSSOServiceImpl" />
 	
 	<!-- command server service -->
 	<service name="commandServerService" configName="commandServerService" class="com.guzzservices.rpc.server.nio.MinaCommandServerServiceImpl"/>

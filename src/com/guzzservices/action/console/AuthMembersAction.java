@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 import com.guzzservices.action.vo.AuthMembersForm;
 import com.guzzservices.manager.IAuthManager;
 import com.guzzservices.manager.ISessionManager;
-import com.guzzservices.manager.IUserManager;
 import com.guzzservices.manager.impl.Members;
 import com.guzzservices.sso.LoginUser;
 import com.guzzservices.util.ValidationUtil;
@@ -28,15 +27,13 @@ public class AuthMembersAction extends SimpleFormController {
 	private IAuthManager authManager ;
 	
 	private ISessionManager sessionManager ;
-	
-	private IUserManager userManager ;
 		
 	public AuthMembersAction() {
 		this.setCommandName("membersForm") ;
 	}
 
 	protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object cmd, BindException errors) throws Exception {
-		LoginUser loginUser = sessionManager.getLoginUser(request, null) ;
+		LoginUser loginUser = sessionManager.getLoginUser(request, response) ;
 		String serviceName = request.getParameter("serviceName") ;
 		String serviceKey = request.getParameter("serviceKey") ;
 		
@@ -90,7 +87,7 @@ public class AuthMembersAction extends SimpleFormController {
 			ValidationUtil.reject(errors, "owners", null, "拥有者过多，最多100人!") ;
 		}else{
 			for(String userName : m.getOwners()){
-				if(userManager.getByEmail(userName) == null){
+				if(this.sessionManager.queryUserInfo(userName) == null){
 					ValidationUtil.reject(errors, "owners", null, "用户[" + userName + "]不存在!") ;
 				}
 			}
@@ -100,7 +97,7 @@ public class AuthMembersAction extends SimpleFormController {
 			ValidationUtil.reject(errors, "owners", null, "贡献者过多，最多100人!") ;
 		}else{
 			for(String userName : m.getCommiters()){
-				if(userManager.getByEmail(userName) == null){
+				if(this.sessionManager.queryUserInfo(userName) == null){
 					ValidationUtil.reject(errors, "commiters", null, "用户[" + userName + "]不存在!") ;
 				}
 			}
@@ -121,14 +118,6 @@ public class AuthMembersAction extends SimpleFormController {
 
 	public void setAuthManager(IAuthManager authManager) {
 		this.authManager = authManager;
-	}
-
-	public IUserManager getUserManager() {
-		return userManager;
-	}
-
-	public void setUserManager(IUserManager userManager) {
-		this.userManager = userManager;
 	}
 
 }

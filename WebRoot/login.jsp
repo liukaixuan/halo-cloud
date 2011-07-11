@@ -23,7 +23,7 @@
                 <td><font color="red">${param.msg}</font></td>
               </tr>
               <tr>
-                <td align="right" width="150px;">邮箱：</td>
+                <td align="right" width="150px;">登录名：</td>
                 <td>&nbsp;</td>
                 <td><input type="text" style='width:200px;height:20px' id="login_userName" name="userName" size="15" ></td>
               </tr>
