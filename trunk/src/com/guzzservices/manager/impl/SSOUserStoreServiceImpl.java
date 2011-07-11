@@ -3,6 +3,7 @@
  */
 package com.guzzservices.manager.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.guzz.service.AbstractService;
@@ -69,7 +70,14 @@ public class SSOUserStoreServiceImpl extends AbstractService implements UserStor
 	}
 
 	public Map<String, Object> queryUserInfo(String userName) {
-		return null;
+		User user = userManager.getByEmail(userName) ;
+		if(user == null){
+			return null ;
+		}
+		
+		HashMap<String, Object> info = new HashMap<String, Object>() ;
+		
+		return info;
 	}
 
 }
