@@ -75,6 +75,10 @@ public class SpringSendMailProvider extends CommandHandlerAdapter implements Sen
 	public String executeCommand(ClientInfo client, String command, String param) throws Exception {
 		if(authedIPs != null && authedIPs.length > 0){
 			boolean passed = true ;
+
+			if(client.getIP() == null && authedIPs.length > 0){
+				throw new ServiceExecutionException("IP not found! Ungrade API!") ;
+			}
 			
 			for(String IP : authedIPs){
 				if(IP.length() == 0) continue ;

@@ -13,22 +13,20 @@ import java.net.InetSocketAddress;
  */
 public class ClientInfo {
 	
-	private String hostName ;
-	
 	private String IP ;
 	
 	private int port ;
 	
 	public ClientInfo(InetSocketAddress addr){
-		this.hostName = addr.getHostName() ;
 		this.port = addr.getPort() ;
 		if(addr.getAddress() != null){
 			this.IP = addr.getAddress().getHostAddress() ;
 		}
 	}
-
-	public String getHostName() {
-		return hostName;
+	
+	public ClientInfo(String IP, int port){
+		this.IP = IP ;
+		this.port = port ;
 	}
 
 	public String getIP() {

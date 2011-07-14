@@ -224,7 +224,7 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		throw new ServiceExecutionException("not supported") ;
 	}
 
-	public Object put(Object key, Object value) {
+	public Object put(String key, Object value) {
 		throw new ServiceExecutionException("no write operation allowed.") ;
 	}
 
