@@ -9,7 +9,7 @@ package com.guzzservices.management;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public interface ConfigurationService extends java.util.Map{
+public interface ConfigurationService extends java.util.Map<String, Object>{
 	
 	/**get string type parameter. including string and text.*/
 	public String getString(String parameter) ;
