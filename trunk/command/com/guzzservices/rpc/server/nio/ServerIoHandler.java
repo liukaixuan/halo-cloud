@@ -51,7 +51,7 @@ public class ServerIoHandler extends IoHandlerAdapter {
 		if(log.isDebugEnabled()){
 			log.debug(sb.toString(), cause) ;
 		}else{
-			log.error(sb.toString());
+			log.info(sb.toString());
 		}
 	    
 	    session.close(true) ;

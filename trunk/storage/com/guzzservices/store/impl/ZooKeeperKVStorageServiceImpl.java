@@ -63,8 +63,6 @@ public class ZooKeeperKVStorageServiceImpl extends AbstractService implements KV
 		}
 	}
 	
-
-	
 	public void storeTo(String path, String value){
 		if(value == null){
 			remove(path) ;
@@ -254,7 +252,7 @@ public class ZooKeeperKVStorageServiceImpl extends AbstractService implements KV
 		shutdownZK0() ;
 		
 		String connectString = props.getProperty("connectString") ;
-		int sessionTimeout = StringUtil.toInt(props.getProperty("sessionTimeout"), 3000) ;
+		int sessionTimeout = StringUtil.toInt(props.getProperty("sessionTimeout"), 8*60*60*1000) ;
 		
 		log.info("connecting to zookeeper:" + connectString) ;
 		

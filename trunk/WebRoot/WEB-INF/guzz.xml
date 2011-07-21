@@ -24,12 +24,13 @@
 	<!-- sso service -->
 	<service name="userStoreService" class="com.guzzservices.manager.impl.SSOUserStoreServiceImpl"/>
 	<service name="ssoServerService" configName="ssoServerService" dependsOn="sessionCacheGroup, userStoreService, commandServerService" class="com.guzzservices.sso.impl.GlobalSSOServerServiceImpl" />
-	<service name="ssoService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.sso.impl.CommandSSOServiceImpl" />
+	<service name="ssoService" dependsOn="commandSocketChannelForSSO" class="com.guzzservices.sso.impl.CommandSSOServiceImpl" />
 	
 	<!-- command server service -->
 	<service name="commandServerService" configName="commandServerService" class="com.guzzservices.rpc.server.nio.MinaCommandServerServiceImpl"/>
 	
 	<!-- command client service -->
+	<service name="commandSocketChannelForSSO" configName="commandSocketChannelForSSO" class="com.guzzservices.rpc.socket.CommandServiceClientImpl"/>
 	<service name="commandSocketChannelForServices" configName="commandSocketChannelForServices" class="com.guzzservices.rpc.socket.CommandServiceClientImpl"/>
 	<service name="commandServletChannelForServices" configName="commandServletChannelForServices" class="com.guzzservices.rpc.http.ServletCommandServiceClientImpl"/>
 	
@@ -41,6 +42,7 @@
 	<service name="configurationService" configName="configurationService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.management.config.ConfigurationServiceImpl"/>
 	<service name="versionControlService" configName="zkVersionControlService" class="com.guzzservices.version.impl.ZKVersionControlServiceImpl"/>
 	<service name="kvStorageService" configName="zkKVStorageService" class="com.guzzservices.store.impl.ZooKeeperKVStorageServiceImpl"/>
+	<service name="leaderService" configName="zkLeaderService" class="com.guzzservices.version.impl.ZKLeaderElectionServiceImpl"/>
 	<service name="sendMailService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.mail.impl.RemoteSendMailServiceImpl"/>
 	
 	<!-- business main starts -->

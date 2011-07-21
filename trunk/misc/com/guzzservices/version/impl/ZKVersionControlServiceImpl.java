@@ -282,7 +282,7 @@ public class ZKVersionControlServiceImpl extends AbstractService implements Vers
 		shutdownZK0() ;
 		
 		String connectString = props.getProperty("connectString") ;
-		int sessionTimeout = StringUtil.toInt(props.getProperty("sessionTimeout"), 3000) ;
+		int sessionTimeout = StringUtil.toInt(props.getProperty("sessionTimeout"), 8*60*60*1000) ;
 		
 		log.info("connecting to zookeeper:" + connectString) ;
 		

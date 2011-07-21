@@ -13,12 +13,16 @@ import org.apache.commons.logging.LogFactory;
 import org.guzz.exception.GuzzException;
 import org.guzz.transaction.WriteTranSession;
 import org.guzz.util.StringUtil;
-import org.quartz.CronTrigger;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.TriggerKey;
+import org.quartz.spi.MutableTrigger;
 
 import com.guzzservices.business.BannedTopRecord;
 import com.guzzservices.business.StatItem;
@@ -103,7 +107,7 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		
 		//remove to task
 		try {
-			scheduler.deleteJob(si.getTaskName(), si.getTaskGroupName()) ;
+			scheduler.deleteJob(JobKey.jobKey(si.getTaskName(), si.getTaskGroupName())) ;
 		} catch (Exception e) {			
 			throw new GuzzException("statId:" + si.getId(), e) ;
 		}
@@ -116,11 +120,12 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		
 		try {
 			 // 得到trigger
-			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(si.getTaskName(), si.getTaskGroupName());
-			trigger.setCronExpression(fillCronWithSeconds(newCron));
+			MutableTrigger trigger = CronScheduleBuilder.cronSchedule(fillCronWithSeconds(newCron)).build() ;
+			trigger.setKey(TriggerKey.triggerKey(si.getTaskName(), si.getTaskGroupName())) ;
+			trigger.setJobKey(JobKey.jobKey(si.getTaskName(), si.getTaskGroupName())) ;
 			
-			// 重置job 
-			scheduler.rescheduleJob(si.getTaskName(), si.getTaskGroupName(), trigger);
+			// 重置job
+			scheduler.rescheduleJob(trigger.getKey(), trigger);
 		} catch (Exception e) {			
 			throw new GuzzException("StatItem id:" + si.getId(), e) ;
 		}
@@ -143,10 +148,13 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		//add to task
 		if(StringUtil.notEmpty(si.getCronExpression())){
 			try {
-				CronTrigger trigger = new CronTrigger(si.getTaskName(), si.getTaskGroupName(), fillCronWithSeconds(si.getCronExpression()));
-				
-				JobDetail job = new JobDetail(si.getTaskName(), si.getTaskGroupName(), TopRankJob.class) ;
+				//CronTriggerImpl trigger = new CronTriggerImpl(si.getTaskName(), si.getTaskGroupName(), fillCronWithSeconds(si.getCronExpression()));
+				JobDetail job = JobBuilder.newJob(TopRankJob.class).withIdentity(si.getTaskName(), si.getTaskGroupName()).build() ;
 				job.getJobDataMap().put("statId", si.getId()) ;
+				
+				MutableTrigger trigger = CronScheduleBuilder.cronSchedule(fillCronWithSeconds(si.getCronExpression())).build() ;
+				trigger.setKey(TriggerKey.triggerKey(si.getTaskName(), si.getTaskGroupName())) ;
+				trigger.setJobKey(job.getKey()) ;
 				
 				scheduler.scheduleJob(job, trigger) ;
 			} catch (Exception e) {

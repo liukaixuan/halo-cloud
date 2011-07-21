@@ -106,7 +106,7 @@ CREATE TABLE gs_stat_item (
   description varchar(255),
   templateContent text,
   errorInfo text,
-  createdTime datetime timestamp default current_timestamp(),
+  createdTime timestamp default current_timestamp(),
   PRIMARY KEY  (id),
   KEY idx_gid (groupId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
