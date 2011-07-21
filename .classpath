@@ -52,7 +52,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-lang-2.5.jar" sourcepath="D:/coding/extlib/commons-lang-2.5/commons-lang-2.5-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/SimpleCaptcha.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-pool-1.5.5.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-all-1.8.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-1.6.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-1.6.4-dep.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/httpclient-4.1.jar"/>
@@ -63,5 +62,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mysql-connector-java-5.1.16-bin.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-all-2.0.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

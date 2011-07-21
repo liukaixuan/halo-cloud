@@ -26,7 +26,7 @@ public class IndexLeftAction implements Controller {
 		LoginUser loginUser = sessionManager.getLoginUser(request, response) ;
 		boolean isSuperAdmin = loginUser.isLogin() ;
 		
-		DHtmlTree root = new DHtmlTree("服务管理(" + loginUser.getDisplayName() + ")");
+		DHtmlTree root = new DHtmlTree("服务管理(" + loginUser.getUserName() + ")");
 
         DHtmlTree node = new DHtmlTree("安全服务") ;
         root.addSon(node);

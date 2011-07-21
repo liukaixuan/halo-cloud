@@ -11,15 +11,20 @@ import org.apache.commons.logging.LogFactory;
 import org.guzz.exception.GuzzException;
 import org.guzz.util.Assert;
 import org.guzz.util.StringUtil;
-import org.quartz.CronTrigger;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.TriggerKey;
+import org.quartz.spi.MutableTrigger;
 
 import com.guzzservices.business.Task;
 import com.guzzservices.manager.ITaskManager;
+import com.guzzservices.manager.impl.StatItemManagerImpl.TopRankJob;
 import com.guzzservices.util.HttpClientUtils;
 
 /**
@@ -107,7 +112,7 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 		
 		//remove to task
 		try {
-			scheduler.deleteJob(m_task.getTaskName(), m_task.getTaskGroupName()) ;
+			scheduler.deleteJob(JobKey.jobKey(m_task.getTaskName(), m_task.getTaskGroupName())) ;
 		} catch (Exception e) {			
 			throw new GuzzException("taskId:" + m_task.getId(), e) ;
 		}
@@ -119,12 +124,13 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 		if(task == null) return ;
 		
 		try {
-			 // 得到trigger
-			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(task.getTaskName(), task.getTaskGroupName());
-			trigger.setCronExpression(fillCronWithSeconds(newCron));
+			//得到trigger
+			MutableTrigger trigger = CronScheduleBuilder.cronSchedule(fillCronWithSeconds(newCron)).build() ;
+			trigger.setKey(TriggerKey.triggerKey(task.getTaskName(), task.getTaskGroupName())) ;
+			trigger.setJobKey(JobKey.jobKey(task.getTaskName(), task.getTaskGroupName())) ;
 			
-			// 重置job 
-			scheduler.rescheduleJob(task.getTaskName(), task.getTaskGroupName(), trigger);
+			// 重置job
+			scheduler.rescheduleJob(trigger.getKey(), trigger);
 		} catch (Exception e) {			
 			throw new GuzzException("taskId:" + task.getId(), e) ;
 		}
@@ -141,10 +147,12 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 		
 		//add to task
 		try {
-			CronTrigger trigger = new CronTrigger(m_task.getTaskName(), m_task.getTaskGroupName(), fillCronWithSeconds(m_task.getCronExpression()));
-			
-			JobDetail job = new JobDetail(m_task.getTaskName(), m_task.getTaskGroupName(), ExecuteTaskJob.class) ;
+			JobDetail job = JobBuilder.newJob(TopRankJob.class).withIdentity(m_task.getTaskName(), m_task.getTaskGroupName()).build() ;
 			job.getJobDataMap().put("taskId", m_task.getId()) ;
+			
+			MutableTrigger trigger = CronScheduleBuilder.cronSchedule(fillCronWithSeconds(m_task.getCronExpression())).build() ;
+			trigger.setKey(TriggerKey.triggerKey(m_task.getTaskName(), m_task.getTaskGroupName())) ;
+			trigger.setJobKey(job.getKey()) ;
 			
 			scheduler.scheduleJob(job, trigger) ;
 		} catch (Exception e) {
