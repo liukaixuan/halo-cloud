@@ -26,6 +26,9 @@ public interface VersionControlService {
 	
 	public void unregister(String path) ;
 	
+	/**
+	 * path如：/alog/xxx
+	 */
 	public long getVersion(String path) ;
 	
 	/**

@@ -7,5 +7,9 @@
     	<property name="commandServerService" ref="commandServerService" />
     	<property name="czFile" value="classpath:qqwry.dat" />
     </bean>
+    
+    <bean id="_contactServiceProvider" class="com.guzzservices.serviceimpl.ContactServiceProvider">
+		<property name="commandServerService" ref="commandServerService" />
+	</bean>
 
 </beans>

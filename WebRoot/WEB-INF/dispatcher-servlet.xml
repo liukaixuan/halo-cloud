@@ -62,5 +62,6 @@
     <import resource="dispatcher-servlet/filterWord.xml" />
     <import resource="dispatcher-servlet/config.xml" />
     <import resource="dispatcher-servlet/stat.xml" />
+    <import resource="dispatcher-servlet/log.xml" />
 	
 </beans>

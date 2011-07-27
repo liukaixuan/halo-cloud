@@ -25,6 +25,8 @@ public class Constants {
 		
 		public final String IP_TABLE = "gs_ipt" ;
 		
+		public final String APP_LOG = "gs_alog" ;
+		
 	}
 	
 	public static String buildVersionControlPath(String serviceName, String serviceKey){

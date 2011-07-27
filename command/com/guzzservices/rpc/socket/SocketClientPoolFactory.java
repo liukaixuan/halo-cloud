@@ -78,13 +78,12 @@ public class SocketClientPoolFactory implements PoolableObjectFactory {
 	}
 
 	public boolean validateObject(Object client) {
-		boolean isClosed = ((SocketCommandService) client).isClosed();
-		if (!isClosed)
+		SocketCommandService scs = (SocketCommandService) client;
+		
+		if (!scs.isClosed() && scs.isChannelConnected())
 			return true;
 
-		// add to the retry queue.
-		SocketCommandService scs = (SocketCommandService) client;
-
+		//add to the retry queue.
 		if (scs.isDisposedForIOException()) {
 			// We don't know how the pool acts. Be a little careful.
 			scs.setDisposedForIOException(false);

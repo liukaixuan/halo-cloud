@@ -187,3 +187,60 @@ CREATE TABLE gs_task (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+--#################2011-07-25
+
+
+CREATE TABLE gs_log_app (
+  id int(11) NOT NULL auto_increment,
+  appName varchar(64) NOT NULL,
+  secureCode varchar(64) NOT NULL,
+  description varchar(255),
+  recordsCount int(11) default 0,
+  createdTime datetime,
+  PRIMARY KEY  (id),
+  KEY idx_scode (secureCode)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+	
+CREATE TABLE gs_log_custom_property (
+  id int(11) NOT NULL auto_increment,
+  appId int(11) not null,
+  propName varchar(32) NOT NULL,
+  colName varchar(32) NOT NULL,
+  displayName varchar(32) NOT NULL,
+  dataType varchar(32) NOT NULL,
+  createdTime datetime,
+  PRIMARY KEY  (id),
+  KEY idx_appId (appId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--log record基础表结构和表名
+CREATE TABLE gs_log_record_ (
+  id bigint(20) NOT NULL auto_increment,
+  userId int(11) not null,
+  appId int(11) not null,
+  appIP varchar(32) not null,
+  createdTime datetime not null,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE gs_log_record_2 (
+  id bigint(20) NOT NULL auto_increment,
+  userId int(11) not null,
+  appId int(11) not null,
+  appIP varchar(32) not null,
+  userNick varchar(64) not null,
+  postId bigint(20) not null,
+  title varchar(128) not null,
+  createdTime datetime not null,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+

@@ -44,6 +44,8 @@
 	<service name="kvStorageService" configName="zkKVStorageService" class="com.guzzservices.store.impl.ZooKeeperKVStorageServiceImpl"/>
 	<service name="leaderService" configName="zkLeaderService" class="com.guzzservices.version.impl.ZKLeaderElectionServiceImpl"/>
 	<service name="sendMailService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.mail.impl.RemoteSendMailServiceImpl"/>
+	<service name="msnContactService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.dir.contact.RemoteContactServiceImpl"/>
+	<service name="appLogService" configName="appLogService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.management.alog.AppLogServiceImpl"/>
 	
 	<!-- business main starts -->
 	<a-business name="user" class="com.guzzservices.business.User" />
@@ -63,6 +65,10 @@
 	
 	<a-business name="taskGroup" class="com.guzzservices.business.TaskGroup" />
 	<a-business name="task" class="com.guzzservices.business.Task" />
+	
+	<a-business name="logApp" class="com.guzzservices.business.LogApp" />
+	<a-business name="logCustomProperty" class="com.guzzservices.business.LogCustomProperty" />
+	<a-business name="logRecord" class="com.guzzservices.business.LogRecord" />
 	<!-- business main ends -->	
 
 </guzz-configs>

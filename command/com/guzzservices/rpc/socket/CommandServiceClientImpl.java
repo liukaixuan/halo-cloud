@@ -1,5 +1,6 @@
 package com.guzzservices.rpc.socket;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Properties;
 
@@ -57,8 +58,7 @@ public class CommandServiceClientImpl extends AbstractService implements Command
 		
 		try{
 			return client.executeCommand(command, param) ;
-		}catch(Exception e){
-			e.printStackTrace() ;
+		}catch(IOException e){
 			//retry again
 			return client.executeCommand(command, param) ;
 		}finally{
@@ -75,7 +75,7 @@ public class CommandServiceClientImpl extends AbstractService implements Command
 		
 		try{
 			return client.executeCommand(command, param) ;
-		}catch(Exception e){
+		}catch(IOException e){
 			//retry again
 			return client.executeCommand(command, param) ;
 		}finally{
@@ -92,7 +92,7 @@ public class CommandServiceClientImpl extends AbstractService implements Command
 		
 		try{
 			return client.executeCommand(command, param) ;
-		}catch(Exception e){
+		}catch(IOException e){
 			//retry again
 			return client.executeCommand(command, param) ;
 		}finally{
@@ -129,7 +129,7 @@ public class CommandServiceClientImpl extends AbstractService implements Command
 			pool.setTestWhileIdle(false) ;
 			pool.setTimeBetweenEvictionRunsMillis(2000) ;
 			pool.setNumTestsPerEvictionRun(10) ;
-			pool.setMaxWait(2000) ;
+			pool.setMaxWait(3000) ;
 			
 			pool.setMaxIdle(StringUtil.toInt(this.firstProps.getProperty("pool.maxIdle"), GenericObjectPool.DEFAULT_MAX_IDLE)) ;
 			pool.setMinIdle(StringUtil.toInt(this.firstProps.getProperty("pool.minIdle"), 3)) ;

@@ -39,6 +39,10 @@ public class SocketCommandService {
 		return isClosed ;
 	}
 	
+	public boolean isChannelConnected(){
+		return this.channel.isConnected() ;
+	}
+	
 	public void dispose(){
 		if(!isClosed){
 			isClosed = true ;
