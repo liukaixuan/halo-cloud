@@ -16,10 +16,9 @@ import org.guzz.exception.InvalidConfigurationException;
 import org.guzz.exception.ServiceExecutionException;
 import org.guzz.service.AbstractService;
 import org.guzz.service.ServiceConfig;
+import org.guzz.service.core.LeaderService;
 import org.guzz.util.Assert;
 import org.guzz.util.StringUtil;
-
-import com.guzzservices.version.LeaderService;
 
 /**
  * 
@@ -160,12 +159,15 @@ public class ZKLeaderElectionServiceImpl extends AbstractService implements Lead
             	zkAvailable = false;
                 break;
             }
-        }else{
+        }else if(event.getPath().equals(this.lockPath)){
+    		try {
+    			if(log.isInfoEnabled()){
+    				log.info("lock [" + this.lockPath + "] changed.") ;
+    			}
+    			
+    			List<String> children = this.zk.getChildren(lockPath, true) ;
         	
-        	if(event.getType() == Event.EventType.NodeChildrenChanged){
-        		try {
-					List<String> children = this.zk.getChildren(lockPath, true) ;
-					
+        		if(event.getType() == Event.EventType.NodeChildrenChanged){
 					long minSeq = this.seqNum ;
 					
 					for(String s : children){
@@ -174,19 +176,27 @@ public class ZKLeaderElectionServiceImpl extends AbstractService implements Lead
 					}
 					
 					//Leader
-					if(this.seqNum == minSeq && !this.isLeader){
-						this.isLeader = true ;
-						
-						log.info("promote to leader for lock:" + lockPath) ;
+					if(this.seqNum == minSeq){
+						if(!this.isLeader){
+							this.isLeader = true ;
+							log.info("promote to leader for lock:" + lockPath) ;
+						}else{
+							log.info("keep leader for lock:" + lockPath) ;
+						}
 					}else{
+						if(this.isLeader){
+							log.info("release leader for lock:" + lockPath) ;
+						}
+						
 						this.isLeader = false ;
 					}
-				} catch (KeeperException e) {
-					throw new ServiceExecutionException("zookeeper KeeperException while fetching children under :[" + lockPath + "]", e) ;
-				} catch (InterruptedException e) {
-					throw new ServiceExecutionException("zookeeper InterruptedException while fetching children under :[" + lockPath + "]", e) ;
-				}
-        	}
+				
+        		}
+    		} catch (KeeperException e) {
+				throw new ServiceExecutionException("zookeeper KeeperException while fetching children under :[" + lockPath + "]", e) ;
+			} catch (InterruptedException e) {
+				throw new ServiceExecutionException("zookeeper InterruptedException while fetching children under :[" + lockPath + "]", e) ;
+			}
 		}
         
         //别的事件没有兴趣

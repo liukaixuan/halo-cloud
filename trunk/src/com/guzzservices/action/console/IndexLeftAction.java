@@ -33,6 +33,7 @@ public class IndexLeftAction implements Controller {
         node.addSon(new DHtmlTree("内容过滤","filterWordGroupList.do"));
         node.addSon(new DHtmlTree("IP黑名单","comingsoon.jsp"));
         node.addSon(new DHtmlTree("用户黑名单","comingsoon.jsp"));
+        node.addSon(new DHtmlTree("操作日志","log/logAppList.do"));
         
         node = new DHtmlTree("通用计算") ;
         root.addSon(node);

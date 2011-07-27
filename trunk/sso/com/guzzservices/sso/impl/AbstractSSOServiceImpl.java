@@ -176,6 +176,12 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		String sessionId = this.readSessionId(request, response) ;
+		if(sessionId == null){
+			request.removeAttribute(CACHED_LOGIN_USER_KEY) ;
+			request.removeAttribute(this.sessionUserCookieName) ;
+			
+			return ;
+		}
 		
 		SSOInfo info = internalLogout(request, response, sessionId) ;
 			

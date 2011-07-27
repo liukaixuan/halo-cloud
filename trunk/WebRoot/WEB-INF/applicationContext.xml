@@ -56,6 +56,10 @@
     <bean id="sendMailService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
     	<property name="serviceName" value="sendMailService" />
     </bean>
+    
+    <bean id="msnContactService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="msnContactService" />
+    </bean>
         
     
      <!--  异常处理  -->
@@ -77,5 +81,6 @@
     <import resource="application-context/extractor.xml" />
     <import resource="application-context/stat.xml" />
     <import resource="application-context/misc.xml" />
+    <import resource="application-context/log.xml" />
 
 </beans>

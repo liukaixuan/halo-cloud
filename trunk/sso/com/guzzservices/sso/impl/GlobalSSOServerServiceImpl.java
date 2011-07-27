@@ -114,7 +114,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 	}
 
 	protected String getLoginUser(String guzzSessionId) {
-		if(guzzSessionId == null) return null ;
+		if(StringUtil.isEmpty(guzzSessionId)) return null ;
 		String loginUser = (String) this.cacheService.getFromCache(guzzSessionId) ;
 		
 		this.onlineStatusSyncThread.notifyUserActive(guzzSessionId, loginUser) ;

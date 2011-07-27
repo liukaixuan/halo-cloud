@@ -4,6 +4,8 @@
 package com.guzzservices.rpc.util;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -53,6 +55,57 @@ public class JsonUtil {
 		} catch (IOException e) {
 			throw new GuzzException(json, e) ;
 		}
+	}
+	 
+	public static <T> List<T> fromJson2List(String json, Class<T> classTypeInList){
+		if(json == null) return null ;
+		json = json.trim() ;
+		if(json.length() == 0) return null ;
+		
+		//list must be [aa, bb, ccc...]
+		char start= json.charAt(0) ;
+		char end = json.charAt(json.length() - 1) ;
+		
+		//error
+		if(start != '[' || end != ']'){
+			throw new GuzzException("json is not a List. json:" + json) ;
+		}
+		
+		//parse the list ourself.
+		int startPos = 1 ;
+		int lastMeet = 1 ;
+		int endPos = json.length() - 1 ;
+		char[] cs = json.toCharArray() ;
+		
+		int deepCount = 0 ;
+		LinkedList<T> results = new LinkedList<T>() ;
+		
+		for(; startPos < endPos ; startPos++){
+			char c = cs[startPos] ;
+						
+			if(c == '{' || c == '['){
+				deepCount++ ;
+			}else if(c == '}' || c == ']'){
+				deepCount-- ;
+			}
+			
+			//one thing
+			if(c ==',' && deepCount == 0){
+				String s = new String(cs, lastMeet, startPos - lastMeet) ;
+				
+				results.add(fromJson(s, classTypeInList)) ;
+				lastMeet = startPos + 1 ;
+			}
+		}
+		
+		//最后一个。
+		if(lastMeet != endPos){
+			String s = new String(cs, lastMeet, endPos - lastMeet) ;
+			
+			results.add(fromJson(s, classTypeInList)) ;
+		}
+		
+		return results ;
 	}
 
 }

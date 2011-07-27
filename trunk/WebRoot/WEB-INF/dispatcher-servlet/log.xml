@@ -1,0 +1,40 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="/console/log/logAppList.do" class="com.guzzservices.action.console.log.LogAppListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/log/logAppAction.do" class="com.guzzservices.action.console.log.LogAppAction">
+		<property name="logAppManager" ref="logAppManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/log/logAppReload.do" class="com.guzzservices.action.console.log.LogAppReloadAction">
+		<property name="logAppManager" ref="logAppManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/log/logCustomPropertyList.do" class="com.guzzservices.action.console.log.LogCustomPropertyListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/log/logCustomPropertyDelete.do" class="com.guzzservices.action.console.log.LogCustomPropertyDeleteAction">
+        <property name="logCustomPropertyManager" ref="logCustomPropertyManager" />
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+    <bean name="/console/log/logCustomPropertyAction.do" class="com.guzzservices.action.console.log.LogCustomPropertyAction">
+        <property name="logCustomPropertyManager" ref="logCustomPropertyManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView">
+            <value>console/log/customPropertyForm</value>
+        </property>
+        <property name="successView">
+            <value>redirect:/console/log/logCustomPropertyList.do</value>
+        </property>
+    </bean>
+
+</beans>
