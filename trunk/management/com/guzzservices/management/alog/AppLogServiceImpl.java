@@ -3,6 +3,7 @@
  */
 package com.guzzservices.management.alog;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,8 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 	public static final String COMMAND_NEW_LOG = "gs.alog.new.l" ;
 	
 	public static final String COMMAND_QUERY_LOG = "gs.qlog.q.l" ;
+	
+	public static final String COMMAND_QUERY_META = "gs.qlog.q.m" ;
 	
 	public static final String KEY_APP_SECURE_CODE = "__key_app_scode" ;
 	
@@ -56,7 +59,15 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 		
 		String json = this.commandService.executeCommand(COMMAND_QUERY_LOG, JsonUtil.toJson(r)) ;
 		
+		if(json == null) return null ;
+		
 		return JsonPageFlip.fromJson(json, LogRecord.class).toPageFlip() ;
+	}
+
+	public Map<String, String> queryCustomPropsMetaInfo() throws Exception {
+		String json = this.commandService.executeCommand(COMMAND_QUERY_META, this.secureCode) ;
+		
+		return JsonUtil.fromJson(json, HashMap.class) ;
 	}
 
 	public boolean configure(ServiceConfig[] scs) {

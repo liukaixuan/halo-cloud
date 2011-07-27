@@ -16,6 +16,7 @@ import org.guzz.orm.ObjectMapping;
 import org.guzz.orm.se.SearchExpression;
 import org.guzz.util.StringUtil;
 
+import com.guzzservices.business.LogCustomProperty;
 import com.guzzservices.business.LogRecord;
 import com.guzzservices.management.alog.AppLogServiceImpl;
 import com.guzzservices.management.alog.AppLogServiceImpl.AppLogQueryRequest;
@@ -103,6 +104,17 @@ public class LogRecordManagerImpl extends GuzzBaseDao implements ILogRecordManag
 			return super.page(se) ;
 		}
 	}
+	
+	public List<LogCustomProperty> queryCustomProperties(String appIP, String secureCode){
+		int appId = this.logAppManager.getAppIdBySecureCode(secureCode) ;
+		
+		//not exist.
+		if(appId < 1){
+			throw new ServiceExecutionException("unknown secure code:[" + secureCode + "] from app server:" + appIP) ;
+		}
+		
+		return this.logAppManager.listLogCustomProperties(appId) ;
+	}
 
 	public LogRecord getForRead(int id) {
 		return (LogRecord) super.getForRead(LogRecord.class, id) ;
@@ -115,6 +127,7 @@ public class LogRecordManagerImpl extends GuzzBaseDao implements ILogRecordManag
 	public void setCommandServerService(CommandServerService css){
 		css.addCommandHandler(AppLogServiceImpl.COMMAND_NEW_LOG, handler) ;
 		css.addCommandHandler(AppLogServiceImpl.COMMAND_QUERY_LOG, handler) ;
+		css.addCommandHandler(AppLogServiceImpl.COMMAND_QUERY_META, handler) ;
 	}
 	
 	private final CommandHandler handler = new CommandHandlerAdapter(){
@@ -137,7 +150,19 @@ public class LogRecordManagerImpl extends GuzzBaseDao implements ILogRecordManag
 				
 				PageFlip data = queryLogs(client.getIP(), request.getSecureCode(), request.getConditions(), request.getPageNo(), request.getPageSize(), request.getOrderBy()) ;
 				
+				if(data == null) return null ;
+				
 				return JsonPageFlip.fromPageFlip(data, LogRecord.class).toJson() ;
+			}else if(AppLogServiceImpl.COMMAND_QUERY_META.equals(command)){
+				String secureCode = param ;
+				List<LogCustomProperty> props = queryCustomProperties(client.getIP(), secureCode) ;
+				
+				HashMap<String, String> mis = new HashMap<String, String>() ;
+				for(LogCustomProperty p : props){
+					mis.put(p.getPropName(), p.getDisplayName()) ;
+				}
+				
+				return JsonUtil.toJson(mis) ;
 			}
 			
 			return null ;
