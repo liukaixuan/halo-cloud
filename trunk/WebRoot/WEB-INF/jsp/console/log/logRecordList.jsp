@@ -1,11 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/include/tags.jsp"%>
-<g:boundary>
-	<c:if test="${not empty appIds}">
-		<g:addInLimit name="id" value="${appIds}" />
-		<g:list var="groups" business="logApp" orderBy="id asc" pageNo="1" pageSize="200" />
-	</c:if>
-</g:boundary>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
