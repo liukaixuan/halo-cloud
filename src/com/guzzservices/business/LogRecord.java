@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
+import org.guzz.annotations.Column;
 import org.guzz.annotations.Table;
 
 /**
@@ -67,6 +68,7 @@ public class LogRecord {
 		this.appId = appId;
 	}
 
+	@Column(type="datetime|yyyy-MM-dd HH:mm:ss")
 	public Date getCreatedTime() {
 		return createdTime;
 	}

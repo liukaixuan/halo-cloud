@@ -109,7 +109,16 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 				StringBuilder sb = new StringBuilder() ;	
 				
 				while(t.getCause() != null){
-					sb.append('(').append(t.getMessage()).append(')') ;
+					sb.append('(') ;
+					sb.append(t.getClass().getName()).append(" - ").append(t.getMessage()) ;
+					
+					StackTraceElement[] es = t.getStackTrace() ;
+					if(es.length > 0){
+						sb.append(" - ").append(es[0].getClassName()).append(":").append(es[0].getLineNumber()) ;
+					}
+					
+					sb.append(')') ;
+					
 					t = t.getCause() ;
 				}
 				

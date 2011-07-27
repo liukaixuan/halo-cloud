@@ -60,6 +60,10 @@
     <bean id="msnContactService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
     	<property name="serviceName" value="msnContactService" />
     </bean>
+    
+    <bean id="appLogService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="appLogService" />
+    </bean>
         
     
      <!--  异常处理  -->

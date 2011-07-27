@@ -118,6 +118,8 @@
 			<td><a href="taskList.do?groupId=${m_group.id}"><c:out value="${m_group.appName}" /></a></td>
 			<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${m_group.createdTime}" /></td>
 			<td>
+			<a href='logRecordList.do?appId=${m_group.id}'>日志记录</a>
+			&nbsp;&nbsp;
 			<a href='#' class="editGroupLink" groupId="${m_group.id}" groupName="${m_group.appName}">修改名称</a>
 			&nbsp;&nbsp;
 			<a href='logCustomPropertyList.do?appId=${m_group.id}'>管理自定义属性</a>
