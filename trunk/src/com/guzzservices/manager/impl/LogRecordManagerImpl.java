@@ -14,6 +14,7 @@ import org.guzz.exception.ServiceExecutionException;
 import org.guzz.orm.BusinessInterpreter;
 import org.guzz.orm.ObjectMapping;
 import org.guzz.orm.se.SearchExpression;
+import org.guzz.service.db.InsertQueueService;
 import org.guzz.util.StringUtil;
 
 import com.guzzservices.business.LogCustomProperty;
@@ -39,6 +40,8 @@ public class LogRecordManagerImpl extends GuzzBaseDao implements ILogRecordManag
 	
 	private ILogAppManager logAppManager ;
 	
+	private InsertQueueService insertQueueService ;
+	
 	private int maxPageSize = 2000 ;
 	
 	public void insert(String appIP, String secureCode, int userId, LogRecord record) {
@@ -54,7 +57,11 @@ public class LogRecordManagerImpl extends GuzzBaseDao implements ILogRecordManag
 		record.setUserId(userId) ;
 		record.setCreatedTime(new Date()) ;
 		
-		this.insert(record, appId) ;
+		if(this.insertQueueService == null){
+			super.insert(record, appId) ;
+		}else{
+			this.insertQueueService.insert(record, appId) ;
+		}
 	}
 	
 	public PageFlip queryLogs(String appIP, String secureCode, List<String> conditions, int pageNo, int pageSize, String orderBy){
@@ -184,6 +191,14 @@ public class LogRecordManagerImpl extends GuzzBaseDao implements ILogRecordManag
 
 	public void setMaxPageSize(int maxPageSize) {
 		this.maxPageSize = maxPageSize;
+	}
+
+	public InsertQueueService getInsertQueueService() {
+		return insertQueueService;
+	}
+
+	public void setInsertQueueService(InsertQueueService insertQueueService) {
+		this.insertQueueService = insertQueueService;
 	}
 
 }

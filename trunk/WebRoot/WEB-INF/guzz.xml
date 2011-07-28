@@ -15,7 +15,7 @@
 		</server>
 	</config-server>
 	
-	<service name="logService" configName="guzzDBLogServiceClient" class="org.guzz.service.log.impl.DBLogServiceImpl" />
+	<service name="insertQueueService" configName="guzzDBLogServiceClient" class="org.guzz.service.db.impl.InsertQueueServiceImpl" />
 	<service name="slowUpdateServer" configName="guzzSlowUpdateServer" class="org.guzz.service.db.impl.SlowUpdateServerImpl" />
 	
 	<!-- memcached: sessionId, feedUserInfo -->

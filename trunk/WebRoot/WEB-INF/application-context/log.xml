@@ -13,6 +13,7 @@
     
     <bean id="logRecordManager" class="com.guzzservices.manager.impl.LogRecordManagerImpl" parent="abstractGuzzDao">
     	<property name="logAppManager" ref="logAppManager" />
+    	<property name="insertQueueService" ref="insertQueueService" />
     	<property name="commandServerService" ref="commandServerService" />
     </bean>
     
