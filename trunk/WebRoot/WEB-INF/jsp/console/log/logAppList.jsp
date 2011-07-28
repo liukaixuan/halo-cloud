@@ -115,7 +115,7 @@
     	<c:forEach items="${groups}" var="m_group" varStatus="m_status">
 		<tr id="sig${m_group.id}">
 			<td><c:out value="${m_group.id}" /></td>
-			<td><a href="taskList.do?groupId=${m_group.id}"><c:out value="${m_group.appName}" /></a></td>
+			<td><a href="logRecordList.do?appId=${m_group.id}"><c:out value="${m_group.appName}" /></a></td>
 			<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${m_group.createdTime}" /></td>
 			<td>
 			<a href='logRecordList.do?appId=${m_group.id}'>日志记录</a>

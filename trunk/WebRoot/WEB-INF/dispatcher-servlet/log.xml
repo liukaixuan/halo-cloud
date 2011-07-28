@@ -39,6 +39,7 @@
 	
 	<bean name="/console/log/logRecordList.do" class="com.guzzservices.action.console.log.LogRecordListAction">
         <property name="appLogService" ref="appLogService" />
+		<property name="logAppManager" ref="logAppManager" />
 		<property name="sessionManager" ref="sessionManager" />
 	</bean>
 

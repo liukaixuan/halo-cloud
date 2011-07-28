@@ -40,16 +40,29 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 	private String secureCode ;
 	
 	public void insertLog(int userId, Map<String, Object> customProps) throws Exception{
+		this.insertLog(this.secureCode, userId, customProps) ;
+	}
+	
+	public PageFlip queryLogs(List<String> conditions, String orderBy, int pageNo, int pageSize) throws Exception{
+		return this.queryLogs(this.secureCode, conditions, orderBy, pageNo, pageSize) ;
+	}
+
+	public Map<String, String> queryCustomPropsMetaInfo() throws Exception {
+		return this.queryCustomPropsMetaInfo(this.secureCode) ;
+	}
+	
+	public void insertLog(String secureCode, int userId, Map<String, Object> customProps) throws Exception {
+		Assert.assertNotNull(this.secureCode, "secureCode不能为空！") ;
+		
 		customProps.put(KEY_APP_SECURE_CODE, secureCode) ;
 		customProps.put(KEY_APP_USER_ID, userId) ;
 		
 		this.commandService.executeCommand(COMMAND_NEW_LOG, JsonUtil.toJson(customProps)) ;
 	}
 	
-	/**
-	 * 如果条件不足，可能返回null；如果条件错误，可能抛出异常。
-	 */
-	public PageFlip queryLogs(List<String> conditions, String orderBy, int pageNo, int pageSize) throws Exception{
+	public PageFlip queryLogs(String secureCode, List<String> conditions, String orderBy, int pageNo, int pageSize) throws Exception {
+		Assert.assertNotNull(this.secureCode, "secureCode不能为空！") ;
+		
 		AppLogQueryRequest r = new AppLogQueryRequest() ;
 		r.setSecureCode(secureCode) ;
 		r.setConditions(conditions) ;
@@ -63,9 +76,11 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 		
 		return JsonPageFlip.fromJson(json, LogRecord.class).toPageFlip() ;
 	}
-
-	public Map<String, String> queryCustomPropsMetaInfo() throws Exception {
-		String json = this.commandService.executeCommand(COMMAND_QUERY_META, this.secureCode) ;
+	
+	public Map<String, String> queryCustomPropsMetaInfo(String secureCode) throws Exception {
+		Assert.assertNotNull(this.secureCode, "secureCode不能为空！") ;
+		
+		String json = this.commandService.executeCommand(COMMAND_QUERY_META, secureCode) ;
 		
 		return JsonUtil.fromJson(json, HashMap.class) ;
 	}
@@ -76,15 +91,13 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 			Assert.assertNotEmpty(secureCode, "secureCode is a must!") ;
 			
 			this.secureCode = secureCode ;
-			
-			return true ;
 		}
 		
-		return false;
+		return true ;
 	}
 
 	public boolean isAvailable() {
-		return secureCode != null ;
+		return true ;
 	}
 
 	public void shutdown() {
