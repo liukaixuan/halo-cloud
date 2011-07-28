@@ -52,7 +52,7 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 	}
 	
 	public void insertLog(String secureCode, int userId, Map<String, Object> customProps) throws Exception {
-		Assert.assertNotNull(this.secureCode, "secureCode不能为空！") ;
+		Assert.assertNotNull(secureCode, "secureCode不能为空！") ;
 		
 		customProps.put(KEY_APP_SECURE_CODE, secureCode) ;
 		customProps.put(KEY_APP_USER_ID, userId) ;
@@ -61,7 +61,7 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 	}
 	
 	public PageFlip queryLogs(String secureCode, List<String> conditions, String orderBy, int pageNo, int pageSize) throws Exception {
-		Assert.assertNotNull(this.secureCode, "secureCode不能为空！") ;
+		Assert.assertNotNull(secureCode, "secureCode不能为空！") ;
 		
 		AppLogQueryRequest r = new AppLogQueryRequest() ;
 		r.setSecureCode(secureCode) ;
@@ -78,7 +78,7 @@ public class AppLogServiceImpl extends AbstractService implements AppLogService 
 	}
 	
 	public Map<String, String> queryCustomPropsMetaInfo(String secureCode) throws Exception {
-		Assert.assertNotNull(this.secureCode, "secureCode不能为空！") ;
+		Assert.assertNotNull(secureCode, "secureCode不能为空！") ;
 		
 		String json = this.commandService.executeCommand(COMMAND_QUERY_META, secureCode) ;
 		
