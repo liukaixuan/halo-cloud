@@ -216,6 +216,10 @@ CREATE TABLE gs_log_custom_property (
 
 
 --log record基础表结构和表名
+
+create database guzzServicesAppLog default character set utf8 ;
+use guzzServicesAppLog ;
+
 CREATE TABLE gs_log_record_ (
   id bigint(20) NOT NULL auto_increment,
   userId int(11) not null,
