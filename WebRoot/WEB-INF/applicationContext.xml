@@ -16,9 +16,8 @@
     	<property name="guzzContext" ref="guzzContext" />
     </bean>
     
-    <!-- export org.guzz.service.log.LogService -->
-    <bean id="logService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
-    	<property name="serviceName" value="logService" />
+    <bean id="insertQueueService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
+    	<property name="serviceName" value="insertQueueService" />
     </bean>
     
     <bean id="slowUpdateService" class="org.guzz.web.context.spring.GuzzServiceFactoryBean">
