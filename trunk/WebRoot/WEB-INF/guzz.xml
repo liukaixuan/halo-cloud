@@ -7,7 +7,7 @@
 	
 	<tran>
 		<dbgroup name="default" masterDBConfigName="guzzServicesMasterDB"/>
-		<dbgroup name="appLogs" masterDBConfigName="appLogsMasterDB"/>
+		<dbgroup name="appLogs" masterDBConfigName="appLogsMasterDB" slaveDBConfigName="appLogsSlaveDB" />
 	</tran>
 	
 	<config-server>
