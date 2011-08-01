@@ -213,7 +213,7 @@ public interface AppLogService {
 
 在这些接口中，customProps为每个应用自定义的属性Map，key为属性名，也就是服务器端自定义属性管理中的propName，value为属性值。
 
-List<String> conditions 为查询条件。因为是远程调用，因此查询条件需要简化成String类型，按照”属性+操作符+值“的方式传递，服务器负责解析。其中”属性“为java属性值，不是数据库字段名，这样开发者只需要记忆一个，不用和数据库直接打交道。
+List`<`String`>` conditions 为查询条件。因为是远程调用，因此查询条件需要简化成String类型，按照”属性+操作符+值“的方式传递，服务器负责解析。其中”属性“为java属性值，不是数据库字段名，这样开发者只需要记忆一个，不用和数据库直接打交道。
 
 String类型查询条件的格式，使用guzz的标签查询语法，请参看：[http://code.google.com/p/guzz/wiki/TutorialTaglib?wl=zh-Hans]
 
