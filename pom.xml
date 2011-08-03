@@ -55,6 +55,10 @@
 	        <enabled>false</enabled>
 	      </snapshots>
 	    </repository>
+	    <repository>
+		  <id>java-jml-maven-repository</id>
+		  <url>http://java-jml.sourceforge.net/maven</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -79,6 +83,16 @@
 	    	<artifactId>spring-webmvc</artifactId>
 	    	<version>3.0.5.RELEASE</version>
 	    </dependency>
+	    <dependency>
+		  <groupId>net.sourceforge.java-jml</groupId>
+		  <artifactId>jml</artifactId>
+		  <version>1.0b4</version>
+		</dependency>
+		<dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 	</dependencies>
   
 </project>
