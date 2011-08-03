@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="content"/>
-	<classpathentry kind="src" path="storage"/>
-	<classpathentry kind="src" path="command"/>
-	<classpathentry kind="src" path="dir"/>
-	<classpathentry kind="src" path="management"/>
-	<classpathentry kind="src" path="misc"/>
-	<classpathentry kind="src" path="sso"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="conf"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_5_CONTAINER"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/guzz.jar"/>
@@ -64,5 +56,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-all-2.0.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jml-1.0b4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

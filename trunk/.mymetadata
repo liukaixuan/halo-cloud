@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="GuzzService"
+  name="GuzzServiceServer"
   id="myeclipse.1286600316619"
   context-root="/services"
   j2ee-spec="5.0"
-  archive="GuzzService.war">
+  archive="GuzzServiceServer.war">
   <attributes>
     <attribute name="webrootdir" value="/WebRoot" />
   </attributes>
