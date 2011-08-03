@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	
+	<bean id="filterWordGroupManager" class="com.guzzservices.manager.impl.FilterWordGroupManagerImpl" parent="abstractGuzzDao">
+    	<property name="versionControlService" ref="versionControlService" />
+    	<property name="authManager" ref="sessionManager" />
+    </bean>
+    
+    <bean id="filterWordManager" class="com.guzzservices.manager.impl.FilterWordManagerImpl" parent="abstractGuzzDao">
+    	<property name="versionControlService" ref="versionControlService" />
+    </bean>
+    
+    <bean id="wordFilter" class="com.guzzservices.manager.impl.wordFilter.WordFilterImpl">
+    	<property name="filterWordManager" ref="filterWordManager" />
+    	<property name="filterWordGroupManager" ref="filterWordGroupManager" />
+    	<property name="commandServerService" ref="commandServerService" />
+    	<property name="versionControlService" ref="versionControlService" />
+    </bean>
+
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    
+    <bean id="logAppManager" class="com.guzzservices.manager.impl.LogAppManagerImpl" parent="abstractGuzzDao">
+    	<property name="authManager" ref="sessionManager" />
+    	<property name="versionControlService" ref="versionControlService" />
+    </bean>
+    
+    <bean id="logCustomPropertyManager" class="com.guzzservices.manager.impl.LogCustomPropertyManagerImpl" parent="abstractGuzzDao">
+    </bean>
+    
+    <bean id="logRecordManager" class="com.guzzservices.manager.impl.LogRecordManagerImpl" parent="abstractGuzzDao">
+    	<property name="logAppManager" ref="logAppManager" />
+    	<property name="insertQueueService" ref="insertQueueService" />
+    	<property name="commandServerService" ref="commandServerService" />
+    </bean>
+    
+</beans>
+
+

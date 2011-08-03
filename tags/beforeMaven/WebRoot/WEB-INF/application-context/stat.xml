@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="dataSource" class="org.guzz.web.context.spring.GuzzDataSourceFactoryBean">
+		<property name="masterDB" value="true" />
+	</bean>
+
+	<bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+		<property name="configLocation" value="classpath:quartz.properties" />
+	</bean>
+		
+	<bean id="statItemManager" class="com.guzzservices.manager.impl.StatItemManagerImpl" parent="abstractGuzzDao">
+    	<property name="topRecordManager" ref="topRecordManager" />
+    	<property name="topDataProvider" ref="topDataProvider" />
+    	<property name="topDataPublisher" ref="topDataPublisher" />
+    	<property name="bannedTopRecordManager" ref="bannedTopRecordManager" />
+    	<property name="velocityService" ref="statVelocityService" />
+    	<property name="scheduler" ref="quartzScheduler" />
+    </bean>
+    
+    <bean id="statItemGroupManager" class="com.guzzservices.manager.impl.StatItemGroupManagerImpl" parent="abstractGuzzDao">
+    	<property name="authManager" ref="sessionManager" />
+    </bean>
+    
+    <bean id="topRecordManager" class="com.guzzservices.manager.impl.TopRecordManagerImpl" parent="abstractGuzzDao">
+    </bean>
+    
+    <bean id="bannedTopRecordManager" class="com.guzzservices.manager.impl.BannedTopRecordManagerImpl" parent="abstractGuzzDao">
+    </bean>
+    
+    <bean id="topDataProvider" class="com.guzzservices.manager.impl.top.UrlTopDataProvider">
+    </bean>
+    
+    <bean id="topDataPublisher" class="com.guzzservices.manager.impl.top.UrlTopDataPublisher">
+    </bean>
+    
+    <!-- task -->
+	<bean id="taskManager" class="com.guzzservices.manager.impl.TaskManagerImpl" parent="abstractGuzzDao">
+    	<property name="scheduler" ref="quartzScheduler" />
+    </bean>
+    
+    <bean id="taskGroupManager" class="com.guzzservices.manager.impl.TaskGroupManagerImpl" parent="abstractGuzzDao">
+    	<property name="authManager" ref="sessionManager" />
+    </bean>
+    
+</beans>
+
+

@@ -1,0 +1,47 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="/console/configGroupList.do" class="com.guzzservices.action.console.config.ConfigGroupListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/configList.do" class="com.guzzservices.action.console.config.ConfigListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/configGroupPost.do" class="com.guzzservices.action.console.config.ConfigurationGroupAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/config/configGroupForm" />
+        <property name="successView" value="redirect:/console/configGroupList.do" />
+    </bean>
+       
+    <bean name="/console/configPost.do" class="com.guzzservices.action.console.config.ConfigurationAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/config/configForm" />
+        <property name="successView" value="redirect:/console/configList.do" />
+    </bean>
+    
+    <bean name="/console/configBatchUpdate.do" class="com.guzzservices.action.console.config.ConfigurationBatchUpdateAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView" value="redirect:/console/configList.do" />
+    </bean>
+    
+    <bean name="/console/configImport.do" class="com.guzzservices.action.console.config.ConfigurationImportAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/config/configImportForm" />
+        <property name="successView" value="redirect:/console/configList.do" />
+    </bean>
+    
+    <bean name="/console/configExport.do" class="com.guzzservices.action.console.config.ConfigurationExportAction">
+        <property name="configurationManager" ref="configurationManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView" value="console/config/configExport" />
+    </bean>
+    
+</beans>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE guzz-configs PUBLIC "-//GUZZ//DTD MAIN CONFIG//EN" "http://www.guzz.org/dtd/guzz.dtd">
+
+<guzz-configs>
+	
+	<dialect class="org.guzz.dialect.Mysql5Dialect" />
+	
+	<tran>
+		<dbgroup name="default" masterDBConfigName="guzzServicesMasterDB"/>
+		<dbgroup name="appLogs" masterDBConfigName="appLogsMasterDB" slaveDBConfigName="appLogsSlaveDB" />
+	</tran>
+	
+	<config-server>
+		<server class="org.guzz.config.LocalFileConfigServer">
+			<param name="resource" value="guzz_services.properties" />
+		</server>
+	</config-server>
+	
+	<service name="insertQueueService" configName="guzzDBLogServiceClient" class="org.guzz.service.db.impl.InsertQueueServiceImpl" />
+	<service name="slowUpdateServer" configName="guzzSlowUpdateServer" class="org.guzz.service.db.impl.SlowUpdateServerImpl" />
+	
+	<!-- memcached: sessionId, feedUserInfo -->
+	<service name="sessionCacheGroup" configName="sessionCacheGroup" class="com.guzzservices.store.impl.MemcachedServiceImpl" />
+		
+	<!-- sso service -->
+	<service name="userStoreService" class="com.guzzservices.manager.impl.SSOUserStoreServiceImpl"/>
+	<service name="ssoServerService" configName="ssoServerService" dependsOn="sessionCacheGroup, userStoreService, commandServerService" class="com.guzzservices.sso.impl.GlobalSSOServerServiceImpl" />
+	<service name="ssoService" dependsOn="commandSocketChannelForSSO" class="com.guzzservices.sso.impl.CommandSSOServiceImpl" />
+	
+	<!-- command server service -->
+	<service name="commandServerService" configName="commandServerService" class="com.guzzservices.rpc.server.nio.MinaCommandServerServiceImpl"/>
+	
+	<!-- command client service -->
+	<service name="commandSocketChannelForSSO" configName="commandSocketChannelForSSO" class="com.guzzservices.rpc.socket.CommandServiceClientImpl"/>
+	<service name="commandSocketChannelForServices" configName="commandSocketChannelForServices" class="com.guzzservices.rpc.socket.CommandServiceClientImpl"/>
+	<service name="commandServletChannelForServices" configName="commandServletChannelForServices" class="com.guzzservices.rpc.http.ServletCommandServiceClientImpl"/>
+	
+	<!-- fundamental services -->
+	<service name="wordFilterService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.secure.wordFilter.WordFilterServiceImpl"/>
+	<service name="chinaIPLocateService" dependsOn="commandServletChannelForServices" class="com.guzzservices.dir.ip.ChinaIPLocateServiceImpl"/>
+	<service name="html2PlainExtractService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.text.impl.RemoteHtml2PlainExtractServiceImpl"/>
+	<service name="statVelocityService" configName="statVelocityService" class="com.guzzservices.velocity.impl.VelocityEngineService" />
+	<service name="configurationService" configName="configurationService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.management.config.ConfigurationServiceImpl"/>
+	<service name="versionControlService" configName="zkVersionControlService" class="com.guzzservices.version.impl.ZKVersionControlServiceImpl"/>
+	<service name="kvStorageService" configName="zkKVStorageService" class="com.guzzservices.store.impl.ZooKeeperKVStorageServiceImpl"/>
+	<service name="leaderService" configName="zkLeaderService" class="com.guzzservices.version.impl.ZKLeaderElectionServiceImpl"/>
+	<service name="sendMailService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.mail.impl.RemoteSendMailServiceImpl"/>
+	<service name="msnContactService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.dir.contact.RemoteContactServiceImpl"/>
+	<service name="appLogService" configName="appLogService" dependsOn="commandSocketChannelForServices" class="com.guzzservices.management.alog.AppLogServiceImpl"/>
+	
+	<!-- business main starts -->
+	<a-business name="user" class="com.guzzservices.business.User" />
+	<a-business name="authedService" class="com.guzzservices.business.AuthedService" />
+	<business name="guzzSlowUpdate" file="classpath:com/guzzservices/business/IncUpdateBusiness.hbm.xml" />
+	
+	<a-business name="filterWord" class="com.guzzservices.business.FilterWord" />
+	<a-business name="filterWordGroup" class="com.guzzservices.business.FilterWordGroup" />
+	<a-business name="configuration" class="com.guzzservices.business.Configuration" />
+	<a-business name="configurationGroup" class="com.guzzservices.business.ConfigurationGroup" />
+	
+	<a-business name="bannedTopRecord" class="com.guzzservices.business.BannedTopRecord" />
+	<a-business name="statItem" class="com.guzzservices.business.StatItem" />
+	<a-business name="statItemGroup" class="com.guzzservices.business.StatItemGroup" />
+	<a-business name="statLog" class="com.guzzservices.business.StatLog" />
+	<a-business name="topRecord" class="com.guzzservices.business.TopRecord" />
+	
+	<a-business name="taskGroup" class="com.guzzservices.business.TaskGroup" />
+	<a-business name="task" class="com.guzzservices.business.Task" />
+	
+	<a-business name="logApp" class="com.guzzservices.business.LogApp" />
+	<a-business name="logCustomProperty" class="com.guzzservices.business.LogCustomProperty" />
+	
+	<a-business dbgroup="appLogs" name="logRecord" class="com.guzzservices.business.LogRecord" />
+	<!-- business main ends -->	
+
+</guzz-configs>

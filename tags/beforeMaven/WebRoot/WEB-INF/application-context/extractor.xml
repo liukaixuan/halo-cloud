@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	
+	<bean id="serversideHtml2PlainExtractor" class="com.guzzservices.manager.impl.ServersideHtml2PlainExtractorImpl">
+    	<property name="commandServerService" ref="commandServerService" />
+    	<property name="ignoreImages" value="/mummy_edit/faces/" />
+    </bean>
+
+</beans>

@@ -1,0 +1,125 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="/console/stat/statItemGroupList.do" class="com.guzzservices.action.console.stat.StatItemGroupListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/stat/bannedTopRecordList.do" class="com.guzzservices.action.console.stat.BannedTopRecordListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/stat/statItemList.do" class="com.guzzservices.action.console.stat.StatItemListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/stat/statLogList.do" class="com.guzzservices.action.console.stat.StatLogListAction">
+		<property name="sessionManager" ref="sessionManager" />
+        <property name="statItemManager" ref="statItemManager" />
+	</bean>
+	
+	<bean name="/console/stat/statTopRecordList.do" class="com.guzzservices.action.console.stat.StatTopRecordListAction">
+		<property name="sessionManager" ref="sessionManager" />
+        <property name="statItemManager" ref="statItemManager" />
+	</bean>
+	
+	<bean name="/console/stat/statItemGroupAction.do" class="com.guzzservices.action.console.stat.StatItemGroupAction">
+		<property name="statItemGroupManager" ref="statItemGroupManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+    <bean name="/console/stat/statItemAction.do" class="com.guzzservices.action.console.stat.StatItemAction">
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView">
+            <value>console/stat/statItemForm</value>
+        </property>
+        <property name="successView">
+            <value>redirect:/console/stat/statItemList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/statTopRecordAction.do" class="com.guzzservices.action.console.stat.TopRecordAction">
+        <property name="topRecordManager">
+            <ref bean="topRecordManager" />
+        </property>
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView">
+            <value>console/stat/statTopRecordForm</value>
+        </property>
+        <property name="successView">
+            <value>redirect:/console/stat/statTopRecordList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/statTopRecordVisibility.do" class="com.guzzservices.action.console.stat.TopRecordVisibilityAction">
+        <property name="topRecordManager">
+            <ref bean="topRecordManager" />
+        </property>
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView">
+            <value>redirect:/console/stat/statTopRecordList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/statItemCommand.do" class="com.guzzservices.action.console.stat.StatItemCommandAction">
+        <property name="topRecordManager">
+            <ref bean="topRecordManager" />
+        </property>
+        <property name="statItemManager">
+            <ref bean="statItemManager" />
+        </property>
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="successView">
+            <value>redirect:/console/stat/statTopRecordList.do</value>
+        </property>
+    </bean>
+    
+    <bean name="/console/stat/bannedTopRecordDelete.do" class="com.guzzservices.action.console.stat.BannedTopRecordDeleteAction">
+       <property name="bannedTopRecordManager" ref="bannedTopRecordManager" />
+       <property name="sessionManager" ref="sessionManager" />
+    </bean>    
+    
+    <bean name="/console/stat/statItemReschedule.do" class="com.guzzservices.action.console.stat.StatItemRescheduleAction">
+        <property name="statItemManager" ref="statItemManager" />
+        <property name="sessionManager" ref="sessionManager" />
+    </bean>
+    
+    <!-- task -->
+	<bean name="/console/task/taskGroupList.do" class="com.guzzservices.action.console.task.TaskGroupListAction">
+		<property name="authManager" ref="sessionManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/task/taskList.do" class="com.guzzservices.action.console.task.TaskListAction">
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean name="/console/task/taskGroupAction.do" class="com.guzzservices.action.console.task.TaskGroupAction">
+		<property name="taskGroupManager" ref="taskGroupManager"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+    <bean name="/console/task/taskAction.do" class="com.guzzservices.action.console.task.TaskAction">
+        <property name="taskManager" ref="taskManager" />
+        <property name="sessionManager" ref="sessionManager" />
+        <property name="formView" value="console/task/taskForm" />
+        <property name="successView" value="redirect:/console/task/taskList.do" />
+    </bean>
+    
+    <bean name="/console/task/taskReschedule.do" class="com.guzzservices.action.console.task.TaskRescheduleAction">
+        <property name="taskManager" ref="taskManager" />
+        <property name="sessionManager" ref="sessionManager" />
+    </bean>
+
+</beans>
