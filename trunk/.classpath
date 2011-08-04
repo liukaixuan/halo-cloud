@@ -3,61 +3,6 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_5_CONTAINER"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/guzz.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/c3p0-0.9.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javax.persistence_2.0.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-web.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-webmvc.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dom.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jaxen-full.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jaxp-api.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jdbc2_0-stdext.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sax.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/saxpath.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/memcached-2.5.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-io-1.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.6.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-log4j12-1.6.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-all-1.6.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/gson-1.3.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-core-2.0.1.jar" sourcepath="D:/coding/extlib/mina-2.0.1/src"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-filter-compression-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-integration-beans-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-integration-jmx-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-integration-ognl-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-integration-xbean-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-statemachine-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mina-transport-apr-2.0.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/filterbuilder.jar" sourcepath="D:/coding/extlib/htmlparser/HTMLParser-2.0-SNAPSHOT-src.zip"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmllexer.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sitecapturer.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/thumbelina.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-lang-2.5.jar" sourcepath="D:/coding/extlib/commons-lang-2.5/commons-lang-2.5-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/SimpleCaptcha.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-pool-1.5.5.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-1.6.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/velocity-1.6.4-dep.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/httpclient-4.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/httpclient-cache-4.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/httpcore-4.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/httpmime-4.1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/zookeeper-3.3.3.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mysql-connector-java-5.1.16-bin.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-all-2.0.2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jml-1.0b4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
