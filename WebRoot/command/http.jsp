@@ -6,7 +6,7 @@ String authKey = request.getParameter("authKey") ;
 
 CommandServerService commandServerService = (CommandServerService) application.getAttribute("commandServerService") ;
 if(commandServerService == null){
-	commandServerService = (CommandServerService) GuzzWebApplicationContextUtil.getGuzzContext(request.getSession().getServletContext()).getService("snsCommandServerService") ;
+	commandServerService = (CommandServerService) GuzzWebApplicationContextUtil.getGuzzContext(request.getSession().getServletContext()).getService("commandServerService") ;
 	application.setAttribute("commandServerService", commandServerService) ;
 }
 
