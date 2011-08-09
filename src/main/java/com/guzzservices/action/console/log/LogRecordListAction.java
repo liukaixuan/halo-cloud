@@ -3,6 +3,7 @@
  */
 package com.guzzservices.action.console.log;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.guzz.dao.PageFlip;
+import org.guzz.util.DateUtil;
 import org.guzz.util.RequestUtil;
 import org.guzz.util.StringUtil;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,20 +53,37 @@ public class LogRecordListAction implements Controller {
 		int userId = RequestUtil.getParameterAsInt(request, "userId", -1) ;
 		int pageNo = RequestUtil.getParameterAsInt(request, "pageNo", 1) ;
 		
+		//如果没有条件，查找本人今天的记录。方便用户了解参数格式。
+		if(userId < 1 && StringUtil.isEmpty(startTime) && StringUtil.isEmpty(endTime)){
+			userId = loginUser.getUserId() ;
+			
+			Calendar cal = Calendar.getInstance() ;
+			cal.set(Calendar.HOUR_OF_DAY, 0) ;
+			cal.set(Calendar.MINUTE, 0) ;
+			cal.set(Calendar.SECOND, 0) ;
+			cal.set(Calendar.MILLISECOND, 0) ;
+			
+			startTime = DateUtil.date2String(cal.getTime(), "yyyy-MM-dd HH:mm:ss") ;
+		}
+
+		HashMap<String, Object> params = new HashMap<String, Object>() ;
+		
 		LinkedList<String> conditions = new LinkedList<String>() ;
 		if(userId > 0){
 			conditions.addLast("userId=" + userId) ;
+			params.put("userId", userId) ;
 		}
 		
 		if(StringUtil.notEmpty(startTime)){
 			conditions.addLast("createdTime>=" + startTime) ;
+			params.put("startTime", startTime) ;
 		}
 		
 		if(StringUtil.notEmpty(endTime)){
 			conditions.addLast("createdTime<=" + endTime) ;
+			params.put("endTime", endTime) ;
 		}
 		
-		HashMap<String, Object> params = new HashMap<String, Object>() ;
 		params.put("appId", appId) ;
 		
 		PageFlip logs = this.appLogService.queryLogs(scode, conditions, "id asc", pageNo, 20) ;

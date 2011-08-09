@@ -24,9 +24,9 @@
     	<form>
     		<input name="appId" value="${appId}" type="hidden" />
     		
-    		用户编号：<input name="userId" type="input" value="${param.userId}" />
-    		开始时间：<input name="startTime" type="input" value="${param.startTime}" />
-    		结束时间：<input name="endTime" type="input" value="${param.endTime}" />
+    		用户编号：<input name="userId" value="${userId}" />
+    		开始时间：<input name="startTime" value="${startTime}" />
+    		结束时间：<input name="endTime" value="${endTime}" />
     		
     		&nbsp;&nbsp;<input type="submit" value="检索" />
     	</form>
