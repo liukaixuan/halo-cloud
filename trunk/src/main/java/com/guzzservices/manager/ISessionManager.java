@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.guzzservices.sso.LoginException;
 import com.guzzservices.sso.LoginUser;
+import com.guzzservices.sso.SSOException;
 import com.guzzservices.sso.SSOService;
 
 /**
@@ -24,7 +25,7 @@ public interface ISessionManager {
 	 * @throws LoginException 
 	 * @see SSOService#queryUserInfo(String)
 	 */
-	public Map<String, Object> queryUserInfo(String userName) throws LoginException ;
+	public Map<String, Object> queryUserInfo(String userName) throws SSOException ;
 	
 	public LoginUser getLoginUser(HttpServletRequest request, HttpServletResponse response) ;
 	

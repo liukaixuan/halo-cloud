@@ -51,6 +51,12 @@ public class SSOUserStoreServiceImpl extends AbstractService implements UserStor
 		return loginUser ;
 	}
 
+	public int queryUserId(String userName) {
+		User user = userManager.getByEmail(userName) ;
+		
+		return user == null ? -1 : user.getId() ;
+	}
+
 	public void setExtendedBeanFactory(ExtendedBeanFactory fac) {
 		this.userManager = (IUserManager) fac.getBean("userManager") ;
 	}
