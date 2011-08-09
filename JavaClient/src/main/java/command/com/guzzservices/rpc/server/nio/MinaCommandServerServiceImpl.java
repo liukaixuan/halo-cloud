@@ -17,6 +17,7 @@ import org.guzz.exception.ServiceExecutionException;
 import org.guzz.service.AbstractService;
 import org.guzz.service.ServiceConfig;
 import org.guzz.util.StringUtil;
+import org.guzz.util.ViewFormat;
 
 import com.guzzservices.rpc.server.ClientInfo;
 import com.guzzservices.rpc.server.CommandHandler;
@@ -38,6 +39,8 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 	
 	private Map<String, CommandHandler> handlers = new HashMap<String, CommandHandler>() ;
 	
+	private String[] authedIPs ;
+	
 	public boolean configure(ServiceConfig[] scs) {
 		if(scs.length == 0){
 			log.warn("Mina Server CommandService is not started. no configuration found.") ;
@@ -47,6 +50,14 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 		acceptor = new NioSocketAcceptor() ;
 		
 		Properties props = scs[0].getProps() ;
+		
+		String authedIPs = props.getProperty("authedIPs") ;
+		
+		if(StringUtil.isEmpty(authedIPs)){
+			this.authedIPs = null ;
+		}else{
+			this.authedIPs = ViewFormat.reassembleAndSplitKeywords(authedIPs) ;
+		}
 		
 		int idleTimeSeconds = StringUtil.toInt(props.getProperty("idleTimeSeconds"), 3600) ;
 		int port = StringUtil.toInt(props.getProperty("port"), 11546) ;
@@ -80,6 +91,26 @@ public class MinaCommandServerServiceImpl extends AbstractService implements Com
 
 	public void startup() {
 
+	}
+
+	public boolean isAuthedClient(ClientInfo client) {
+		if(this.authedIPs == null) return true ;
+		if(this.authedIPs.length == 0) return true ;
+		
+		String clientIP = client.getIP() ;
+		for(String IP : this.authedIPs){
+			if(IP.length() == 0) continue ;
+			
+			if(IP.equals(clientIP)) {
+				return true ;
+			}
+			
+			if(clientIP.startsWith(IP)){
+				return true ;
+			}
+		}
+		
+		return false ;
 	}
 	
 	public CommandResponse executeCommand(ClientInfo client, CommandRequest request){

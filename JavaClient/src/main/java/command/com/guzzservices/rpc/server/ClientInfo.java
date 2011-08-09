@@ -36,5 +36,9 @@ public class ClientInfo {
 	public int getPort() {
 		return port;
 	}
+	
+	public String toString(){
+		return IP + ":" + port ;
+	}
 
 }

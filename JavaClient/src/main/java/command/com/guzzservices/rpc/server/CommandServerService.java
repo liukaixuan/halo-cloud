@@ -19,4 +19,6 @@ public interface CommandServerService {
 	
 	public CommandResponse executeCommand(ClientInfo client, CommandRequest request) ;
 	
+	public boolean isAuthedClient(ClientInfo client) ;
+	
 }

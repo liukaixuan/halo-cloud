@@ -69,6 +69,8 @@ public class SocketClientPoolFactory implements PoolableObjectFactory {
 			// add to the retry pool
 			addToWatingQueue(new ReconnectRequest(props, 0, this.healConnectionInterval));
 
+			log.error("failed to connect to :[" + props + "], error message:" + e.getMessage()) ;
+			
 			throw e;
 		}
 	}

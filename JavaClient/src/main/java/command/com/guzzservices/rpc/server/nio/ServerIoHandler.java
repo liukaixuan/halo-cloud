@@ -3,6 +3,7 @@
  */
 package com.guzzservices.rpc.server.nio;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import org.apache.commons.logging.Log;
@@ -59,6 +60,16 @@ public class ServerIoHandler extends IoHandlerAdapter {
 
 	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
 		session.close(false) ;
+	}
+
+	public void sessionCreated(IoSession session) throws Exception {
+		InetSocketAddress addr = (InetSocketAddress) session.getRemoteAddress() ;		
+		ClientInfo client = new ClientInfo(addr) ;
+		
+		//没有授权的IP
+		if(!this.commandServerService.isAuthedClient(client)){
+			throw new IOException("Permission denied! Your IP:" + client) ;
+		}
 	}
 
 }
