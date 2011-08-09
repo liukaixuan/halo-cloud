@@ -15,6 +15,7 @@ import com.guzzservices.rpc.CommandService;
 import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.sso.LoginException;
 import com.guzzservices.sso.LoginUser;
+import com.guzzservices.sso.SSOException;
 import com.guzzservices.sso.stub.SSOInfo;
 
 /**
@@ -36,6 +37,8 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 	public static final String COMMAND_CHECK_PASSWORD = "gs.sso.c.cpsw" ;
 	
 	public static final String COMMAND_QUERY_USER_INFO = "gs.sso.c.qui" ;
+	
+	public static final String COMMAND_QUERY_USER_ID = "gs.sso.c.qid" ;
 	
 	protected SSOInfo internalLogout(HttpServletRequest request, HttpServletResponse response, String sessionId) {
 		String json = null ;
@@ -96,7 +99,7 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 		return null ;
 	}
 	
-	public void checkPassword(String IP, String userName, String password) throws LoginException {
+	public void checkPassword(String IP, String userName, String password) throws SSOException {
 		CheckPasswordCommandRequest r = new CheckPasswordCommandRequest() ;
 		r.userName = userName ;
 		r.password = password ;
@@ -108,17 +111,17 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 			String result = this.commandService.executeCommand(COMMAND_CHECK_PASSWORD, JsonUtil.toJson(r));
 			errorCode = Integer.parseInt(result) ;
 		} catch (Exception e) {
-			throw new LoginException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
+			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
 		}
 		
 		if(SSOInfo.SUCCESS != errorCode){
-			throw new LoginException(errorCode) ;
+			throw new SSOException(errorCode) ;
 		}
 		
 		return ;
 	}
 
-	public Map<String, Object> queryUserInfo(String userName) throws LoginException {
+	public Map<String, Object> queryUserInfo(String userName) throws SSOException {
 		try {
 			String result = this.commandService.executeCommand(COMMAND_QUERY_USER_INFO, userName);
 			
@@ -129,7 +132,21 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 			return JsonUtil.fromJson(result, HashMap.class) ;
 			
 		} catch (Exception e) {
-			throw new LoginException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
+			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
+		}
+	}
+
+	public int queryUserId(String userName) throws SSOException {
+		try {
+			String result = this.commandService.executeCommand(COMMAND_QUERY_USER_ID, userName);
+			
+			if(result == null){
+				return -1 ;
+			}
+			
+			return StringUtil.toInt(result, -1) ;
+		} catch (Exception e) {
+			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
 		}
 	}
 	

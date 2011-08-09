@@ -25,7 +25,7 @@ public interface SSOService {
 	
 	public CookieUser readCookieUser(HttpServletRequest request, HttpServletResponse response) throws IOException ;
 	
-	public void checkPassword(String IP, String userName, String password) throws LoginException ;
+	public void checkPassword(String IP, String userName, String password) throws SSOException ;
 	
 	/**
 	 * Query user info.
@@ -33,7 +33,16 @@ public interface SSOService {
 	 * @param userName
 	 * @return return null if user not exist.
 	 */
-	public Map<String, Object> queryUserInfo(String userName) throws LoginException ;
+	public Map<String, Object> queryUserInfo(String userName) throws SSOException ;
+	
+	/**
+	 * Query userId by userName.
+	 * 
+	 * @param userName
+	 * @return return -1 if user not exist.
+	 * @throws LoginException server internal error.
+	 */
+	public int queryUserId(String userName) throws SSOException ;
 
 	/**
 	 * login for the current browser session.

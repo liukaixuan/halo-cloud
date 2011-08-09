@@ -29,7 +29,7 @@ public interface UserStoreService {
 	 * @param userName
 	 * @param password
 	 * @param IP
-	 * @return {@link SSOInfo#SUCCESS} yes; others in {@link LoginException} false.
+	 * @return {@link SSOInfo#SUCCESS} if permission granted; or return a constant error code in {@link LoginException} on failed.
 	 */
 	public int checkLogin(String userName, String password, String IP) ;
 	
@@ -40,4 +40,13 @@ public interface UserStoreService {
 	 * @return return null if user not exist.
 	 */
 	public Map<String, Object> queryUserInfo(String userName) ;
+
+	/**
+	 * Query userId by userName.
+	 * 
+	 * @param userName
+	 * @return return -1 if user not exist.
+	 */
+	public int queryUserId(String userName) ;
+	
 }

@@ -9,7 +9,7 @@ package com.guzzservices.sso;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public class LoginException extends Exception {
+public class LoginException extends SSOException {
 	
 	public static final int NO_SUCH_USER = 1 ;
 	
@@ -23,35 +23,12 @@ public class LoginException extends Exception {
 	
 	public static final int SERVER_INTERNAL_ERROR = 30 ;
 	
-	private int errorCode ;
-	
-	private String errorMsg ;
-	
 	public LoginException(int errorCode, String errorMsg){
-		super("error code:" + errorCode) ;
-	
-		this.errorCode = errorCode ;
-		this.errorMsg = errorMsg ;
+		super(errorCode, errorMsg) ;
 	}
 
 	public LoginException(int errorCode) {
-		this.errorCode = errorCode ;
-	}
-
-	public int getErrorCode() {
-		return errorCode;
-	}
-
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
-	}
-
-	public String getErrorMsg() {
-		return errorMsg;
-	}
-
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
+		super(errorCode, null) ;
 	}
 
 }

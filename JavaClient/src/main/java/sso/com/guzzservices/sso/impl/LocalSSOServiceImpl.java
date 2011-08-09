@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.guzzservices.sso.LoginException;
 import com.guzzservices.sso.LoginUser;
+import com.guzzservices.sso.SSOException;
 import com.guzzservices.sso.stub.SSOInfo;
 
 /**
@@ -30,11 +31,11 @@ public class LocalSSOServiceImpl extends AbstractSSOServiceImpl {
 		return globalSSOServerService.localGetLoginUser(sessionId) ;
 	}
 	
-	public void checkPassword(String IP, String userName, String password) throws LoginException {
+	public void checkPassword(String IP, String userName, String password) throws SSOException {
 		int errorCode = globalSSOServerService.checkPassword(IP, userName, password) ;
 		
 		if(SSOInfo.SUCCESS != errorCode){
-			throw new LoginException(errorCode) ;
+			throw new SSOException(errorCode) ;
 		}
 	}
 
@@ -52,8 +53,12 @@ public class LocalSSOServiceImpl extends AbstractSSOServiceImpl {
 		return info ;
 	}
 
-	public Map<String, Object> queryUserInfo(String userName) throws LoginException {
+	public Map<String, Object> queryUserInfo(String userName) throws SSOException {
 		return globalSSOServerService.localQueryUserInfo(userName) ;
+	}
+
+	public int queryUserId(String userName) throws SSOException {
+		return globalSSOServerService.localQueryUserId(userName) ;
 	}
 
 	public boolean isAvailable() {
