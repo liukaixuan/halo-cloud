@@ -40,6 +40,8 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 	
 	public static final String COMMAND_QUERY_USER_ID = "gs.sso.c.qid" ;
 	
+	public static final String COMMAND_QUERY_USER_NAME = "gs.sso.c.quname" ;
+	
 	protected SSOInfo internalLogout(HttpServletRequest request, HttpServletResponse response, String sessionId) {
 		String json = null ;
 		
@@ -145,6 +147,16 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 			}
 			
 			return StringUtil.toInt(result, -1) ;
+		} catch (Exception e) {
+			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
+		}
+	}
+	
+	public String queryUserName(int userId) throws SSOException {
+		try {
+			String result = this.commandService.executeCommand(COMMAND_QUERY_USER_NAME, String.valueOf(userId));
+			
+			return result ;
 		} catch (Exception e) {
 			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
 		}

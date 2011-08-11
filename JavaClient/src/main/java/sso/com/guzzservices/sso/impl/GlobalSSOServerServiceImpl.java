@@ -238,6 +238,10 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 		return this.userStoreService.queryUserId(userName);
 	}
 	
+	public String localQueryUserName(int userId){
+		return this.userStoreService.queryUserName(userId) ;
+	}
+	
 	protected SSOInfo buildSSOInfo(String sessionId, LoginUser loginUser, int maxAge){
 		CookieUser cu = new CookieUser() ;
 		cu.setLogin(loginUser.isLogin()) ;
@@ -319,6 +323,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD, commandHandler) ;
 		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO, commandHandler) ;
 		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_ID, commandHandler) ;
+		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_NAME, commandHandler) ;
 	}
 	
 	private CommandHandler commandHandler = new CommandHandlerAdapter(){
@@ -351,6 +356,10 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 				String userName = param ;
 				
 				result = String.valueOf(localQueryUserId(userName)) ;
+			}else if(CommandSSOServiceImpl.COMMAND_QUERY_USER_NAME.equals(command)){
+				int userId = Integer.parseInt(param) ;
+				
+				result = localQueryUserName(userId) ;
 			}else if(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD.equals(command)){
 				CheckPasswordCommandRequest r = JsonUtil.fromJson(param, CheckPasswordCommandRequest.class) ;
 				int errorCode = checkPassword(r.IP, r.userName, r.password) ;

@@ -43,6 +43,15 @@ public interface SSOService {
 	 * @throws LoginException server internal error.
 	 */
 	public int queryUserId(String userName) throws SSOException ;
+	
+	/**
+	 * Query userName by userId.
+	 * 
+	 * @param userId
+	 * @return return null if user not exist.
+	 * @throws LoginException server internal error.
+	 */
+	public String queryUserName(int userId) throws SSOException ;
 
 	/**
 	 * login for the current browser session.

@@ -49,4 +49,12 @@ public interface UserStoreService {
 	 */
 	public int queryUserId(String userName) ;
 	
+	/**
+	 * Query userName by userId.
+	 * 
+	 * @param userId
+	 * @return return null if user not exist.
+	 */
+	public String queryUserName(int userId) ;
+	
 }

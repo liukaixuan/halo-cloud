@@ -61,6 +61,10 @@ public class LocalSSOServiceImpl extends AbstractSSOServiceImpl {
 		return globalSSOServerService.localQueryUserId(userName) ;
 	}
 
+	public String queryUserName(int userId) throws SSOException {
+		return globalSSOServerService.localQueryUserName(userId) ;
+	}
+
 	public boolean isAvailable() {
 		return this.globalSSOServerService != null ;
 	}
