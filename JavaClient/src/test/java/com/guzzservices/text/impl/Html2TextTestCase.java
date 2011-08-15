@@ -80,6 +80,10 @@ public class Html2TextTestCase extends TestCase {
 		
 		System.out.println("aaaaaaaaaaaaaa:" + p.extractText(text, 10).getPlainText()) ;
 		assertEquals(p.extractText(text, 10).getPlainText(), "政治") ;
+		
+		text = "政治政治政治政治......<br><br>政治政治<a target=\"_blank\" href=\"http://tv.people.com.cn/GB/166419/15389044.html\">http://tv.people.com.cn/GB/166419/15389044.html</a>" ;
+	
+		assertEquals(p.extractText(text, 124).getPlainText(), "政治政治政治政治......\n\n政治政治") ;
 	}
 	
 	public static void main(String[] args) throws Exception{
