@@ -84,6 +84,30 @@ public class LocalHtmlParserExtractServiceImpl extends AbstractService implement
 			result.setTextCutted(true) ;
 		}
 		
+		//如果有没有关闭的A标签，关闭之（默认策略为：宁可返回的字符数不够，也不返回含有未关闭标签的html代码，避免引起页面错乱）
+		String text = result.getPlainText() ;
+		for(int i = 0 ; i < v.getOpenedAHrefs() ; i++){
+			int pos = text.lastIndexOf("<a href=\"") ;
+			
+			if(pos > 0){
+				text = text.substring(0, pos) ;
+			}else{
+				text = "" ;
+				break ;
+			}
+		}
+		
+		//删除截取后的html未关闭处理，TODO: 优化在解析树中处理
+		int startPos = text.lastIndexOf("<") ;
+		int endPos = text.indexOf("</a>", startPos) ;
+		
+		//发现截错的标签
+		if(startPos > 0 && endPos < 0){
+			text = text.substring(0, startPos) ;
+		}
+		
+		result.setPlainText(text) ;
+		
 		if(log.isDebugEnabled()){
 			log.debug("extracted html:" + result.getPlainText()) ;
 		}
@@ -110,6 +134,8 @@ public class LocalHtmlParserExtractServiceImpl extends AbstractService implement
 		private String keepATarget = "_blank" ;
 		
 		private String[] ignoreImages ;
+		
+		private int openedAHrefs ;
 		
 		public TextAndImageVisitor(int contentLength, int maxImageCount, String[] ignoreImages, Map<String, String> tips){
 			 sb = new StringBuilder(contentLength) ;
@@ -184,6 +210,8 @@ public class LocalHtmlParserExtractServiceImpl extends AbstractService implement
 				}
 				
 				sb.append('>') ;
+				
+				openedAHrefs++ ;
 			}else if("SCRIPT".equals(tag.getTagName())){
 				ignoreContent = true ;
 			}else if("STYLE".equals(tag.getTagName())){
@@ -223,6 +251,8 @@ public class LocalHtmlParserExtractServiceImpl extends AbstractService implement
 				if(!this.keepA) return ;
 				
 				sb.append("</a>") ;
+				
+				openedAHrefs-- ;
 			}else if("SCRIPT".equals(tag.getTagName())){
 				ignoreContent = false ;
 			}else if("STYLE".equals(tag.getTagName())){
@@ -233,9 +263,12 @@ public class LocalHtmlParserExtractServiceImpl extends AbstractService implement
 		public LinkedList<String> getImageTitles() {
 			return imageTitles;
 		}
-		
-	}
 
+		public int getOpenedAHrefs() {
+			return this.openedAHrefs;
+		}
+	}
+	
 	public boolean configure(ServiceConfig[] scs) {
 		if(scs.length > 0){
 			String ignoreImages = scs[0].getProps().getProperty("ignoreImages") ;

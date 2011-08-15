@@ -77,6 +77,20 @@ public class Html2TextTestCase extends TestCase {
 		
 		
 		System.out.println("1 m nano:" + (end - start)) ;
+		
+		System.out.println("aaaaaaaaaaaaaa:" + p.extractText(text, 10).getPlainText()) ;
+		assertEquals(p.extractText(text, 10).getPlainText(), "政治") ;
+	}
+	
+	public static void main(String[] args) throws Exception{
+		LocalHtmlParserExtractServiceImpl p = new LocalHtmlParserExtractServiceImpl() ;
+		HashMap<String, String> tips = new HashMap<String, String>() ;
+		tips.put("keepA", "true") ;
+		tips.put("keepATarget", "mainFrame") ;
+		p.setTips(tips) ;
+		
+		String text = "政治<a href=\"http://finance.ce.cn/macro/gdxw/200901/21/t20090121_14143831.shtml\" target=\"_blank\" onmousedown=\"return si_T('&amp;ID=SERP,5026.1')\">2008年主要经济<strong>数据</strong> 外商直接投资(<strong>FDI</strong>) _<strong>中国</strong>经济网——国家经济门户</a><br/>" ;
+		System.out.println(p.extractText(text, 10).getPlainText()) ;
 	}
 
 }

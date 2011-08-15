@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.codec.binary.Hex;
 import org.guzz.exception.ServiceExecutionException;
@@ -27,6 +28,7 @@ import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.sso.GuestUser;
 import com.guzzservices.sso.LoginException;
 import com.guzzservices.sso.LoginUser;
+import com.guzzservices.sso.SSOServerService;
 import com.guzzservices.sso.UserStatusListener;
 import com.guzzservices.sso.UserStoreService;
 import com.guzzservices.sso.impl.CommandSSOServiceImpl.CheckPasswordCommandRequest;
@@ -41,7 +43,7 @@ import com.guzzservices.store.CacheService;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public class GlobalSSOServerServiceImpl extends AbstractService {
+public class GlobalSSOServerServiceImpl extends AbstractService implements SSOServerService {
 	
 	private String sessionIdCookieName = "guzz_session_id" ;
 	
@@ -56,6 +58,11 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 	private List<UserStatusListener> listeners = new LinkedList<UserStatusListener>() ;
 	
 	private OnlineStatusSync onlineStatusSyncThread = new OnlineStatusSync() ;
+	
+	/**
+	 * Thread pool to perform user login & logout notifications.
+	 */
+	private ExecutorService executorService ;
 
 	public boolean configure(ServiceConfig[] scs) {
 		if(scs.length != 0){
@@ -196,13 +203,41 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 		}
 		
 		if(!this.listeners.isEmpty()){
-			for(UserStatusListener l : this.listeners){
-				l.notifyLogin(loginUser, maxAge) ;
+			//如果有pool就用pool
+			if(this.executorService != null){
+				this.executorService.execute(new _Notify_Task(this.listeners, loginUser, maxAge) {
+					
+					public void run() {
+						for(UserStatusListener l : this.listeners){
+							l.notifyLogin(this.loginUser, this.maxAge) ;
+						}
+					}
+				}) ;
+				
+			}else{
+				for(UserStatusListener l : this.listeners){
+					l.notifyLogin(loginUser, maxAge) ;
+				}
 			}
 		}
 		
 		//store to cookies
 		return buildSSOInfo(sessionId, loginUser, maxAge);
+	}
+	
+	static abstract class _Notify_Task implements Runnable{
+		
+		protected final List<UserStatusListener> listeners ;
+		
+		protected final LoginUser loginUser ;
+		
+		protected final int maxAge ;
+		
+		public _Notify_Task(List<UserStatusListener> listeners, LoginUser loginUser, int maxAge){
+			this.listeners = listeners ;
+			this.loginUser = loginUser ;
+			this.maxAge = maxAge ;
+		}
 	}
 
 	public SSOInfo localLogout(String sessionId) {
@@ -210,8 +245,21 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 			LoginUser loginUser = localGetLoginUser(sessionId) ;
 			
 			if(loginUser != null && loginUser.isLogin()){
-				for(UserStatusListener l : this.listeners){
-					l.notifyLogout(loginUser) ;
+				//如果有pool就用pool
+				if(this.executorService != null){
+					this.executorService.execute(new _Notify_Task(this.listeners, loginUser, 0) {
+						
+						public void run() {
+							for(UserStatusListener l : this.listeners){
+								l.notifyLogout(this.loginUser) ;
+							}
+						}
+					}) ;
+					
+				}else{
+					for(UserStatusListener l : this.listeners){
+						l.notifyLogout(loginUser) ;
+					}
 				}
 			}
 		}
@@ -379,10 +427,6 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 			
 			return result;
 		}
-
-		public byte[] executeCommand(String command, byte[] param) throws Exception {
-			throw new ServiceExecutionException("byte[] protocol not implemented.") ;
-		}
 	} ;
 	
 	class OnlineStatusSync extends DemonQueuedThread{
@@ -423,6 +467,14 @@ public class GlobalSSOServerServiceImpl extends AbstractService {
 			return false ;
 		}
 		
+	}
+
+	public ExecutorService getExecutorService() {
+		return this.executorService;
+	}
+
+	public void setExecutorService(ExecutorService executorService) {
+		this.executorService = executorService;
 	}
 	
 }
