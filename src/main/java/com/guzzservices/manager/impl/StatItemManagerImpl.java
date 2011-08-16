@@ -169,7 +169,7 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 	}
 	
 	public void setException(StatItem item, Exception e) {
-		item.setErrorInfo(e == null ? null : e.getMessage()) ;
+		item.setErrorInfo("error found:" + (e == null ? null : e.getMessage())) ;
 		
 		super.update(item) ;
 	}
@@ -183,7 +183,11 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		
 		String text;
 		try {
-			text = this.velocityService.translateText(data, "stat" + item.getId(), item.getTemplateContent());
+			if("json".equalsIgnoreCase(item.getTemplateContent())){
+				text = JsonUtil.toJson(data) ;
+			}else{
+				text = this.velocityService.translateText(data, "stat" + item.getId(), item.getTemplateContent());
+			}
 		} catch (Exception e) {
 			this.setException(item, e) ;
 			
@@ -201,7 +205,11 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		
 		//通知使用者，重新加载内容。
 		try {
-			this.topDataPublisher.publishData(item, text) ;
+			String result = this.topDataPublisher.publishData(item, text) ;
+			
+			if(StatItemManagerImpl.this.log.isDebugEnabled()){
+				StatItemManagerImpl.this.log.debug("publish data for item:" + item.getId() + ". returned:" + result) ;
+			}
 		} catch (Exception e) {
 			this.setException(item, e) ;
 			
@@ -216,9 +224,15 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		try {
 			records = this.topDataProvider.readNewData(topRecordManager, this, item);
 		} catch (Exception e1) {
+			log.error("failed to refresh item:" + item.getId() + " from url:" + item.getDataProviderUrl(), e1) ;
+			
 			this.setException(item, e1) ;
 			
 			return ;
+		}
+		
+		if(log.isDebugEnabled()){
+			log.debug("reading " + records.size() + " records for item:" + item.getId()) ;
 		}
 		
 		//关联数据
@@ -230,6 +244,10 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 			
 			if(btr != null){
 				r.setBanned(true) ;
+				
+				if(log.isDebugEnabled()){
+					log.debug("top record " + r.getObjectId() + " banned for item:" + item.getId()) ;
+				}
 				
 				btr.setLastHitTime(new Date()) ;
 				super.update(btr) ;
@@ -271,6 +289,8 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 			write.commit() ;
 		}catch(Exception e){
 			write.rollback() ;
+
+			StatItemManagerImpl.this.log.error("failed to refresh item:" + item.getId(), e) ;
 			
 			this.setException(item, e) ;
 		}finally{
