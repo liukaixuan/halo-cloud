@@ -49,7 +49,10 @@ public class UrlTopDataProvider implements TopDataProvider {
 			r.setObjectId(String.valueOf(m.get("objectId"))) ;
 			r.setObjectTitle(String.valueOf( m.get("objectTitle"))) ;
 			r.setObjectURL(String.valueOf( m.get("objectURL"))) ;
-			r.setOpTimes(((Number) m.get("opTimes")).intValue()) ;
+			
+			Number count = (Number) m.get("opTimes") ;
+			
+			r.setOpTimes(count == null ? 0 : count.intValue()) ;
 			
 			records.add(r) ;
 		}

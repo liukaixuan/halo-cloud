@@ -94,6 +94,10 @@ public class StatItem implements Serializable {
 		return "top" + userId ;
 	}
 
+	public boolean getAutoPublish() {
+		return autoPublish;
+	}
+
 	public boolean isAutoPublish() {
 		return autoPublish;
 	}
