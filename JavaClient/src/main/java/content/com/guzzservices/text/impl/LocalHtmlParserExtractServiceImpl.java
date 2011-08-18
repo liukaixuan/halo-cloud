@@ -92,18 +92,21 @@ public class LocalHtmlParserExtractServiceImpl extends AbstractService implement
 			if(pos > 0){
 				text = text.substring(0, pos) ;
 			}else{
-				text = "" ;
 				break ;
 			}
 		}
 		
 		//删除截取后的html未关闭处理，TODO: 优化在解析树中处理
-		int startPos = text.lastIndexOf("<") ;
-		int endPos = text.indexOf("</a>", startPos) ;
-		
-		//发现截错的标签
-		if(startPos > 0 && endPos < 0){
-			text = text.substring(0, startPos) ;
+		if(text.length() > 0){
+			int startPos = text.lastIndexOf("<a") ;
+			int endPos = text.indexOf("</a>", startPos) ;
+			
+			//发现截错的标签
+			if(startPos > 0 && endPos < 0){
+				text = text.substring(0, startPos) ;
+			}else if(text.charAt(text.length() - 1) == '<'){
+				text = text.substring(0, text.length() - 1) ;
+			}
 		}
 		
 		result.setPlainText(text) ;
