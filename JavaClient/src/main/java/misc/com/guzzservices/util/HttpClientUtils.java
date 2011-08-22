@@ -5,6 +5,7 @@ package com.guzzservices.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.guzz.util.FileUtil;
+import org.guzz.util.StringUtil;
 
 /**
  * 
@@ -30,8 +32,69 @@ import org.guzz.util.FileUtil;
 public class HttpClientUtils {
 	
 	static final String header = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; CIBA; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)" ;
+	
+	public static final String PARAM_NAKED_URL = "__naked_url_" ;
+	
+	/**
+	 * 解析给定URL中的请求地址和参数（queryString），存入一个Map中。请求地址存放的key为 {@value #PARAM_NAKED_URL} 。
+	 * @return 解析结果存储的Map。如果url不含有参数，返回null。
+	 */
+	public static Map<String, String> parseParamsFromUrl(String url){
+		if(url == null) return null ;
+		url = url.trim() ;
+		if(url.length() == 0) return null ;
 		
+		int queryPos = url.indexOf('?') ;
+		if(queryPos == -1) return null ;
+		
+		HashMap<String, String> map = new HashMap<String, String>() ;
+		String nurl = url.substring(0, queryPos) ;
+		
+		int p2 = queryPos + 1 ;
+		if(p2 < url.length()){
+			//has query params
+			String paramS = url.substring(p2) ;
+			String[] params = StringUtil.splitString(paramS, "&") ;
+			
+			for(String param : params){
+				if(param.length() == 0) continue ;
+				
+				int pos = param.indexOf('=') ;
+				if(pos == 0) continue ;
+				if(pos == -1){
+					if(param.charAt(0) != '?'){
+						map.put(param, "") ;
+					}
+					continue ;
+				}
+				
+				String key = param.substring(0, pos) ;
+				if(key.equals("?")){
+					continue ;
+				}
+				
+				if(pos + 1 >= param.length()){
+					//no value
+					map.put(key, "") ;
+				}else{
+					map.put(key, param.substring(pos + 1)) ;
+				}
+			}
+		}
+		
+		map.put(PARAM_NAKED_URL, nurl) ;		
+		
+		return map ;
+	}
+	
+	
 	public static String post(String url, Map<String, String> params, String encoding) throws IOException{
+		Map<String, String> paramsInUrl = parseParamsFromUrl(url) ;
+		if(paramsInUrl != null){
+			url = paramsInUrl.remove(HttpClientUtils.PARAM_NAKED_URL) ;
+			params.putAll(paramsInUrl) ;
+		}
+		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		httpclient.getParams().setParameter("User-Agent", header) ;
 		httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
@@ -68,6 +131,12 @@ public class HttpClientUtils {
 	}
 	
 	public static String get(String url, Map<String, String> params, String encoding) throws IOException{
+		Map<String, String> paramsInUrl = parseParamsFromUrl(url) ;
+		if(paramsInUrl != null){
+			url = paramsInUrl.remove(HttpClientUtils.PARAM_NAKED_URL) ;
+			params.putAll(paramsInUrl) ;
+		}
+		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		httpclient.getParams().setParameter("User-Agent", header) ;
 		
