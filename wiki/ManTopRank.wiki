@@ -80,7 +80,7 @@ out.print(com.guzzservices.rpc.util.JsonUtil.toJson(records)) ;
 
 接受POST的地址应该处理此请求，将翻译后的文本内容，按照业务需要进行排行更新。
 
-发起POST时，将附带5个参数。具体参数如下：
+发起POST时，将附带6个参数。具体参数如下：
 
 || 参数 || 含义 || 备注 ||
 || authKey || 验证key，数据提供者可以通过此参数验证请求是否合法 || 在创建排行榜时自己设定 ||
