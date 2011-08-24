@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -184,7 +185,25 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		String text;
 		try {
 			if("json".equalsIgnoreCase(item.getTemplateContent())){
-				text = JsonUtil.toJson(data) ;
+				LinkedList<HashMap<String, Object>> m_records = new LinkedList<HashMap<String, Object>>() ;
+				
+				for(TopRecord t : records){
+					HashMap<String, Object> r = new HashMap<String, Object>() ;
+					
+					r.put("objectId", t.getObjectId()) ;
+					r.put("objectOrder", t.getObjectOrder()) ;
+					r.put("objectTitle", t.getObjectTitle()) ;
+					r.put("objectURL", t.getObjectURL()) ;
+					r.put("objectCreatedTime", t.getObjectCreatedTime()) ;
+					r.put("opTimes", t.getOpTimes()) ;
+					r.put("extra1", t.getExtra1()) ;
+					r.put("extra2", t.getExtra2()) ;
+					r.put("extra3", t.getExtra3()) ;
+					
+					m_records.addLast(r) ;
+				}
+				
+				text = JsonUtil.toJson(m_records) ;
 			}else{
 				text = this.velocityService.translateText(data, "stat" + item.getId(), item.getTemplateContent());
 			}
