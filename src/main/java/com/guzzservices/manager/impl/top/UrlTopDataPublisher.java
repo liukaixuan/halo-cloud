@@ -20,6 +20,7 @@ public class UrlTopDataPublisher implements TopDataPublisher {
 		HashMap<String, String> params = new HashMap<String, String>() ;
 		params.put("authKey", item.getAuthKey()) ;
 		params.put("statId", String.valueOf(item.getId())) ;
+		params.put("statName", item.getName()) ;
 		params.put("time", String.valueOf(item.getStatBeforeMinutes())) ;
 		params.put("programId", item.getProgramId()) ;
 		params.put("content", text) ;
