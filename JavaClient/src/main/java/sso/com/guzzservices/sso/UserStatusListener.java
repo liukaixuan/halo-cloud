@@ -11,7 +11,7 @@ package com.guzzservices.sso;
  */
 public interface UserStatusListener {
 	
-	public void notifyLogin(LoginUser loginUser, int maxAge) ;
+	public void notifyLogin(LoginUser loginUser, String IP, int maxAge) ;
 	
 	public void notifyOnline(LoginUser loginUser) ;
 	

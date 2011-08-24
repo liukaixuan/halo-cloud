@@ -171,7 +171,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 		return this.userStoreService.checkLogin(userName, password, IP) ;
 	}
 	
-	public SSOInfo localLogin(String oldSessionId, String userName, String IP, int maxAge) {
+	public SSOInfo localLogin(String oldSessionId, String userName, final String IP, int maxAge) {
 		//删除以前登录的用户
 		if(StringUtil.notEmpty(oldSessionId)){
 			this.cacheService.removeFromCache(oldSessionId) ;
@@ -209,14 +209,14 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 					
 					public void run() {
 						for(UserStatusListener l : this.listeners){
-							l.notifyLogin(this.loginUser, this.maxAge) ;
+							l.notifyLogin(this.loginUser, IP, this.maxAge) ;
 						}
 					}
 				}) ;
 				
 			}else{
 				for(UserStatusListener l : this.listeners){
-					l.notifyLogin(loginUser, maxAge) ;
+					l.notifyLogin(loginUser, IP, maxAge) ;
 				}
 			}
 		}
