@@ -29,6 +29,21 @@ public class SSOUserStoreServiceImpl extends AbstractService implements UserStor
 
 	private IUserManager userManager ;
 	
+	private static Map<Integer, String> errorMsgs = new HashMap<Integer, String>() ;
+	
+	static{
+		errorMsgs.put(LoginException.IP_BANNED, "IP已被禁用！") ;
+		errorMsgs.put(LoginException.NO_SUCH_USER, "用户名或密码错误！") ;
+		errorMsgs.put(LoginException.PASSWORD_WRONG, "用户名或密码错误！") ;
+		errorMsgs.put(LoginException.PERMISSION_DENIED, "无权限！") ;
+		errorMsgs.put(LoginException.SERVER_INTERNAL_ERROR, "服务器内部错误！") ;
+		errorMsgs.put(LoginException.USER_BANNED, "用户已被禁用！") ;
+	}
+	
+	public String translateErrorCode(int errorCode) {
+		return errorMsgs.get(errorCode) ;
+	}
+	
 	public int checkLogin(String userName, String password, String IP) {
 		User user = userManager.getByEmail(userName) ;
 			
