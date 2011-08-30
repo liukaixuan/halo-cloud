@@ -227,10 +227,10 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 					request.setAttribute(c.getName(), c.getValue()) ;
 				}
 			}else{
-				throw new LoginException(info.getErrorCode()) ;
+				throw new LoginException(info.getErrorCode(), info.getErrorMsg()) ;
 			}
 		}else{
-			throw new LoginException(LoginException.SERVER_INTERNAL_ERROR) ;
+			throw new LoginException(LoginException.SERVER_INTERNAL_ERROR, "Service not available!") ;
 		}
 		
 		request.removeAttribute(CACHED_LOGIN_USER_KEY) ;

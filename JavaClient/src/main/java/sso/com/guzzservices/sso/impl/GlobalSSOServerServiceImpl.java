@@ -161,7 +161,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 		int errorCode = this.userStoreService.checkLogin(userName, password, IP) ;
 		
 		if(errorCode != SSOInfo.SUCCESS){
-			return new SSOInfo(errorCode) ;
+			return new SSOInfo(errorCode, this.userStoreService.translateErrorCode(errorCode)) ;
 		}
 		
 		return localLogin(oldSessionId, userName, IP, maxAge) ;
@@ -185,7 +185,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 		LoginUser loginUser = this.userStoreService.getLoginUser(userName) ;
 		
 		if(loginUser == null ){
-			return new SSOInfo(LoginException.NO_SUCH_USER) ;
+			return new SSOInfo(LoginException.NO_SUCH_USER, this.userStoreService.translateErrorCode(LoginException.NO_SUCH_USER)) ;
 		}
 		
 		loginUser.setLoginTime(new Date().getTime()) ;

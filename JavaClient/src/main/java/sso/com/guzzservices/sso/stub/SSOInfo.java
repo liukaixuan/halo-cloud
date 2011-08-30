@@ -20,8 +20,11 @@ public class SSOInfo implements java.io.Serializable{
 	
 	private int errorCode ;
 	
-	public SSOInfo(int errorCode){
+	private String errorMsg ;
+	
+	public SSOInfo(int errorCode, String errorMsg){
 		this.errorCode = errorCode ;
+		this.errorMsg = errorMsg ;
 	}
 	
 	public SSOInfo(){
@@ -54,6 +57,14 @@ public class SSOInfo implements java.io.Serializable{
 	
 	public boolean isSuccess(){
 		return this.errorCode == SUCCESS ;
+	}
+
+	public String getErrorMsg() {
+		return this.errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
 	}
 
 }

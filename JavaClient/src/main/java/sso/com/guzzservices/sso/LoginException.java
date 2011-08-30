@@ -27,8 +27,8 @@ public class LoginException extends SSOException {
 		super(errorCode, errorMsg) ;
 	}
 
-	public LoginException(int errorCode) {
-		super(errorCode, null) ;
-	}
+//	public LoginException(int errorCode) {
+//		super(errorCode, null) ;
+//	}
 
 }

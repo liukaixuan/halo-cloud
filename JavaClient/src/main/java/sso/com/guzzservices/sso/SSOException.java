@@ -3,6 +3,8 @@
  */
 package com.guzzservices.sso;
 
+import org.guzz.util.StringUtil;
+
 /**
  * 
  * 
@@ -16,7 +18,7 @@ public class SSOException extends Exception {
 	private String errorMsg ;
 	
 	public SSOException(int errorCode, String errorMsg){
-		super("error code:" + errorCode) ;
+		super(StringUtil.isEmpty(errorMsg) ? "error code:" + errorCode : errorMsg) ;
 	
 		this.errorCode = errorCode ;
 		this.errorMsg = errorMsg ;

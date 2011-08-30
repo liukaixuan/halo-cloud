@@ -57,4 +57,12 @@ public interface UserStoreService {
 	 */
 	public String queryUserName(int userId) ;
 	
+	/**
+	 * Translate the errorCode to a human readable message.
+	 * 
+	 * @param errorCode
+	 * @return human readable message
+	 */
+	public String translateErrorCode(int errorCode) ;
+	
 }
