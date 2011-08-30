@@ -59,7 +59,13 @@ public class ServerIoHandler extends IoHandlerAdapter {
 	}
 
 	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-		session.close(false) ;
+		if(log.isInfoEnabled()){
+			log.info("sessionIdle. count:" + session.getWriterIdleCount() + ", last write time:" + session.getLastWriteTime()) ;
+		}
+		
+		if(IdleStatus.WRITER_IDLE.equals(status)){
+			session.close(false) ;
+		}
 	}
 
 	public void sessionCreated(IoSession session) throws Exception {
