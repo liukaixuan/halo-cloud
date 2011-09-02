@@ -11,6 +11,7 @@ import org.guzz.util.StringUtil;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
+@SuppressWarnings("serial")
 public class SSOException extends Exception {
 	
 	private int errorCode ;

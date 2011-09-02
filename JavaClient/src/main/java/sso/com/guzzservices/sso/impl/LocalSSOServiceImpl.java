@@ -3,8 +3,6 @@
  */
 package com.guzzservices.sso.impl;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,18 +49,6 @@ public class LocalSSOServiceImpl extends AbstractSSOServiceImpl {
 		}
 		
 		return info ;
-	}
-
-	public Map<String, Object> queryUserInfo(String userName) throws SSOException {
-		return globalSSOServerService.localQueryUserInfo(userName) ;
-	}
-
-	public int queryUserId(String userName) throws SSOException {
-		return globalSSOServerService.localQueryUserId(userName) ;
-	}
-
-	public String queryUserName(int userId) throws SSOException {
-		return globalSSOServerService.localQueryUserName(userId) ;
 	}
 
 	public boolean isAvailable() {

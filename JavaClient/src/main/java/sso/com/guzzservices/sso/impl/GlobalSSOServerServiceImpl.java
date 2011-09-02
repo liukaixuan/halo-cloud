@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -277,19 +276,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 		
 		return info ;
 	}
-	
-	public Map<String, Object> localQueryUserInfo(String userName) {
-		return this.userStoreService.queryUserInfo(userName);
-	}
-	
-	public int localQueryUserId(String userName){
-		return this.userStoreService.queryUserId(userName);
-	}
-	
-	public String localQueryUserName(int userId){
-		return this.userStoreService.queryUserName(userId) ;
-	}
-	
+		
 	protected SSOInfo buildSSOInfo(String sessionId, LoginUser loginUser, int maxAge){
 		CookieUser cu = new CookieUser() ;
 		cu.setLogin(loginUser.isLogin()) ;
@@ -369,9 +356,6 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_LOGOUT, commandHandler) ;
 		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_GET_LOGIN_USER, commandHandler) ;
 		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD, commandHandler) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO, commandHandler) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_ID, commandHandler) ;
-		css.addCommandHandler(CommandSSOServiceImpl.COMMAND_QUERY_USER_NAME, commandHandler) ;
 	}
 	
 	private CommandHandler commandHandler = new CommandHandlerAdapter(){
@@ -400,27 +384,11 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 				String guzzSessionId = param ;
 				
 				result = getLoginUser(guzzSessionId) ;
-			}else if(CommandSSOServiceImpl.COMMAND_QUERY_USER_ID.equals(command)){
-				String userName = param ;
-				
-				result = String.valueOf(localQueryUserId(userName)) ;
-			}else if(CommandSSOServiceImpl.COMMAND_QUERY_USER_NAME.equals(command)){
-				int userId = Integer.parseInt(param) ;
-				
-				result = localQueryUserName(userId) ;
 			}else if(CommandSSOServiceImpl.COMMAND_CHECK_PASSWORD.equals(command)){
 				CheckPasswordCommandRequest r = JsonUtil.fromJson(param, CheckPasswordCommandRequest.class) ;
 				int errorCode = checkPassword(r.IP, r.userName, r.password) ;
 				
 				return String.valueOf(errorCode) ;
-			}else if(CommandSSOServiceImpl.COMMAND_QUERY_USER_INFO.equals(command)){
-				Map<String, Object> infos = localQueryUserInfo(param) ;
-				
-				if(infos == null){
-					return null ;
-				}else{
-					return JsonUtil.toJson(infos) ;
-				}
 			}else{
 				throw new ServiceExecutionException("unknown command for sso:" + command) ;
 			}

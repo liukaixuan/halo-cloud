@@ -16,6 +16,7 @@ import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.sso.LoginException;
 import com.guzzservices.sso.LoginUser;
 import com.guzzservices.sso.SSOException;
+import com.guzzservices.sso.UserInfoService;
 import com.guzzservices.sso.stub.SSOInfo;
 
 /**
@@ -24,7 +25,7 @@ import com.guzzservices.sso.stub.SSOInfo;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
+public class CommandSSOServiceImpl extends AbstractSSOServiceImpl implements UserInfoService {
 	
 	private CommandService commandService ;
 	
@@ -40,7 +41,11 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 	
 	public static final String COMMAND_QUERY_USER_ID = "gs.sso.c.qid" ;
 	
-	public static final String COMMAND_QUERY_USER_NAME = "gs.sso.c.quname" ;
+	public static final String COMMAND_QUERY_USER_NAME = "gs.sso.c.quname" ;	
+
+	public static final String COMMAND_CHECK_PROFILE = "gs.sso.c.pf" ;
+
+	public static final String COMMAND_REG_NEW_USER = "gs.sso.reg.u" ;
 	
 	protected SSOInfo internalLogout(HttpServletRequest request, HttpServletResponse response, String sessionId) {
 		String json = null ;
@@ -160,6 +165,38 @@ public class CommandSSOServiceImpl extends AbstractSSOServiceImpl {
 		} catch (Exception e) {
 			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
 		}
+	}
+
+	public String checkProfileValid(String propToCheck, String value) throws SSOException {
+		CheckProfileRequest r = new CheckProfileRequest() ;
+		r.propToCheck = propToCheck ;
+		r.value = value ;
+		
+		try {
+			String result = this.commandService.executeCommand(COMMAND_CHECK_PROFILE, JsonUtil.toJson(r)) ;
+			
+			return result ;
+		} catch (Exception e) {
+			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
+		}
+	}
+
+	public String regUser(Map<String, Object> userInfos) throws SSOException {
+		try {
+			String result = this.commandService.executeCommand(COMMAND_REG_NEW_USER, JsonUtil.toJson(userInfos));
+			
+			return result ;
+		} catch (Exception e) {
+			throw new SSOException(LoginException.SERVER_INTERNAL_ERROR, e.getMessage()) ;
+		}
+	}
+	
+	public static class CheckProfileRequest{
+		
+		public String propToCheck ;
+		
+		public String value ;
+		
 	}
 	
 	public static class LoginCommandRequest{

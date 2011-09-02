@@ -4,7 +4,6 @@
 package com.guzzservices.sso;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,32 +26,6 @@ public interface SSOService {
 	
 	public void checkPassword(String IP, String userName, String password) throws SSOException ;
 	
-	/**
-	 * Query user info.
-	 * 
-	 * @param userName
-	 * @return return null if user not exist.
-	 */
-	public Map<String, Object> queryUserInfo(String userName) throws SSOException ;
-	
-	/**
-	 * Query userId by userName.
-	 * 
-	 * @param userName
-	 * @return return -1 if user not exist.
-	 * @throws LoginException server internal error.
-	 */
-	public int queryUserId(String userName) throws SSOException ;
-	
-	/**
-	 * Query userName by userId.
-	 * 
-	 * @param userId
-	 * @return return null if user not exist.
-	 * @throws LoginException server internal error.
-	 */
-	public String queryUserName(int userId) throws SSOException ;
-
 	/**
 	 * login for the current browser session.
 	 * <p/>only allowed for local login.
