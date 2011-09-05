@@ -1,22 +1,15 @@
 package com.guzzservices.manager.impl;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.guzz.exception.GuzzException;
 import org.guzz.util.Assert;
-import org.guzz.util.StringUtil;
 import org.quartz.CronScheduleBuilder;
-import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.TriggerKey;
@@ -24,8 +17,6 @@ import org.quartz.spi.MutableTrigger;
 
 import com.guzzservices.business.Task;
 import com.guzzservices.manager.ITaskManager;
-import com.guzzservices.manager.impl.StatItemManagerImpl.TopRankJob;
-import com.guzzservices.util.HttpClientUtils;
 
 /**
  * 
@@ -33,72 +24,13 @@ import com.guzzservices.util.HttpClientUtils;
  * @author liu kaixuan
  */
 public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements ITaskManager {
-	private static final Log log = LogFactory.getLog(TaskManagerImpl.class) ;
+	static final Log log = LogFactory.getLog(TaskManagerImpl.class) ;
 	
 	public Scheduler scheduler ;
 	
 	public static ITaskManager taskManager ;
 	
-	private static CountDownLatch waitingForInit = new CountDownLatch(1) ;
-	
-	public static class ExecuteTaskJob implements Job{
-
-		public void execute(JobExecutionContext context) throws JobExecutionException {
-			int taskId = context.getJobDetail().getJobDataMap().getInt("taskId") ;
-			
-			if(waitingForInit != null){
-				try {
-					waitingForInit.await() ;
-				} catch (InterruptedException e) {
-					throw new JobExecutionException(e) ;
-				}
-			}
-			
-			Task m_task = taskManager.getForUpdate(taskId) ;
-			
-			if(m_task == null){
-				log.warn("unknown task:" + taskId) ;
-				return ;
-			}
-			
-			if(!m_task.shouldExecute()){
-				if(log.isDebugEnabled()){
-					log.debug("task:" + taskId + " cancelled. Not in a execute time span.") ;
-				}
-				
-				return ;
-			}
-			
-			//request a remote page
-			HashMap<String, String> params = new HashMap<String, String>() ;
-			params.put("authKey", m_task.getAuthKey()) ;
-			
-			String resultCode = null ;
-			try {
-				resultCode = HttpClientUtils.get(m_task.getRemoteUrl(), params, "UTF-8");
-			} catch (IOException e) {
-				throw new JobExecutionException("fail to execute task:" + m_task.getId(), e) ;
-			}
-			
-			if(resultCode != null){
-				resultCode = resultCode.trim() ;
-			}
-			
-			int code = StringUtil.toInt(resultCode) ;
-			m_task.setErrorCode(code) ;
-			m_task.setLastExecuteTime(new Date()) ;
-			
-			if(code == 0){
-				m_task.setLastSucessTime(m_task.getLastExecuteTime()) ;
-			}
-			
-			if(log.isDebugEnabled()){
-				log.debug("task:" + taskId + " executed. result:" + resultCode) ;
-			}
-			
-			taskManager.update(m_task) ;
-		}
-	}
+	static CountDownLatch waitingForInit = new CountDownLatch(1) ;
 	
 	protected String fillCronWithSeconds(String cron){
 		int seconds = (int) (Math.random() * 60) ;
@@ -147,7 +79,7 @@ public class TaskManagerImpl extends AbstractBaseManagerImpl<Task> implements IT
 		
 		//add to task
 		try {
-			JobDetail job = JobBuilder.newJob(TopRankJob.class).withIdentity(m_task.getTaskName(), m_task.getTaskGroupName()).build() ;
+			JobDetail job = JobBuilder.newJob(ExecuteTaskJob.class).withIdentity(m_task.getTaskName(), m_task.getTaskGroupName()).build() ;
 			job.getJobDataMap().put("taskId", m_task.getId()) ;
 			
 			MutableTrigger trigger = CronScheduleBuilder.cronSchedule(fillCronWithSeconds(m_task.getCronExpression())).build() ;

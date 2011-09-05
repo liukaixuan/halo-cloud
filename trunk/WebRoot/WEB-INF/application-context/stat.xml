@@ -11,6 +11,9 @@
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
+		<property name="jobFactory">
+			<bean class="org.quartz.simpl.SimpleJobFactory"></bean>
+		</property>
 		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
 		<property name="configLocation" value="classpath:quartz.properties" />
 	</bean>

@@ -29,6 +29,7 @@ import com.guzzservices.sso.LoginException;
 import com.guzzservices.sso.LoginUser;
 import com.guzzservices.sso.SSOException;
 import com.guzzservices.sso.SSOService;
+import com.guzzservices.sso.UserInfoService;
 import com.guzzservices.store.KVStorageService;
 
 /**
@@ -48,7 +49,7 @@ public class DefaultSessionManagerImpl extends AbstractBaseManagerImpl<AuthedSer
 	 * @see SSOService#queryUserInfo(String)
 	 */
 	public Map<String, Object> queryUserInfo(String userName) throws SSOException{
-		return this.ssoService.queryUserInfo(userName) ;
+		return ((UserInfoService) this.ssoService).queryUserInfo(userName) ;
 	}
 
 	public LoginUser getLoginUser(HttpServletRequest request, HttpServletResponse response) {

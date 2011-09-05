@@ -9,3 +9,9 @@ insert into gs_authed_service(serviceName, owner, serviceKey, email) select 'gs_
 
 insert into gs_authed_service(serviceName, owner, serviceKey, email) select 'gs_si', 1, f.id, u.email  from gs_stat_item_group as f left join gs_user as u on f.userId = u.id;
 
+
+
+
+update QRTZ_JOB_DETAILS set JOB_CLASS_NAME = "com.guzzservices.manager.impl.ExecuteTaskJob" WHERE JOB_CLASS_NAME = "com.guzzservices.manager.impl.StatItemManagerImpl$TopRankJob" and JOB_GROUP LIKE "task%" ;
+update QRTZ_TRIGGERS set TRIGGER_STATE = "WAITING" WHERE TRIGGER_STATE="ERROR" ;
+
