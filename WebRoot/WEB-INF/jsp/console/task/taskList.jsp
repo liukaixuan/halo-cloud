@@ -108,8 +108,6 @@
 			&nbsp;&nbsp;
 			<a href='./taskAction.do?id=${m_item.id}'>修改任务</a>
 			&nbsp;&nbsp;
-			<a href='./statTopRecordList.do?statId=${m_item.id}'>管理排行</a>
-			&nbsp;&nbsp;
 			</td>
 		</tr>
     	</c:forEach>
