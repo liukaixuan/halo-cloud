@@ -129,10 +129,15 @@ public class TopRecordManagerImpl extends AbstractBaseManagerImpl<TopRecord> imp
 	}
 	
 	public void cleanUpOldData(WriteTranSession write, StatItem item) {
-		CompiledSQL cs = this.getTransactionManager().getCompiledSQLBuilder().buildCompiledSQL(TopRecord.class, 
-				"delete from @@" + TopRecord.class.getName() + " where @statId = :statId") ;
+		if(cleanUpOldDataCS == null){
+			cleanUpOldDataCS = this.getTransactionManager().getCompiledSQLBuilder().buildCompiledSQL(TopRecord.class, 
+					"delete from @@" + TopRecord.class.getName() + " where @statId = :statId") ;
+			cleanUpOldDataCS.addParamPropMapping("statId", "statId") ;
+		}
 		
-		write.executeUpdate(cs.bind("statId", item.getId())) ;
+		write.executeUpdate(cleanUpOldDataCS.bind("statId", item.getId())) ;
 	}
+	
+	private CompiledSQL cleanUpOldDataCS ;
 
 }

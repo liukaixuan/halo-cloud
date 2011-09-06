@@ -226,8 +226,8 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		try {
 			String result = this.topDataPublisher.publishData(item, text) ;
 			
-			if(StatItemManagerImpl.this.log.isDebugEnabled()){
-				StatItemManagerImpl.this.log.debug("publish data for item:" + item.getId() + ". returned:" + result) ;
+			if(StatItemManagerImpl.log.isDebugEnabled()){
+				StatItemManagerImpl.log.debug("publish data for item:" + item.getId() + ". returned:" + result) ;
 			}
 		} catch (Exception e) {
 			this.setException(item, e) ;
@@ -295,6 +295,7 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		try{
 			write.insert(log) ;
 			this.topRecordManager.cleanUpOldData(write, item) ;
+			write.commit() ;
 			
 			for(int i = 0 ; i < records.size() ; i++){
 				TopRecord r = records.get(i) ;
@@ -309,7 +310,7 @@ public class StatItemManagerImpl extends AbstractBaseManagerImpl<StatItem> imple
 		}catch(Exception e){
 			write.rollback() ;
 
-			StatItemManagerImpl.this.log.error("failed to refresh item:" + item.getId(), e) ;
+			StatItemManagerImpl.log.error("failed to refresh item:" + item.getId(), e) ;
 			
 			this.setException(item, e) ;
 		}finally{
