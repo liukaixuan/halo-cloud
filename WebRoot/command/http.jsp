@@ -1,13 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8"%><%@ page session="false" %><%@page import="org.apache.commons.codec.digest.DigestUtils"%><%@page import="org.apache.commons.codec.binary.Base64"%><%@page import="com.guzzservices.rpc.server.CommandServerService"%><%@page import="com.guzzservices.rpc.server.CommandRequest"%><%@page import="com.guzzservices.rpc.server.CommandResponse"%><%@page import="org.guzz.web.context.GuzzWebApplicationContextUtil"%><%@page import="java.nio.ByteBuffer"%><%
 
-//TODO: check authKey:
-String authKey = request.getParameter("authKey") ;
-
-
 CommandServerService commandServerService = (CommandServerService) application.getAttribute("commandServerService") ;
 if(commandServerService == null){
 	commandServerService = (CommandServerService) GuzzWebApplicationContextUtil.getGuzzContext(request.getSession().getServletContext()).getService("commandServerService") ;
 	application.setAttribute("commandServerService", commandServerService) ;
+}
+
+//check auth
+ClientInfo client = new ClientInfo(request.getRemoteAddr(), request.getRemotePort()) ;
+if(!commandServerService.isAuthedClient(client)){
+	//TODO: check authKey for HTTP:
+	String authKey = request.getParameter("authKey") ;	
+
+	response.sendError(404, client.toString()) ;
+	return ;
 }
 
 CommandRequest cr = new CommandRequest() ;
