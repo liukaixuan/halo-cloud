@@ -7,7 +7,7 @@ if(commandServerService == null){
 }
 
 //check auth
-ClientInfo client = new ClientInfo(request.getRemoteAddr(), request.getRemotePort()) ;
+com.guzzservices.rpc.server.ClientInfo client = new com.guzzservices.rpc.server.ClientInfo(request.getRemoteAddr(), request.getRemotePort()) ;
 if(!commandServerService.isAuthedClient(client)){
 	//TODO: check authKey for HTTP:
 	String authKey = request.getParameter("authKey") ;	
