@@ -32,8 +32,6 @@ if(param != null){
 	}
 }
 
-com.guzzservices.rpc.server.ClientInfo client = new com.guzzservices.rpc.server.ClientInfo(request.getRemoteAddr(), request.getRemotePort()) ;
-
 CommandResponse resp = commandServerService.executeCommand(client, cr) ;
 
 response.setHeader("guzzCommandServiceException", resp.isException ? "1" : "0") ;

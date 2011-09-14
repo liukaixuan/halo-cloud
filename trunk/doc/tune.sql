@@ -15,3 +15,6 @@ insert into gs_authed_service(serviceName, owner, serviceKey, email) select 'gs_
 update QRTZ_JOB_DETAILS set JOB_CLASS_NAME = "com.guzzservices.manager.impl.ExecuteTaskJob" WHERE JOB_CLASS_NAME = "com.guzzservices.manager.impl.StatItemManagerImpl$TopRankJob" and JOB_GROUP LIKE "task%" ;
 update QRTZ_TRIGGERS set TRIGGER_STATE = "WAITING" WHERE TRIGGER_STATE="ERROR" ;
 
+
+alter table gs_stat_item modify column autoPublish bit(1) default 0 ;
+

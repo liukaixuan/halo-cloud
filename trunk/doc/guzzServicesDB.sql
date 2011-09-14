@@ -96,7 +96,7 @@ CREATE TABLE gs_stat_item (
   dataPublisherUrl varchar(128) NOT NULL,
   lastDataLoadTime datetime,
   timePointPrecision int(11) NOT NULL,
-  autoPublish bit(11) default 0,
+  autoPublish bit(1) default 0,
   cronExpression varchar(16) not null,
   fetchSize int(11) not null,
   publishSize int(11) not null,
