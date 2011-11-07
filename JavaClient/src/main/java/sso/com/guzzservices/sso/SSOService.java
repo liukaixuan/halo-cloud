@@ -20,7 +20,12 @@ public interface SSOService {
 	
 	public static final String CACHED_LOGIN_USER_KEY = "guzzLoginUser" ;
 
-	public Object getLoginUser(HttpServletRequest request, HttpServletResponse response) ;
+	public Object getLoginUser(HttpServletRequest request, HttpServletResponse response) ;	
+
+	/**
+	 * Get LoginUser from the server side. Slow but promising.
+	 */
+	public Object getLoginUserForUpdate(HttpServletRequest request, HttpServletResponse response) ;
 	
 	public CookieUser readCookieUser(HttpServletRequest request, HttpServletResponse response) throws IOException ;
 	

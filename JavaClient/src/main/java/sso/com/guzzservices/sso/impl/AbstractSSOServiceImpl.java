@@ -67,14 +67,14 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 	public void startup() {}
 	
 	public String readSessionId(HttpServletRequest request, HttpServletResponse response){
-		String sid = cookieUtil.readCookie(request, sessionIdCookieName) ;
+		String sid = (String) request.getAttribute(sessionIdCookieName) ;
 		
 		if(StringUtil.isEmpty(sid)){
 			sid = request.getParameter(sessionIdCookieName) ;
 		}
 		
 		if(StringUtil.isEmpty(sid)){
-			sid = (String) request.getAttribute(sessionIdCookieName) ;
+			sid = cookieUtil.readCookie(request, sessionIdCookieName) ;
 		}
 		
 		if(StringUtil.isEmpty(sid)){
@@ -84,15 +84,57 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 		return sid ;
 	}
 	
+	public Object getLoginUser(HttpServletRequest request, HttpServletResponse response) {
+		CookieUser cu = null ;
+		try {
+			cu = this.readCookieUser(request, response);
+		} catch (IOException e) {
+			log.error("error to read cookie", e) ;
+		}
+		
+		Object cachedUser ;
+		
+		if(cu != null && cu.isLogin()){
+			LoginUser lu = new LoginUser() ;
+			lu.setDisplayName(cu.getDisplayName()) ;
+			lu.setLoginTime(cu.getLoginTime()) ;
+			lu.setRoleId(0) ;
+			lu.setStatus(0) ;
+			lu.setTalk(cu.getTalk()) ;
+			lu.setUserId(cu.getUserId()) ;
+			lu.setUserName(cu.getUserName()) ;
+			lu.setUserNick(cu.getUserNick()) ;
+			
+			if(localSessionService != null){
+				cachedUser = localSessionService.getLocalLoginUser(request, response, null, lu) ;
+			}else{
+				cachedUser = lu ;
+			}
+			
+			//cache to the request
+			request.setAttribute(CACHED_LOGIN_USER_KEY, cachedUser) ;
+			
+			return cachedUser ;
+		}
+		
+		if(localSessionService != null){
+			cachedUser = localSessionService.getLocalGuest(request, response) ;
+		}else{
+			cachedUser = GuestUser.GUEST ;
+		}
+		
+		return cachedUser ;
+	}
+	
 	public CookieUser readCookieUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		String hexValue = cookieUtil.readCookie(request, sessionUserCookieName) ;
+		String hexValue = (String) request.getAttribute(sessionUserCookieName) ;
 		
 		if(StringUtil.isEmpty(hexValue)){
 			hexValue = request.getParameter(sessionUserCookieName) ;
 		}
 		
 		if(StringUtil.isEmpty(hexValue)){
-			hexValue = (String) request.getAttribute(sessionUserCookieName) ;
+			hexValue = cookieUtil.readCookie(request, sessionUserCookieName) ;
 		}
 		
 		//no cookie
@@ -133,7 +175,7 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 		login(request, response, userName, password, maxAge, true) ;
 	}
 	
-	public Object getLoginUser(HttpServletRequest request, HttpServletResponse response) {
+	public Object getLoginUserForUpdate(HttpServletRequest request, HttpServletResponse response) {
 		Object cachedUser = request.getAttribute(CACHED_LOGIN_USER_KEY) ;
 		
 		if(cachedUser != null) return cachedUser ;
@@ -159,6 +201,11 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 				}else{
 					cachedUser = lu ;
 				}
+				
+				//cache to the request
+				request.setAttribute(CACHED_LOGIN_USER_KEY, cachedUser) ;
+				
+				return cachedUser ;
 			}
 		} catch (Exception e) {
 			log.error("fail to read user info from cookie.", e) ;

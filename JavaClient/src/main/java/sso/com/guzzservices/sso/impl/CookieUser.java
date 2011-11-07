@@ -16,6 +16,8 @@ public class CookieUser {
 	
 	private int userId ;
 	
+	private String userName ;
+	
 	private String userNick ;
 	
 	private String displayName ;
@@ -80,6 +82,14 @@ public class CookieUser {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return this.userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }
