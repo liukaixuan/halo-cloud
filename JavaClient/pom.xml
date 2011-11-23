@@ -163,13 +163,13 @@
 			            </goals>
 			            <configuration>
 			              <sources>
-			                <source>src/main/java/command</source>
-			                <source>src/main/java/content</source>
-			                <source>src/main/java/dir</source>
-			                <source>src/main/java/management</source>
-			                <source>src/main/java/misc</source>
-			                <source>src/main/java/sso</source>
-			                <source>src/main/java/storage</source>
+			                <source>src/main/java/command/</source>
+			                <source>src/main/java/content/</source>
+			                <source>src/main/java/dir/</source>
+			                <source>src/main/java/management/</source>
+			                <source>src/main/java/misc/</source>
+			                <source>src/main/java/sso/</source>
+			                <source>src/main/java/storage/</source>
 			              </sources>
 			            </configuration>
 			          </execution>
