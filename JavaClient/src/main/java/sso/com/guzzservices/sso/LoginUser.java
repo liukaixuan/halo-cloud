@@ -27,6 +27,8 @@ public class LoginUser {
 	
 	private int roleId ;
 	
+	private int authType ;
+	
 	private String talk ;
 	
 	private long version ;
@@ -105,6 +107,14 @@ public class LoginUser {
 
 	public void setUserNick(String userNick) {
 		this.userNick = userNick;
+	}
+
+	public int getAuthType() {
+		return this.authType;
+	}
+
+	public void setAuthType(int authType) {
+		this.authType = authType;
 	}
 	
 }

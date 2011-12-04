@@ -22,6 +22,8 @@ public class CookieUser {
 	
 	private String displayName ;
 	
+	private int authType ;
+	
 	private String talk ;
 	
 	private long version ;
@@ -90,6 +92,14 @@ public class CookieUser {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public int getAuthType() {
+		return this.authType;
+	}
+
+	public void setAuthType(int authType) {
+		this.authType = authType;
 	}
 
 }

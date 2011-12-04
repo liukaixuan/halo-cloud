@@ -286,6 +286,7 @@ public class GlobalSSOServerServiceImpl extends AbstractService implements SSOSe
 		cu.setUserNick(loginUser.getUserNick()) ;
 		cu.setUserName(loginUser.getUserName()) ;
 		cu.setVersion(loginUser.getVersion()) ;
+		cu.setAuthType(loginUser.getAuthType()) ;
 		
 		//4KB per cookie maximum 
 		String talk = loginUser.getTalk() ;

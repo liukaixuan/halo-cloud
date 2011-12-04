@@ -104,6 +104,7 @@ public abstract class AbstractSSOServiceImpl extends AbstractService implements 
 			lu.setUserId(cu.getUserId()) ;
 			lu.setUserName(cu.getUserName()) ;
 			lu.setUserNick(cu.getUserNick()) ;
+			lu.setAuthType(cu.getAuthType()) ;
 			
 			if(localSessionService != null){
 				cachedUser = localSessionService.getLocalLoginUser(request, response, null, lu) ;
