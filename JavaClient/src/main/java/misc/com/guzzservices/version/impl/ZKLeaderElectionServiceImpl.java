@@ -3,6 +3,7 @@
  */
 package com.guzzservices.version.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -10,15 +11,16 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.ZooDefs.Ids;
+import org.apache.zookeeper.ZooKeeper;
 import org.guzz.exception.InvalidConfigurationException;
 import org.guzz.exception.ServiceExecutionException;
 import org.guzz.service.AbstractService;
 import org.guzz.service.ServiceConfig;
-import org.guzz.service.core.LeaderService;
 import org.guzz.util.Assert;
 import org.guzz.util.StringUtil;
+
+import com.guzzservices.version.EnhancedLeaderService;
 
 /**
  * 
@@ -26,7 +28,7 @@ import org.guzz.util.StringUtil;
  * 
  * @author liukaixuan(liukaixuan@gmail.com)
  */
-public class ZKLeaderElectionServiceImpl extends AbstractService implements LeaderService, Watcher {
+public class ZKLeaderElectionServiceImpl extends AbstractService implements EnhancedLeaderService, Watcher {
 
 	private ZooKeeper zk ;
 	
@@ -41,6 +43,8 @@ public class ZKLeaderElectionServiceImpl extends AbstractService implements Lead
 	private volatile boolean isLeader = false ;
 	
 	private long seqNum = Long.MAX_VALUE ;
+	
+	private ArrayList<LeaderStatusListener> listeners = new ArrayList<LeaderStatusListener>() ;
 	
 	private boolean alwaysLeader ;
 	
@@ -175,6 +179,8 @@ public class ZKLeaderElectionServiceImpl extends AbstractService implements Lead
 						minSeq = Math.min(num, minSeq) ;
 					}
 					
+					boolean oldStatus = this.isLeader ;
+					
 					//Leader
 					if(this.seqNum == minSeq){
 						if(!this.isLeader){
@@ -190,7 +196,8 @@ public class ZKLeaderElectionServiceImpl extends AbstractService implements Lead
 						
 						this.isLeader = false ;
 					}
-				
+					
+					notifyLeaderStatusChanged(oldStatus, this.isLeader) ;
         		}
     		} catch (KeeperException e) {
 				throw new ServiceExecutionException("zookeeper KeeperException while fetching children under :[" + lockPath + "]", e) ;
@@ -207,6 +214,24 @@ public class ZKLeaderElectionServiceImpl extends AbstractService implements Lead
 		if(this.alwaysNotLeader) return false ;
 		
 		return this.isLeader;
+	}
+
+	public void addLeaderStatusListener(LeaderStatusListener listener) {
+		listeners.add(listener) ;
+	}
+
+	public void removeLeaderStatusListener(LeaderStatusListener listener) {
+		listeners.remove(listener) ;
+	}
+	
+	public void notifyLeaderStatusChanged(boolean oldIsLeader, boolean nowLeader) {
+		for(LeaderStatusListener l : this.listeners){
+			try{
+				l.leaderStatusChanged(oldIsLeader, nowLeader) ;
+			}catch(Throwable t){
+				log.error("failed to notify the leader status changed event to listener:" + l, t) ;
+			}
+		}
 	}
 
 }
