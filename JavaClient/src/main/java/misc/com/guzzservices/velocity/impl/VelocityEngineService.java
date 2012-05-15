@@ -21,6 +21,8 @@ import org.guzz.util.StringUtil;
 import org.guzz.web.context.GuzzContextAware;
 
 import com.guzzservices.velocity.VelocityService;
+import com.guzzservices.velocity.api.EscapeJavascriptDirective;
+import com.guzzservices.velocity.api.EscapeXmlDirective;
 import com.guzzservices.velocity.api.GuzzAddInLimitDirective;
 import com.guzzservices.velocity.api.GuzzAddLimitDirective;
 import com.guzzservices.velocity.api.GuzzBoundaryDirective;
@@ -29,7 +31,10 @@ import com.guzzservices.velocity.api.GuzzGetDirective;
 import com.guzzservices.velocity.api.GuzzIncDirective;
 import com.guzzservices.velocity.api.GuzzListDirective;
 import com.guzzservices.velocity.api.GuzzPageDirective;
+import com.guzzservices.velocity.api.IsEmptyDirective;
+import com.guzzservices.velocity.api.NotEmptyDirective;
 import com.guzzservices.velocity.api.SummonDirective;
+import com.guzzservices.velocity.api.UTF8EncodingDirective;
 
 /**
  * 
@@ -103,9 +108,25 @@ public class VelocityEngineService extends AbstractService implements VelocitySe
 		}else{
 			p = new Properties() ;
 		}
+
+		String d = EscapeXmlDirective.class.getName()
+			+ ", " + EscapeJavascriptDirective.class.getName()
+			+ ", " + UTF8EncodingDirective.class.getName() 
+			+ ", " + IsEmptyDirective.class.getName() 
+			+ ", " + NotEmptyDirective.class.getName() 
+			;
+		
+		String oldDirective = p.getProperty("userdirective") ;
+		
+		if(StringUtil.isEmpty(oldDirective)){
+			oldDirective = d ;
+		}else{
+			oldDirective = oldDirective + ", " + d ;
+		}
 		
 		if(this.enableDBAccess){
-			String guzzDirectives = GuzzAddInLimitDirective.class.getName()
+			oldDirective = oldDirective
+			+ ", " + GuzzAddInLimitDirective.class.getName()
 			+ ", " + GuzzAddLimitDirective.class.getName()
 			+ ", " + GuzzBoundaryDirective.class.getName()
 			+ ", " + GuzzCountDirective.class.getName()
@@ -113,16 +134,10 @@ public class VelocityEngineService extends AbstractService implements VelocitySe
 			+ ", " + GuzzIncDirective.class.getName()
 			+ ", " + GuzzListDirective.class.getName()
 			+ ", " + GuzzPageDirective.class.getName() ;
-			
-			String oldDirective = p.getProperty("userdirective") ;
-			
-			if(StringUtil.isEmpty(oldDirective)){
-				p.setProperty("userdirective", guzzDirectives) ;
-			}else{
-				p.setProperty("userdirective", oldDirective + ", " + guzzDirectives) ;
-			}
 		}
 
+		p.setProperty("userdirective", oldDirective) ;
+		
 		this.ve = new VelocityEngine();
 		ve.setApplicationAttribute(SummonDirective.GUZZ_CONTEXT_NAME, this.guzzContext) ;
 

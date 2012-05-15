@@ -42,7 +42,7 @@ public class GuzzIncDirective extends Directive {
 
 	public boolean render(InternalContextAdapter context, Writer writer, Node node) throws IOException, ResourceNotFoundException, ParseErrorException, MethodInvocationException {
 		if(node.jjtGetNumChildren() != 1){
-			throw new RuntimeException(getName() + " only and must accepts one Map parameter!") ;
+			throw new RuntimeException(getName() + " only and must accept one Map parameter!") ;
 		}
 		
 		if(this.slowUpdateService == null){
