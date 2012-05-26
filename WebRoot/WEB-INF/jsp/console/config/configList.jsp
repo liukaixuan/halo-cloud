@@ -30,7 +30,7 @@
 		</tr>
     	<c:forEach items="${configs}" var="m_config">
 		<tr>
-		    <td>${m_config.name}</td>
+		    <td><c:out value="${m_config.name}" default="${m_config.parameter}" /></td>
 			<td>
 				<c:if test="${m_config.enumValues}">
 					<select name='config.<c:out value="${m_config.parameter}" />'>
