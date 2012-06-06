@@ -55,6 +55,12 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		
 		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
 	}
+	
+	public String getString(String parameter, String defaultValue) {
+		String s = this.getString(parameter) ;
+		
+		return s == null ? defaultValue : s ;
+	}
 
 	public boolean getBoolean(String parameter, boolean defaultValue) {
 		Object value = this.configs.get(parameter) ;
@@ -65,7 +71,7 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 			return (Boolean) value ;
 		}
 		
-		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
+		throw new DataTypeException("configuration item:[" + parameter + "] should be boolean but was " + value.getClass()) ;
 	}
 
 	public double getDouble(String parameter, double defaultValue) {
@@ -73,11 +79,11 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		
 		if(value == null) return defaultValue ;
 		
-		if(value instanceof Double){
-			return (Double) value ;
+		if(value instanceof Number){
+			return ((Number) value).doubleValue() ;
 		}
 		
-		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
+		throw new DataTypeException("configuration item:[" + parameter + "] should be double but was " + value.getClass()) ;
 	}
 
 	public float getFloat(String parameter, float defaultValue) {
@@ -85,11 +91,11 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		
 		if(value == null) return defaultValue ;
 		
-		if(value instanceof Float){
-			return (Float) value ;
+		if(value instanceof Number){
+			return ((Number) value).floatValue() ;
 		}
 		
-		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
+		throw new DataTypeException("configuration item:[" + parameter + "] should be float but was " + value.getClass()) ;
 	}
 
 	public int getInt(String parameter, int defaultValue) {
@@ -97,11 +103,11 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		
 		if(value == null) return defaultValue ;
 		
-		if(value instanceof Integer){
-			return (Integer) value ;
+		if(value instanceof Number){
+			return ((Number) value).intValue() ;
 		}
 		
-		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
+		throw new DataTypeException("configuration item:[" + parameter + "] should be int but was " + value.getClass()) ;
 	}
 
 	public long getLong(String parameter, long defaultValue) {
@@ -110,10 +116,10 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		if(value == null) return defaultValue ;
 		
 		if(value instanceof Long){
-			return (Long) value ;
+			return ((Number) value).longValue() ;
 		}
 		
-		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
+		throw new DataTypeException("configuration item:[" + parameter + "] should be long but was " + value.getClass()) ;
 	}
 
 	public short getShort(String parameter, short defaultValue) {
@@ -121,11 +127,11 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 		
 		if(value == null) return defaultValue ;
 		
-		if(value instanceof Short){
-			return (Short) value ;
+		if(value instanceof Number){
+			return ((Number) value).shortValue() ;
 		}
 		
-		throw new DataTypeException("configuration item:[" + parameter + "] should be a " + value.getClass()) ;
+		throw new DataTypeException("configuration item:[" + parameter + "] should be short but was " + value.getClass()) ;
 	}
 
 	public boolean configure(ServiceConfig[] scs) {
