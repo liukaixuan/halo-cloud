@@ -12,7 +12,10 @@ package com.guzzservices.management;
 public interface ConfigurationService extends java.util.Map<String, Object>{
 	
 	/**get string type parameter. including string and text.*/
-	public String getString(String parameter) ;
+	public String getString(String parameter) ;	
+
+	/**get string type parameter. including string and text.*/
+	public String getString(String parameter, String defaultValue) ;
 
 	/**get short type parameter. including string and text.*/
 	public short getShort(String parameter, short defaultValue) ;
