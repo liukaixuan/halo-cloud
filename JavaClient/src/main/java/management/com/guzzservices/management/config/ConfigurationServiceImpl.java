@@ -43,6 +43,8 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 	private int checkIntervalInSeconds = 10 ;
 		
 	private Map<String, Object> configs = new HashMap<String, Object>() ;
+	
+	private Map<String, String> localConfigs ;
 
 	public String getString(String parameter) {
 		Object value = this.configs.get(parameter) ;
@@ -144,6 +146,15 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 			this.checkIntervalInSeconds = StringUtil.toInt(scs[0].getProps().getProperty("checkIntervalInSeconds"), this.checkIntervalInSeconds) ;
 			Assert.assertBigger(this.checkIntervalInSeconds, 0, "config item 'checkIntervalInSeconds' must be postive!") ;
 			
+			localConfigs = new HashMap<String, String>() ;
+			
+			for(Entry e :scs[0].getProps().entrySet()){
+				String key = (String) e.getKey() ;
+				if("groupId".equals(key) || "checkIntervalInSeconds".equals(key)) continue ;
+				
+				localConfigs.put((String) e.getKey(), (String) e.getValue()) ;
+			}
+			
 			return true ;
 		}
 		
@@ -196,6 +207,9 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
 				//update to the latest version.
 				version = i_version ;
 				configs = m ;
+				
+				//override by the local config
+				configs.putAll(localConfigs) ;
 			}
 			
 			return false ;
