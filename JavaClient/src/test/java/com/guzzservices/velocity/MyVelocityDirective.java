@@ -18,12 +18,11 @@ import org.apache.velocity.runtime.directive.Directive;
 import org.apache.velocity.runtime.parser.node.Node;
 import org.guzz.Configuration;
 import org.guzz.GuzzContext;
-
-import com.guzzservices.velocity.api.GuzzBoundaryDirective;
-import com.guzzservices.velocity.api.GuzzCountDirective;
-import com.guzzservices.velocity.api.GuzzIncDirective;
-import com.guzzservices.velocity.api.GuzzListDirective;
-import com.guzzservices.velocity.api.SummonDirective;
+import org.guzz.api.velocity.GuzzBoundaryDirective;
+import org.guzz.api.velocity.GuzzCountDirective;
+import org.guzz.api.velocity.GuzzIncDirective;
+import org.guzz.api.velocity.GuzzListDirective;
+import org.guzz.api.velocity.SummonDirective;
 
 public class MyVelocityDirective extends Directive {
 	@Override

@@ -12,6 +12,20 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.guzz.GuzzContext;
+import org.guzz.api.velocity.EscapeJavascriptDirective;
+import org.guzz.api.velocity.EscapeXmlDirective;
+import org.guzz.api.velocity.GuzzAddInLimitDirective;
+import org.guzz.api.velocity.GuzzAddLimitDirective;
+import org.guzz.api.velocity.GuzzBoundaryDirective;
+import org.guzz.api.velocity.GuzzCountDirective;
+import org.guzz.api.velocity.GuzzGetDirective;
+import org.guzz.api.velocity.GuzzIncDirective;
+import org.guzz.api.velocity.GuzzListDirective;
+import org.guzz.api.velocity.GuzzPageDirective;
+import org.guzz.api.velocity.IsEmptyDirective;
+import org.guzz.api.velocity.NotEmptyDirective;
+import org.guzz.api.velocity.SummonDirective;
+import org.guzz.api.velocity.UTF8EncodingDirective;
 import org.guzz.exception.InvalidConfigurationException;
 import org.guzz.io.FileResource;
 import org.guzz.service.AbstractService;
@@ -21,20 +35,6 @@ import org.guzz.util.StringUtil;
 import org.guzz.web.context.GuzzContextAware;
 
 import com.guzzservices.velocity.VelocityService;
-import com.guzzservices.velocity.api.EscapeJavascriptDirective;
-import com.guzzservices.velocity.api.EscapeXmlDirective;
-import com.guzzservices.velocity.api.GuzzAddInLimitDirective;
-import com.guzzservices.velocity.api.GuzzAddLimitDirective;
-import com.guzzservices.velocity.api.GuzzBoundaryDirective;
-import com.guzzservices.velocity.api.GuzzCountDirective;
-import com.guzzservices.velocity.api.GuzzGetDirective;
-import com.guzzservices.velocity.api.GuzzIncDirective;
-import com.guzzservices.velocity.api.GuzzListDirective;
-import com.guzzservices.velocity.api.GuzzPageDirective;
-import com.guzzservices.velocity.api.IsEmptyDirective;
-import com.guzzservices.velocity.api.NotEmptyDirective;
-import com.guzzservices.velocity.api.SummonDirective;
-import com.guzzservices.velocity.api.UTF8EncodingDirective;
 
 /**
  * 
