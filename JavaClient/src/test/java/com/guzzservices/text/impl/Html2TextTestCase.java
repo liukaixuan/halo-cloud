@@ -4,7 +4,9 @@
 package com.guzzservices.text.impl;
 
 import java.util.HashMap;
+import java.util.List;
 
+import com.guzzservices.rpc.util.JsonUtil;
 import com.guzzservices.text.PlainExtractResult;
 
 import junit.framework.TestCase;
@@ -16,6 +18,15 @@ import junit.framework.TestCase;
  * @author liukaixuan(liukaixuan@gmail.com)
  */
 public class Html2TextTestCase extends TestCase {
+	
+	public void testJsonUtil(){
+		List<String> ss = JsonUtil.fromJson2List("[\"@g2@1\",\"@g2@2\",\"@g2@1089\",\"@g2@588\"]", String.class) ;
+		assertEquals(ss.size(), 4) ;
+		assertEquals(ss.get(0), "@g2@1") ;
+		assertEquals(ss.get(1), "@g2@2") ;
+		assertEquals(ss.get(2), "@g2@1089") ;
+		assertEquals(ss.get(3), "@g2@588") ;
+	}
 	
 	public void testPlainText() throws Exception{
 		LocalHtmlParserExtractServiceImpl p = new LocalHtmlParserExtractServiceImpl() ;

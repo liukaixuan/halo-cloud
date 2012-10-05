@@ -78,7 +78,7 @@ public class JsonUtil {
 		char[] cs = json.toCharArray() ;
 		
 		int deepCount = 0 ;
-		LinkedList<T> results = new LinkedList<T>() ;
+		LinkedList results = new LinkedList() ;
 		
 		for(; startPos < endPos ; startPos++){
 			char c = cs[startPos] ;
@@ -93,7 +93,18 @@ public class JsonUtil {
 			if(c ==',' && deepCount == 0){
 				String s = new String(cs, lastMeet, startPos - lastMeet) ;
 				
-				results.add(fromJson(s, classTypeInList)) ;
+				if(classTypeInList.isAssignableFrom(String.class)){
+					if(s.length() == 2){
+						s= "" ;
+					}else{
+						s = s.trim() ;
+						s = s.substring(1, s.length() - 1) ;
+					}
+					results.add(s) ;
+				}else{
+					results.add(fromJson(s, classTypeInList)) ;
+				}
+				
 				lastMeet = startPos + 1 ;
 			}
 		}
@@ -102,7 +113,17 @@ public class JsonUtil {
 		if(lastMeet != endPos){
 			String s = new String(cs, lastMeet, endPos - lastMeet) ;
 			
-			results.add(fromJson(s, classTypeInList)) ;
+			if(classTypeInList.isAssignableFrom(String.class)){
+				if(s.length() == 2){
+					s= "" ;
+				}else{
+					s = s.trim() ;
+					s = s.substring(1, s.length() - 1) ;
+				}
+				results.add(s) ;
+			}else{
+				results.add(fromJson(s, classTypeInList)) ;
+			}
 		}
 		
 		return results ;
